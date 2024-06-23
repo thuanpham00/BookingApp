@@ -5,7 +5,6 @@ import { FlightOfferParamsConfig } from "src/types/flight.type"
 
 export default function Home() {
   const queryConfig = useQueryConfig()
-  console.log(queryConfig)
 
   const getFlightOffersQuery = useQuery({
     queryKey: ["flightOffers", queryConfig],
@@ -16,5 +15,9 @@ export default function Home() {
 
   console.log(getFlightOffersQuery.data?.data)
 
-  return <div>Home</div>
+  return (
+    <div className="h-[1000px]">
+      <div className="container">home</div>
+    </div>
+  )
 }

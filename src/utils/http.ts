@@ -4,6 +4,7 @@ import { isAxiosError } from "./utils"
 import { toast } from "react-toastify"
 
 // cấu hình cơ bản của baseURL
+
 const authEndpoint = "https://test.api.amadeus.com/v1/security/oauth2/token"
 const APIkey = "LrkpfAKnVraTBXv6mMgkdUymcgyRYSRA"
 const APIsecret = "KYm4yBAxE0wNG7OO"
@@ -26,7 +27,7 @@ class http {
           await this.getAccessToken()
         } // nếu không có token thì gọi ra
         if (config.headers && this.accessToken) {
-          config.headers.Authorization = `Bearer ${this.accessToken}` // Bearer not bear
+          config.headers.Authorization = `Bearer ${this.accessToken}` // Bearer not bearer // đại diện cho các tiêu đề http gửi đi // tên tiêu đề 'Authorization'
         } // nếu có token thì request lên server để xác thực người dùng
         return config
       },
@@ -41,9 +42,7 @@ class http {
       },
       async (error) => {
         if (isAxiosError(error) && error.response?.status === 401) {
-          console.log(error)
-          const data = error.message
-          toast.error(data)
+          toast.error(error.message)
           await this.getAccessToken() // trong hàm này có set Token rồi - chỉ cần chạy
           if (this.accessToken && error.config) {
             error.config.headers = error.config.headers || {}

@@ -12,7 +12,9 @@ module.exports = {
     extend: {
       // ee4a00
       colors: {
-        primaryColor: "#f9f7f4"
+        primaryColor: "#f9f7f4",
+        textColor: "#313541",
+        blueColor: "#003b95"
       }
     }
   },
@@ -22,12 +24,12 @@ module.exports = {
       addComponents({
         ".container": {
           // set up class container mới
-          // maxWidth: "80rem", // 1280px
-          // width: "100%",
-          // marginLeft: "auto",
-          // marginRight: "auto",
-          // paddingLeft: "16px",
-          // paddingRight: "16px"
+          maxWidth: "90rem", // 1440px
+          width: "100%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: "8px",
+          paddingRight: "8px"
         }
       })
     })

@@ -1,4 +1,5 @@
-import SideNavMenu from "src/components/SideNavMenu"
+import Footer from "src/components/Footer"
+import Header from "src/components/Header"
 
 interface Props {
   children: React.ReactNode
@@ -6,11 +7,10 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   return (
-    <div className="w-full grid grid-cols-12 gap-4 bg-[#f2f2f2]">
-      <div className="col-span-2">
-        <SideNavMenu />
-      </div>
-      <div className="col-span-10">{children}</div>
+    <div className="w-full bg-[#f2f2f2]">
+      <Header />
+      {children}
+      <Footer />
     </div>
   )
 }
