@@ -11,9 +11,9 @@ const APIsecret = "KYm4yBAxE0wNG7OO"
 
 class http {
   instance: AxiosInstance
-  private accessToken: string | null
+  private tokenAPI: string | null
   constructor() {
-    this.accessToken = null // khởi tạo
+    this.tokenAPI = null // khởi tạo
     this.instance = axios.create({
       baseURL: "https://test.api.amadeus.com/v2/",
       timeout: 10000, // thời gian chờ
@@ -23,11 +23,11 @@ class http {
     })
     this.instance.interceptors.request.use(
       async (config) => {
-        if (!this.accessToken) {
+        if (!this.tokenAPI) {
           await this.getAccessToken()
         } // nếu không có token thì gọi ra
-        if (config.headers && this.accessToken) {
-          config.headers.Authorization = `Bearer ${this.accessToken}` // Bearer not bearer // đại diện cho các tiêu đề http gửi đi // tên tiêu đề 'Authorization'
+        if (config.headers && this.tokenAPI) {
+          config.headers.Authorization = `Bearer ${this.tokenAPI}` // Bearer not bearer // đại diện cho các tiêu đề http gửi đi // tên tiêu đề 'Authorization'
         } // nếu có token thì request lên server để xác thực người dùng
         return config
       },
@@ -37,16 +37,15 @@ class http {
     )
     this.instance.interceptors.response.use(
       (response) => {
-        console.log(response)
+        // console.log(response)
         return response
       },
       async (error) => {
         if (isAxiosError(error) && error.response?.status === 401) {
           toast.error(error.message)
           await this.getAccessToken() // trong hàm này có set Token rồi - chỉ cần chạy
-          if (this.accessToken && error.config) {
-            error.config.headers = error.config.headers || {}
-            error.config.headers.Authorization = `Bearer ${this.accessToken}`
+          if (this.tokenAPI && error.config) {
+            error.config.headers.Authorization = `Bearer ${this.tokenAPI}`
             return axios.request(error.config) // thực hiện lại request
           }
         }
@@ -67,7 +66,7 @@ class http {
         }
       )
       // lấy accessToken từ kết quả trả về
-      this.accessToken = response.data.access_token
+      this.tokenAPI = response.data.access_token
     } catch (error) {
       console.log(error)
     }

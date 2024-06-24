@@ -27,13 +27,11 @@ module.exports = {
           maxWidth: "90rem", // 1440px
           width: "100%",
           marginLeft: "auto",
-          marginRight: "auto",
-          paddingLeft: "8px",
-          paddingRight: "8px"
+          marginRight: "auto"
         }
       })
-    })
-    // require("tailwindcss-animate"),
+    }),
+    require("tailwindcss-animate")
     // require("@tailwindcss/line-clamp")
     // thêm lớp line-clamp quá số dòng thì ...
   ]

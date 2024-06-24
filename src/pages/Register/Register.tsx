@@ -6,7 +6,6 @@ import schema, { schemaType } from "src/utils/rules"
 import { Link, useNavigate } from "react-router-dom"
 import { path } from "src/constant/path"
 import Button from "src/components/Button"
-
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { createUserWithEmailAndPassword } from "firebase/auth"
@@ -24,6 +23,7 @@ export default function Register() {
     handleSubmit,
     register
   } = useForm<FormData>({ resolver: yupResolver(schemaForm) })
+
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -48,6 +48,7 @@ export default function Register() {
       setLoading(false)
     }
   })
+
   return (
     <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-[#f2f2f2] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
       <Helmet>

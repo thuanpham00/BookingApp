@@ -7,9 +7,12 @@ import schema, { schemaType } from "src/utils/rules"
 import { yupResolver } from "@hookform/resolvers/yup"
 import Button from "src/components/Button"
 import { Helmet } from "react-helmet-async"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth } from "src/firebase"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { setAccessTokenToLS, setProfileToLS } from "src/utils/auth"
+import { toast } from "react-toastify"
+import { AppContext } from "src/context/useContext"
 
 const schemaForm = schema.pick(["email", "password"])
 
@@ -23,6 +26,7 @@ export default function Login() {
   } = useForm<FormData>({ resolver: yupResolver(schemaForm) })
 
   const [loading, setLoading] = useState(false)
+  const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (data) => {
@@ -30,14 +34,44 @@ export default function Login() {
     try {
       const res = await signInWithEmailAndPassword(auth, data.email, data.password)
       if (res) {
-        await res.user.getIdTokenResult().then((response) => console.log(response))
+        await res.user.getIdTokenResult().then((response) => {
+          const token = response.token
+          setAccessTokenToLS(`Bearer ${token}`)
+        })
+        setIsAuthenticated(true)
+        setProfileToLS(res.user.email as string)
+        location.reload()
+
+        navigate(path.home)
+        toast.success("Login successfully !!!")
         setLoading(false)
       }
     } catch (error) {
-      console.log(error)
+      toast.error("Error (auth/invalid-credential)")
       setLoading(false)
     }
   })
+
+  const loginGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider() // khởi tạo login google
+      const res = await signInWithPopup(auth, provider)
+      if (res) {
+        await res.user.getIdTokenResult().then((response) => {
+          const token = response.token
+          setAccessTokenToLS(`Bearer ${token}`)
+        })
+      }
+      setIsAuthenticated(true)
+      setProfileToLS(res.user.displayName as string)
+      location.reload()
+
+      navigate(path.home)
+      toast.success("Login successfully !!!")
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-[#f2f2f2] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
@@ -55,7 +89,10 @@ export default function Login() {
 
       <div className="text-textColor text-3xl font-semibold text-center">Login</div>
 
-      <button className="mt-4 flex items-center justify-center gap-2 w-full rounded-full border border-[#4e6c8d] py-2">
+      <button
+        onClick={loginGoogle}
+        className="mt-4 flex items-center justify-center gap-2 w-full rounded-full border border-[#4e6c8d] py-2"
+      >
         <div
           className="w-5 h-5"
           style={{
@@ -90,7 +127,7 @@ export default function Login() {
           messageError={errors.password?.message}
           register={register}
         />
-        <Button nameButton="Login" disable={false} loading={false} />
+        <Button nameButton="Login" disable={loading} loading={loading} />
       </form>
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 

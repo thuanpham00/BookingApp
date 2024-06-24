@@ -1,22 +1,13 @@
-import { useQuery } from "@tanstack/react-query"
-import { flightApi } from "src/apis/flight.api"
-import useQueryConfig from "src/hooks/useQueryConfig"
-import { FlightOfferParamsConfig } from "src/types/flight.type"
+import { Helmet } from "react-helmet-async"
 
 export default function Home() {
-  const queryConfig = useQueryConfig()
-
-  const getFlightOffersQuery = useQuery({
-    queryKey: ["flightOffers", queryConfig],
-    queryFn: () => {
-      return flightApi.flightOffers(queryConfig as FlightOfferParamsConfig)
-    }
-  })
-
-  console.log(getFlightOffersQuery.data?.data)
-
   return (
     <div className="h-[1000px]">
+      <Helmet>
+        <title>Home</title>
+        <meta name="description" content="Home - Amadeus Booking" />
+      </Helmet>
+
       <div className="container">home</div>
     </div>
   )
