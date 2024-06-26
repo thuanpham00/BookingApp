@@ -14,3 +14,11 @@ export type FlightOfferParamsConfig = {
   includedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn bao gồm trong kết quả tìm kiếm chuyến bay.
   excludedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn loại trừ khỏi kết quả tìm kiếm chuyến bay.
 }
+
+export type airportCodeItem = {
+  code: string
+  airport: string
+  country: string
+}
+
+export type airportCodeList = airportCodeItem[]

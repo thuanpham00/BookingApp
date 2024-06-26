@@ -3,8 +3,8 @@ import { ButtonHTMLAttributes } from "react"
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   nameButton: string
   className?: string
-  disable: boolean
-  loading: boolean
+  disable?: boolean
+  loading?: boolean
 }
 
 export default function Button({

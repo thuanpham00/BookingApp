@@ -52,8 +52,8 @@ export default function Register() {
   return (
     <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-[#f2f2f2] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
       <Helmet>
-        <title>Sign up</title>
-        <meta name="description" content="Sign up - Amadeus Booking" />
+        <title>Đăng ký</title>
+        <meta name="description" content="Đăng ký - Amadeus Booking" />
       </Helmet>
 
       <Link to={path.home} className="flex items-center justify-center cursor-pointer">
@@ -63,7 +63,7 @@ export default function Register() {
         <h1 className="text-2xl text-textColor font-semibold text-center">Amadeus Booking</h1>
       </Link>
 
-      <div className="text-textColor text-3xl font-semibold text-center">Sign up</div>
+      <div className="text-textColor text-3xl font-semibold text-center">Đăng ký</div>
 
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
@@ -74,7 +74,7 @@ export default function Register() {
           type="text"
           name="userName" // name phải khớp trong schema
           autoComplete="on"
-          placeholder="Enter user-name"
+          placeholder="Nhập user-name"
           messageError={errors.userName?.message}
           register={register}
         />
@@ -84,7 +84,7 @@ export default function Register() {
           type="email"
           name="email"
           autoComplete="on"
-          placeholder="Enter email"
+          placeholder="Nhập email"
           messageError={errors.email?.message}
           register={register}
         />
@@ -94,7 +94,7 @@ export default function Register() {
           type="password"
           name="password"
           autoComplete="on"
-          placeholder="Enter password"
+          placeholder="Nhập password"
           messageError={errors.password?.message}
           register={register}
         />
@@ -104,18 +104,18 @@ export default function Register() {
           type="password"
           name="confirmPassword"
           autoComplete="on"
-          placeholder="Enter confirm-password"
+          placeholder="Nhập confirm-password"
           messageError={errors.confirmPassword?.message}
           register={register}
         />
-        <Button type="submit" nameButton="Sign up" disable={loading} loading={loading} />
+        <Button type="submit" nameButton="Đăng ký" disable={loading} loading={loading} />
       </form>
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
       <div className="flex justify-center items-center gap-1">
-        <span className="text-base">Do you already have an account?</span>
-        <Link to={path.login} className=" text-textColor font-semibold text-base">
-          Login
+        <span className="text-base">Bạn đã có tài khoản?</span>
+        <Link to={path.login} className=" text-textColor font-semibold text-base underline">
+          Đăng nhập
         </Link>
       </div>
     </div>

@@ -76,8 +76,8 @@ export default function Login() {
   return (
     <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-[#f2f2f2] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
       <Helmet>
-        <title>Login</title>
-        <meta name="description" content="Login - Amadeus Booking" />
+        <title>Đăng nhập</title>
+        <meta name="description" content="Đăng nhập - Amadeus Booking" />
       </Helmet>
 
       <Link to={path.home} className="flex items-center justify-center cursor-pointer">
@@ -87,7 +87,7 @@ export default function Login() {
         <h1 className="text-2xl text-textColor font-semibold text-center">Amadeus Booking</h1>
       </Link>
 
-      <div className="text-textColor text-3xl font-semibold text-center">Login</div>
+      <div className="text-textColor text-3xl font-semibold text-center">Đăng nhập</div>
 
       <button
         onClick={loginGoogle}
@@ -113,7 +113,7 @@ export default function Login() {
           type="email"
           name="email"
           autoComplete="on"
-          placeholder="Enter email"
+          placeholder="Nhập email"
           messageError={errors.email?.message}
           register={register}
         />
@@ -123,18 +123,18 @@ export default function Login() {
           type="password"
           name="password"
           autoComplete="on"
-          placeholder="Enter password"
+          placeholder="Nhập password"
           messageError={errors.password?.message}
           register={register}
         />
-        <Button nameButton="Login" disable={loading} loading={loading} />
+        <Button nameButton="Đăng nhập" disable={loading} loading={loading} />
       </form>
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
       <div className="flex justify-center items-center gap-1">
-        <span className="text-base">Do not have an account?</span>
-        <Link to={path.register} className=" text-textColor font-semibold text-base">
-          Sign up
+        <span className="text-base">Bạn chưa có tài khoản?</span>
+        <Link to={path.register} className=" text-textColor font-semibold text-base underline">
+          Đăng ký
         </Link>
       </div>
     </div>

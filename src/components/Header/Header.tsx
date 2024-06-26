@@ -32,9 +32,9 @@ export default function Header() {
       <div className=" bg-blueColor py-2 text-[#f2f2f2]">
         <div className="container">
           <div className="flex items-center justify-center gap-1">
-            <strong>Get Great Deals!</strong>
-            <span>Choose from 500+ airlines for now airfares!</span>
-            <strong className="underline cursor-pointer">Explore!</strong>
+            <strong>Nhận ưu đãi lớn!</strong>
+            <span>Chọn từ hơn 500 hãng hàng không để có giá vé máy bay ngay bây giờ!</span>
+            <strong className="underline cursor-pointer">Khám phá!</strong>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function Header() {
                   to={path.home}
                   className="flex items-center text-textColor duration-200 hover:text-gray-500 mr-6"
                 >
-                  <span className="text-base font-semibold hover:underline block">Home</span>
+                  <span className="text-base font-semibold hover:underline block">Trang chủ</span>
                 </Link>
 
                 <NavigationMenu>
@@ -71,30 +71,30 @@ export default function Header() {
                             <path d="m20.505 7.5-15.266.022.672.415-1.1-2.2a.75.75 0 0 0-.638-.414l-2.293-.1C.82 5.228-.003 6.06.003 7.083c.002.243.051.484.146.709l2.072 4.68a2.95 2.95 0 0 0 2.701 1.778h4.043l-.676-1.075-2.484 5.168A1.83 1.83 0 0 0 7.449 21h2.099a1.85 1.85 0 0 0 1.419-.664l5.165-6.363-.582.277h4.956c1.82.09 3.399-1.341 3.49-3.198l.004-.134a3.426 3.426 0 0 0-3.44-3.419l-.074.001zm.02 1.5h.042a1.924 1.924 0 0 1 1.933 1.914l-.002.065a1.866 1.866 0 0 1-1.955 1.772l-4.993-.001a.75.75 0 0 0-.582.277l-5.16 6.355a.35.35 0 0 1-.26.118h-2.1a.336.336 0 0 1-.3-.49l2.493-5.185a.75.75 0 0 0-.676-1.075H4.924a1.45 1.45 0 0 1-1.328-.878l-2.07-4.676a.35.35 0 0 1 .326-.474l2.255.1-.638-.415 1.1 2.2a.75.75 0 0 0 .672.415L20.507 9zm-4.202-1.24-2.992-4.02A1.85 1.85 0 0 0 11.85 3H9.783a1.85 1.85 0 0 0-1.654 2.672l1.439 2.91a.75.75 0 0 0 1.344-.664l-1.44-2.911a.35.35 0 0 1 .312-.507h2.066a.35.35 0 0 1 .279.14l2.99 4.017a.75.75 0 1 0 1.203-.896z"></path>
                           </svg>
                           <span className="text-base font-semibold hover:underline block">
-                            Flight
+                            Chuyến bay
                           </span>
                         </div>
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <NavigationMenuLink>
-                          <div className="bg-[#f2f2f2] rounded-sm shadow-lg min-w-[150px] border border-gray-300">
+                          <div className="bg-[#f2f2f2] rounded-sm shadow-lg border border-gray-300">
                             <Link
                               to={path.flightSearch}
-                              className="block py-3 px-3 bg-[#f2f2f2] hover:bg-gray-300 duration-200"
+                              className="block py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200"
                             >
-                              Search Flights
+                              Tìm kiếm chuyến bay
                             </Link>
                             <Link
                               to={path.flightManage}
-                              className="block py-3 px-3 bg-[#f2f2f2] hover:bg-gray-300 duration-200"
+                              className="block py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200"
                             >
-                              Manage Bookings
+                              Quản lý đặt chỗ
                             </Link>
-                            <div className="py-3 px-3 bg-[#f2f2f2] hover:bg-gray-300 duration-200">
-                              Seat Selection
+                            <div className="py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200">
+                              Lựa chọn chỗ ngồi
                             </div>
-                            <div className="py-3 px-3 bg-[#f2f2f2] hover:bg-gray-300 duration-200">
-                              Branded Fares
+                            <div className="py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200">
+                              Giá vé có thương hiệu
                             </div>
                           </div>
                         </NavigationMenuLink>
@@ -113,7 +113,7 @@ export default function Header() {
                         >
                           <img src={hotel} alt="icon hotel" className="w-4 h-4 mr-1" />
                           <span className="text-base font-semibold hover:underline block">
-                            Hotel
+                            Khánh sạn
                           </span>
                         </Link>
                       </NavigationMenuTrigger>
@@ -145,7 +145,7 @@ export default function Header() {
               >
                 <div className="flex gap-1 items-center py-2 px-3 border-2 border-gray-300 rounded-3xl duration-200 hover:bg-[#ddd]/80 text-base text-textColor">
                   <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
-                  Language
+                  Ngôn ngữ
                 </div>
               </Popover>
 
@@ -154,15 +154,15 @@ export default function Header() {
                   className="sticky top-0 left-0 z-30"
                   renderPopover={
                     <div className="shadow-lg rounded flex flex-col border border-gray-300">
-                      <button className="text-base text-left w-[140px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border-b border-gray-300">
-                        My profile
+                      <button className="text-base text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border-b border-gray-300">
+                        Tài khoản của tôi
                       </button>
 
                       <button
                         onClick={handleLogOut}
-                        className="text-base text-left w-[140px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2"
+                        className="text-base text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2"
                       >
-                        Logout
+                        Đăng xuất
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"

@@ -10,5 +10,14 @@ html {
 body {
   font-family: "Lato", Arial, sans-serif;
   font-weight: 400;
+  scrollbar-color: #ccc #eee;
   /* độ dày chữ : 400 mặc định */
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 6px 0px 6px;
+  border-color: #0077b6 transparent transparent transparent;
 }
