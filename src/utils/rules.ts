@@ -24,7 +24,11 @@ const schema = yup
       .required("ConfirmPassword bắt buộc")
       .min(6, "Độ dài từ 6-20 kí tự")
       .max(20, "Độ dài từ 6-20 kí tự")
-      .oneOf([yup.ref("password")], "Password không khớp")
+      .oneOf([yup.ref("password")], "Password không khớp"),
+    originLocationCode: yup.string().required("Bắt buộc"),
+    destinationLocationCode: yup.string().required("Bắt buộc"),
+    departureDate: yup.string().required("Bắt buộc"),
+    returnDate: yup.string().required("Bắt buộc")
   })
   .required()
 

@@ -21,6 +21,8 @@
 
 - sử dụng setInterval và setTimeout nhớ clear nó đi
 
+- dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
+
 ## Firebase
 
 - createUserWithEmailAndPassword() - hàm tạo tài khoản user email & password

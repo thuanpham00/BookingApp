@@ -44,7 +44,7 @@ class http {
         if (isAxiosError(error) && error.response?.status === 401) {
           toast.error(error.message)
           await this.getAccessToken() // trong hàm này có set Token rồi - chỉ cần chạy
-          if (this.tokenAPI && error.config) {
+          if (error.config && this.tokenAPI) {
             error.config.headers.Authorization = `Bearer ${this.tokenAPI}`
             return axios.request(error.config) // thực hiện lại request
           }

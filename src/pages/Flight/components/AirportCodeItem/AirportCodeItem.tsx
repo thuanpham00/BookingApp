@@ -3,12 +3,13 @@ import iconFlight2 from "src/img/svg/flight-airplane-svgrepo-com.svg"
 
 interface Props {
   item: airportCodeItem
-  setSearchText: React.Dispatch<React.SetStateAction<string>>
+  inputName: string
+  handleItemClick: (inputName: string, value: string) => void
 }
 
-export default function AirportCodeItem({ item, setSearchText }: Props) {
+export default function AirportCodeItem({ item, handleItemClick, inputName }: Props) {
   const handleChangeInput = () => {
-    setSearchText(`${item.country} - ${item.code}`)
+    handleItemClick(inputName, `${item.country} - ${item.code}`)
   }
 
   return (

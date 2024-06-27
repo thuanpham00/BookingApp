@@ -12,3 +12,18 @@ export const getNameToEmail = (email: string) => {
   }
   return null
 }
+
+export const getCodeAirport = (code: string) => {
+  if (code) {
+    const result = code.split(" - ")
+    return result[1]
+  }
+  return null
+}
+// Wed Jun 05 2024 00:00:00 GMT+0700 (Indochina Time)
+export const convertToYYYYMMDD = (date: Date) => {
+  const year = date.getFullYear().toString()
+  const month = ("0" + (date.getMonth() + 1)).slice(-2)
+  const day = ("0" + date.getDate()).slice(-2)
+  return `${year}-${month}-${day}`
+}

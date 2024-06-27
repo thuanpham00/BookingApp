@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet-async"
 import banner from "../../img/Flight/banner.jpg"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
-
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -13,17 +12,42 @@ import Breadcrumb from "src/components/Breadcrumb/Breadcrumb.tsx"
 import { format } from "date-fns"
 import { Calendar } from "src/components/ui/calendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
+import { convertToYYYYMMDD, getCodeAirport } from "src/utils/utils.ts"
+import schema, { schemaType } from "src/utils/rules.ts"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+type FormData = Pick<
+  schemaType,
+  "originLocationCode" | "destinationLocationCode" | "departureDate" | "returnDate"
+>
+
+type InputName = "originLocationCode" | "destinationLocationCode" | "departureDate" | "returnDate"
+
+const schemaFormData = schema.pick([
+  "originLocationCode",
+  "destinationLocationCode",
+  "departureDate",
+  "returnDate"
+])
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
 export default function Flight() {
   // const queryConfig = useQueryConfig()
-  const { handleSubmit, control } = useForm()
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    control,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schemaFormData)
+  })
 
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+  const [valueState, setValueState] = useState("")
 
   const [airportCodeList, setAirportCodeList] = useState<airportCodeList>([])
 
@@ -32,9 +56,12 @@ export default function Flight() {
   const inputRef = useRef<HTMLInputElement>(null)
   const inputRef2 = useRef<HTMLInputElement>(null)
 
+  // state lưu trữ của form
   const [searchText, setSearchText] = useState<string>("")
   const [searchText2, setSearchText2] = useState<string>("")
-  const [date, setDate] = useState<Date>()
+  const [date, setDate] = useState<Date | null>(null)
+  const [date2, setDate2] = useState<Date | null>(null)
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const getFlightOffersQuery = useQuery({
   //   queryKey: ["flightOffers", queryConfig],
@@ -100,8 +127,19 @@ export default function Flight() {
   ) // lọc các item dựa vào searchText (input)
   // includes: hàm check bao gồm
 
+  const handleItemClick = (inputName: string, value: string) => {
+    setValue(inputName, getCodeAirport(value)) // đảm bảo giá trị của input được quản lý bởi react-hook-form
+    if (inputName === "originLocationCode") {
+      setSearchText(value) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
+      setShowListAirport(false)
+    } else if (inputName === "destinationLocationCode") {
+      setSearchText2(value)
+      setShowListAirport2(false)
+    }
+  }
+
   const handleSubmitSearch = handleSubmit((data) => {
-    console.log("hii")
+    console.log(data)
   })
 
   return (
@@ -130,6 +168,7 @@ export default function Flight() {
               </h2>
 
               <form
+                autoComplete="off"
                 onSubmit={handleSubmitSearch}
                 noValidate
                 className="py-4 px-6 bg-[#f2f2f2] rounded-bl-lg rounded-br-lg "
@@ -158,18 +197,19 @@ export default function Flight() {
 
                   <div className="my-4 w-[2px] h-4 bg-textColor"></div>
 
+                  {/* hạng vé */}
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
-                      <Button
+                      <ButtonShadcn
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
                         className="w-[200px] justify-between text-sm"
                       >
-                        {value
-                          ? travelClass.find((item) => item.value === value)?.value
+                        {valueState
+                          ? travelClass.find((item) => item.value === valueState)?.value
                           : "Chọn hạng vé"}
-                      </Button>
+                      </ButtonShadcn>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
@@ -180,7 +220,7 @@ export default function Flight() {
                                 key={item.value}
                                 value={item.value}
                                 onSelect={(currentValue) => {
-                                  setValue(currentValue === value ? "" : currentValue)
+                                  setValueState(currentValue === valueState ? "" : currentValue)
                                   setOpen(false)
                                 }}
                               >
@@ -194,118 +234,185 @@ export default function Flight() {
                   </Popover>
                 </div>
 
-                <div className="mt-2 flex items-center gap-3 relative">
-                  {/* điểm xuất phát */}
-                  <div className="py-[5px] px-4 border border-textColor rounded-md flex items-center gap-1">
-                    <img src={iconFlight} alt="icon flight" className="w-6 h-6 flex-shrink-0" />
-                    <input
-                      type="text"
-                      className="w-[160px] p-2 outline-none bg-transparent text-base flex-grow"
-                      placeholder="Bay từ"
-                      onClick={handleFocusAirportList("1")}
-                      value={searchText}
-                      onChange={handleChangeValue("input_1")}
-                    />
-                  </div>
-                  <div
-                    className="absolute top-16 left-0 h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                    ref={inputRef}
-                  >
-                    {showListAirport && (
-                      <AirportCodeList
-                        setSearchText={setSearchText}
-                        listAirport={filterAirportCodeList_1}
-                      />
-                    )}
+                <div className="flex flex-col">
+                  <div className="flex relative">
+                    <span className="absolute -top-1 left-0 text-red-500 min-h-[1.25rem] block">
+                      {errors.originLocationCode?.message}
+                    </span>
+                    <span className="absolute -top-1 left-[210px] text-red-500 min-h-[1.25rem] block">
+                      {errors.destinationLocationCode?.message}
+                    </span>
+                    <span className="absolute -top-1 left-[420px] text-red-500 min-h-[1.25rem] block">
+                      {errors.departureDate?.message}
+                    </span>
+                    <span className="absolute -top-1 left-[575px] text-red-500 min-h-[1.25rem] block">
+                      {errors.returnDate?.message}
+                    </span>
                   </div>
 
-                  <button className="z-20 absolute left-[214px] flex items-center justify-center w-8 h-8 rounded-full text-blueColor border-2 border-blueColor bg-blue-100">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-5 w-5"
+                  <div className="mt-4 flex items-center gap-3 relative">
+                    {/* điểm xuất phát */}
+                    <div className="py-[5px] px-4 border border-textColor rounded-md flex items-center">
+                      <img src={iconFlight} alt="icon flight" className="w-6 h-6 flex-shrink-0" />
+                      <input
+                        type="text"
+                        className="w-[140px] p-2 outline-none bg-transparent text-base flex-grow"
+                        placeholder="Bay từ"
+                        onClick={handleFocusAirportList("1")}
+                        {...register("originLocationCode")}
+                        value={searchText}
+                        onChange={handleChangeValue("input_1")}
+                      />
+                    </div>
+                    <div
+                      className="absolute top-16 left-0 h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      ref={inputRef}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-                      />
-                    </svg>
-                  </button>
-
-                  {/* điểm đến */}
-                  <div className="py-[5px] px-4 border border-textColor rounded-md flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-6 w-6 flex-shrink-0"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                      />
-                    </svg>
-                    <input
-                      type="text"
-                      className="w-[160px] p-2 outline-none bg-transparent text-base flex-grow"
-                      placeholder="Bay đến"
-                      onClick={handleFocusAirportList("2")} // dùng currying lúc này phần tử vẫn còn return
-                      // bình thường thì useForm quản lý
-                      // nhưng để list render lại thì cần dùng onChange và value
-                      value={searchText2}
-                      onChange={handleChangeValue("input_2")}
-                    />
-                  </div>
-                  <div
-                    className="absolute top-16 left-[238px] h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                    ref={inputRef2}
-                  >
-                    {showListAirport2 && (
-                      <AirportCodeList
-                        setSearchText={setSearchText2}
-                        listAirport={filterAirportCodeList_2}
-                      />
-                    )}
-                  </div>
-
-                  <div className="flex gap-2">
-                    {/* date ngày đi*/}
-                    <div className="h-[52px] py-[4px] px-1 border border-textColor rounded-md flex items-center gap-1">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <ButtonShadcn
-                            variant={"outline"}
-                            className="bg-transparent text-left shadow-none border-none"
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? format(date, "PPP") : <span>Chọn ngày đi</span>}
-                          </ButtonShadcn>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
-                        </PopoverContent>
-                      </Popover>
+                      {showListAirport && (
+                        <AirportCodeList
+                          listAirport={filterAirportCodeList_1}
+                          handleItemClick={handleItemClick}
+                          inputName="originLocationCode"
+                        />
+                      )}
                     </div>
 
-                    {/* date ngày về */}
-                  </div>
+                    <button className="z-20 absolute left-[190px] flex items-center justify-center w-8 h-8 rounded-full text-blueColor border-2 border-blueColor bg-blue-100">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-5 w-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+                        />
+                      </svg>
+                    </button>
 
-                  <Button
-                    nameButton="Tìm kiếm"
-                    className="px-5 py-3 bg-orangeColor w-full text-[#f2f2f2] text-lg rounded-md hover:bg-orangeColor/80 duration-200"
-                  />
+                    {/* điểm đến */}
+                    <div className="py-[5px] px-4 border border-textColor rounded-md flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-6 w-6 flex-shrink-0"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                        />
+                      </svg>
+                      <input
+                        type="text"
+                        className="w-[140px] p-2 outline-none bg-transparent text-base flex-grow"
+                        placeholder="Bay đến"
+                        onClick={handleFocusAirportList("2")} // dùng currying lúc này phần tử vẫn còn return
+                        // bình thường thì useForm quản lý
+                        // nhưng để list render lại thì cần dùng onChange và value
+                        {...register("destinationLocationCode")}
+                        value={searchText2}
+                        onChange={handleChangeValue("input_2")}
+                      />
+                    </div>
+                    <div
+                      className="absolute top-16 left-[208px] h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      ref={inputRef2}
+                    >
+                      {showListAirport2 && (
+                        <AirportCodeList
+                          listAirport={filterAirportCodeList_2}
+                          handleItemClick={handleItemClick}
+                          inputName="destinationLocationCode"
+                        />
+                      )}
+                    </div>
+
+                    <div className="flex gap-1">
+                      {/* date ngày đi*/}
+                      <div className="w-[150px] py-[6px] border border-textColor rounded-md flex items-center">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <ButtonShadcn
+                              variant={"outline"}
+                              className="bg-transparent text-left shadow-none border-none"
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {date ? format(date, "yyyy-MM-dd") : <span>Chọn ngày đi</span>}
+                            </ButtonShadcn>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Controller
+                              control={control} //  dùng để điều phối và quản lý trạng thái của các thành phần trong form.
+                              name="departureDate"
+                              render={({ field }) => (
+                                <Calendar
+                                  {...field}
+                                  mode="single"
+                                  selected={date as Date}
+                                  onSelect={(date) => {
+                                    setDate(date as Date)
+                                    field.onChange(convertToYYYYMMDD(date as Date))
+                                  }}
+                                  initialFocus
+                                />
+                              )}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+
+                      {/* date ngày về */}
+                      <div className="w-[150px] py-[6px] border border-textColor rounded-md flex items-center">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <ButtonShadcn
+                              variant={"outline"}
+                              className="bg-transparent text-left shadow-none border-none"
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {date2 ? format(date2, "yyyy-MM-dd") : <span>Chọn ngày về</span>}
+                            </ButtonShadcn>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Controller
+                              control={control}
+                              name="returnDate" // tên trường dữ liệu
+                              render={({ field }) => (
+                                // truyền tất cả props và phương thức của field vào Calendar
+                                <Calendar
+                                  mode="single"
+                                  selected={date2 as Date}
+                                  onSelect={(date2) => {
+                                    setDate2(date2 as Date)
+                                    field.onChange(convertToYYYYMMDD(date2 as Date)) // cập nhật giá trị của một trường //  giá trị chuỗi này vẫn được lưu trữ trong trường dữ liệu của form. // quan trọng vì nó quản lý dữ liệu của trường // bởi controller
+                                  }}
+                                  initialFocus
+                                />
+                              )}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </div>
+
+                    <Button
+                      nameButton="Tìm kiếm"
+                      className="px-5 py-3 bg-orangeColor w-full text-[#f2f2f2] text-lg rounded-md hover:bg-orangeColor/80 duration-200"
+                    />
+                  </div>
                 </div>
               </form>
             </div>
@@ -315,3 +422,7 @@ export default function Flight() {
     </div>
   )
 }
+
+// Dùng thêm state cục bộ để quản lý dữ liệu input kết hợp với useForm sử dụng setValue để quản lý dữ liệu trước khi submit đi
+// nếu không dùng state cục bộ thì không thể truyền props xuống các component con
+// vì thường các trường dữ liệu của input chỉ quản lý trong component đó (validate...) submit đi

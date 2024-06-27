@@ -101,7 +101,7 @@ export default function Login() {
             backgroundRepeat: "no-repeat"
           }}
         ></div>
-        <span className="text-lg text-textColor font-medium">Login with Google</span>
+        <span className="text-base text-textColor font-medium">Đăng nhập với Google</span>
       </button>
 
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
@@ -115,7 +115,7 @@ export default function Login() {
           autoComplete="on"
           placeholder="Nhập email"
           messageError={errors.email?.message}
-          register={register}
+          register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
         />
         <Input
           className="mt-1 relative"
@@ -125,7 +125,7 @@ export default function Login() {
           autoComplete="on"
           placeholder="Nhập password"
           messageError={errors.password?.message}
-          register={register}
+          register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
         />
         <Button nameButton="Đăng nhập" disable={loading} loading={loading} />
       </form>
