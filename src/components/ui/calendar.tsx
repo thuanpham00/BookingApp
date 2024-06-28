@@ -1,18 +1,16 @@
-import * as React from "react"
+/* eslint-disable react/prop-types */
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "src/lib/utils"
 import { buttonVariants } from "src/components/ui/button"
+import { forwardRef } from "react"
+import { Controller } from "react-hook-form"
+import { convertToYYYYMMDD } from "src/utils/utils"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
-function Calendar({
-  className,
-  classNames,
-  showOutsideDays = true,
-  ...props
-}: CalendarProps) {
+function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -31,8 +29,7 @@ function Calendar({
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell:
-          "text-slate-500 rounded-md w-8 font-normal text-[0.8rem] dark:text-slate-400",
+        head_cell: "text-slate-500 rounded-md w-8 font-normal text-[0.8rem] dark:text-slate-400",
         row: "flex w-full mt-2",
         cell: cn(
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-slate-100 [&:has([aria-selected].day-outside)]:bg-slate-100/50 [&:has([aria-selected].day-range-end)]:rounded-r-md dark:[&:has([aria-selected])]:bg-slate-800 dark:[&:has([aria-selected].day-outside)]:bg-slate-800/50",
@@ -55,11 +52,12 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-slate-100 aria-selected:text-slate-900 dark:aria-selected:bg-slate-800 dark:aria-selected:text-slate-50",
         day_hidden: "invisible",
-        ...classNames,
+        ...classNames
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
+        IconRight: () => <ChevronRightIcon className="h-4 w-4" />
       }}
       {...props}
     />
@@ -68,3 +66,29 @@ function Calendar({
 Calendar.displayName = "Calendar"
 
 export { Calendar }
+
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: any // Thay any bằng loại dữ liệu phù hợp với react-hook-form của bạn
+  name: string
+}
+const CustomCalendar = forwardRef<HTMLDivElement, Props>(({ control, name }, ref) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <div ref={ref}>
+        <Calendar
+          mode="single"
+          selected={field.value} // Sử dụng field.value thay vì date2 hoặc giá trị tương ứng trong state của bạn
+          onSelect={(date) => {
+            field.onChange(convertToYYYYMMDD(date as Date))
+          }}
+          initialFocus
+        />
+      </div>
+    )}
+  />
+))
+
+export default CustomCalendar

@@ -27,3 +27,10 @@ export const convertToYYYYMMDD = (date: Date) => {
   const day = ("0" + date.getDate()).slice(-2)
   return `${year}-${month}-${day}`
 }
+
+export const convertTravelClassToEng = (travelClass: string) => {
+  if (travelClass === "Hạng Phổ thông") return "ECONOMY"
+  else if (travelClass === "Hạng Phổ thông cao cấp") return "PREMIUM_ECONOMY"
+  else if (travelClass === "Hạng thương gia") return "BUSINESS"
+  else if (travelClass === "Hạng nhất") return "FIRST"
+}

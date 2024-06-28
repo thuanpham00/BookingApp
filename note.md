@@ -48,3 +48,9 @@
 7. Flight Price Analysis API: API này có thể được sử dụng bất cứ lúc nào để phân tích giá cả của các chuyến bay, giúp bạn hiểu rõ hơn về các mẫu giá và xu hướng giá cả.
 
 8. Flight Choice Prediction API: Nếu bạn muốn cung cấp các đề xuất chuyến bay dựa trên dữ liệu lịch sử và hành vi của khách hàng, bạn có thể sử dụng API này để dự đoán các lựa chọn chuyến bay phù hợp.
+
+### Lỗi tồn động :
+
+- lỗi ref tại Calender
+- làm thêm hàm chuyển 2 giá trị airport chéo
+- làm nốt phần tổng số hành khách, thêm button vào

@@ -28,7 +28,11 @@ const schema = yup
     originLocationCode: yup.string().required("Bắt buộc"),
     destinationLocationCode: yup.string().required("Bắt buộc"),
     departureDate: yup.string().required("Bắt buộc"),
-    returnDate: yup.string().required("Bắt buộc")
+    returnDate: yup.string().required("Bắt buộc"),
+    travelClass: yup.string().required("Bắt buộc"),
+    adults: yup.number(),
+    children: yup.number(),
+    infants: yup.number()
   })
   .required()
 

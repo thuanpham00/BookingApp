@@ -1,10 +1,11 @@
 import { airportCodeItem } from "src/types/flight.type"
 import iconFlight2 from "src/img/svg/flight-airplane-svgrepo-com.svg"
+import { InputName } from "../../Flight"
 
 interface Props {
   item: airportCodeItem
-  inputName: string
-  handleItemClick: (inputName: string, value: string) => void
+  inputName: InputName
+  handleItemClick: (inputName: InputName, value: string) => void
 }
 
 export default function AirportCodeItem({ item, handleItemClick, inputName }: Props) {

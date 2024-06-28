@@ -61,7 +61,7 @@ export const airportCodes: airportCodeList = [
   { code: "SAW", airport: "Sân bay Sabiha Gökçen", country: "Thổ Nhĩ Kỳ" }
 ]
 
-export const travelClass = [
+export const travelClassList = [
   {
     value: "Hạng Phổ thông"
   },
