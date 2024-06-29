@@ -51,6 +51,4 @@
 
 ### Lỗi tồn động :
 
-- lỗi ref tại Calender
 - làm thêm hàm chuyển 2 giá trị airport chéo
-- làm nốt phần tổng số hành khách, thêm button vào

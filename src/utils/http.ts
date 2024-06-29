@@ -48,6 +48,7 @@ class http {
             error.config.headers.Authorization = `Bearer ${this.tokenAPI}`
             return axios.request(error.config) // thực hiện lại request
           }
+          location.reload()
         }
       }
     )

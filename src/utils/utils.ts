@@ -34,3 +34,28 @@ export const convertTravelClassToEng = (travelClass: string) => {
   else if (travelClass === "Hạng thương gia") return "BUSINESS"
   else if (travelClass === "Hạng nhất") return "FIRST"
 }
+
+export const getHourFromAPI = (hours: string) => {
+  if (hours) {
+    const result = hours.split("T")
+    return result[1].substring(0, 5)
+  }
+  return null
+}
+// 2024-07-01T14:20:00
+
+export const getDurationFromAPI = (duration: string) => {
+  if (duration) {
+    const result = duration.split("T")[1]
+
+    const hours = result.split("H")[0]
+
+    const minute = result.split("H")[1].split("M")[0]
+    return `${hours} giờ ${minute} phút`
+  }
+  return null
+}
+// PT2h5m
+// 2h5m || 2h11m
+// hours 2
+// minute

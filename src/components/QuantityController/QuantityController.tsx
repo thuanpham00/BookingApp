@@ -8,6 +8,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   onIncrease: (value: number) => void
   onDecrease: (value: number) => void
   register?: UseFormRegister<any>
+  value: number
 }
 
 export default function QuantityController({
