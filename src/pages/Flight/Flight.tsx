@@ -14,22 +14,15 @@ import {
 import Breadcrumb from "src/components/Breadcrumb/Breadcrumb"
 import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
-import {
-  convertToYYYYMMDD,
-  convertTravelClassToEng,
-  getCodeAirport,
-  getDurationFromAPI,
-  getHourFromAPI
-} from "src/utils/utils.ts"
+import { convertToYYYYMMDD, convertTravelClassToEng, getCodeAirport } from "src/utils/utils.ts"
 import schema, { schemaType } from "src/utils/rules.ts"
 import { yupResolver } from "@hookform/resolvers/yup"
 import InputSearch from "src/components/InputSearch/InputSearch"
 import QuantityController from "src/components/QuantityController"
 import SelectDate from "src/components/SelectDate"
+import { useQuery } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import useQueryConfig from "src/hooks/useQueryConfig"
-import { useQuery } from "@tanstack/react-query"
-import { Link } from "react-router-dom"
 
 type FormData = Pick<
   schemaType,
@@ -81,8 +74,9 @@ export default function Flight() {
     retry: 0 // số lần fetch khi yêu cầu thất bại
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const listFlight_1 = getFlightOffersQuery?.data?.data as ResponseFlightSearch
-  console.log(listFlight_1)
+  // console.log(listFlight_1)
 
   const [open, setOpen] = useState(false)
 
@@ -91,7 +85,6 @@ export default function Flight() {
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const inputRef2 = useRef<HTMLInputElement>(null)
-  const inputShowPassenger = useRef<HTMLInputElement>(null)
 
   // quản lý state lưu trữ của form
   const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
@@ -195,7 +188,6 @@ export default function Flight() {
     } else if (nameQuantity === "infants") {
       setNumberInfants(value)
     }
-
     setShowPassenger(numberAdults + numberChildren + numberInfants)
   }
 
@@ -204,8 +196,17 @@ export default function Flight() {
     setShowPassenger(numberAdults + numberChildren + numberInfants)
   }, [numberAdults, numberChildren, numberInfants])
 
+  const exchangeTwoValues = () => {
+    setSearchText(searchText2)
+    setSearchText2(searchText)
+    setValue("originLocationCode", searchText2)
+    setValue("destinationLocationCode", searchText) // cập nhật trường dữ liệu trước khi submit form
+    // chỗ này type button // thực hiện click
+  }
+
   const handleSubmitSearch = handleSubmit((data) => {
     console.log(data)
+    // chỗ này type submit // thực hiện submit form
   })
 
   return (
@@ -218,18 +219,12 @@ export default function Flight() {
       <div className="container">
         <Breadcrumb name="Chuyến bay" name2="Tìm kiếm chuyến bay" />
 
-        <div className="pt-4 pb-2 h-[600px]">
-          <div className="w-full h-[400px] relative">
+        <div className="pt-4 pb-2">
+          <div className="w-full h-[450px] relative">
             <img src={banner} alt="banner" className="w-full h-full rounded-md" />
 
-            <div className="absolute left-[76px] top-24">
-              <h1 className="text-[#f2f2f2] text-6xl font-bold">
-                Compare and Book Cheap Flights on Over 500 Airlines
-              </h1>
-            </div>
-
-            <div className="w-[80%] shadow-md absolute left-1/2 -translate-x-1/2 top-64">
-              <h2 className="bg-gray-300 rounded-tl-lg rounded-tr-lg py-6 px-6 border-b border-b-gray-300 text-3xl text-textColor font-semibold ">
+            <div className="w-[80%] shadow-md absolute left-1/2 -translate-x-1/2 -bottom-10">
+              <h2 className="bg-gray-300 rounded-tl-lg rounded-tr-lg py-6 px-6 border-b border-b-gray-300 text-2xl text-textColor font-semibold ">
                 Search for flights to find the best options for your travel needs.
               </h2>
 
@@ -378,7 +373,12 @@ export default function Flight() {
                       </svg>
                     </InputSearch>
 
-                    <button className="z-20 absolute left-1/2 -translate-x-1/2 top-3 flex items-center justify-center w-7 h-7 rounded-full text-blueColor border-2 border-blueColor bg-blue-100">
+                    {/* đổi 2 giá trị với nhau */}
+                    <button
+                      type="button"
+                      onClick={exchangeTwoValues}
+                      className="z-20 absolute left-1/2 -translate-x-1/2 top-3 flex items-center justify-center w-7 h-7 rounded-full text-blueColor border-2 border-blueColor bg-blue-100"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -460,7 +460,6 @@ export default function Flight() {
                             className="w-[20px] p-1 outline-none bg-transparent text-base flex-grow text-center"
                             value={showPassenger}
                             readOnly
-                            ref={inputShowPassenger}
                           />
 
                           <span className="text-base text-textColor font-semibold">Khách</span>
@@ -505,6 +504,7 @@ export default function Flight() {
                   </div>
 
                   <Button
+                    type="submit"
                     nameButton="Tìm kiếm"
                     className="px-8 py-[14px] bg-orangeColor w-full text-[#f2f2f2] text-lg rounded-md hover:bg-orangeColor/80 duration-200 font-semibold"
                   />
@@ -514,17 +514,30 @@ export default function Flight() {
           </div>
         </div>
 
-        <div className="my-4">
+        <div className="mt-32">
           <h2 className="text-2xl text-textColor font-semibold">Khám Phá Các Chuyến Bay Quốc Tế</h2>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-          <div className="mt-4">
+// Dùng thêm state cục bộ để quản lý dữ liệu input kết hợp với useForm sử dụng setValue để quản lý dữ liệu trước khi submit đi
+// nếu không dùng state cục bộ thì không thể truyền props xuống các component con
+// vì thường các trường dữ liệu của input chỉ quản lý trong component đó (validate...) submit đi
+
+{
+  /* render ra tất cả hành trình bay (chuyến bay - quá cảnh) của 1 chuyến bay */
+}
+
+/**
+ *  <div className="mt-4">
             {listFlight_1?.data.map((item) => (
               <div key={item.id}>
                 <Link
                   to=""
                   className="flex items-center p-6 border border-textColor rounded-md w-full"
                 >
-                  {/* render ra tất cả hành trình bay (chuyến bay - quá cảnh) của 1 chuyến bay */}
                   {item.itineraries.map((detail, index) => (
                     <div key={index} className="flex items-center justify-between w-full">
                       <div className="flex flex-col items-center">
@@ -558,12 +571,4 @@ export default function Flight() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Dùng thêm state cục bộ để quản lý dữ liệu input kết hợp với useForm sử dụng setValue để quản lý dữ liệu trước khi submit đi
-// nếu không dùng state cục bộ thì không thể truyền props xuống các component con
-// vì thường các trường dữ liệu của input chỉ quản lý trong component đó (validate...) submit đi
+ */

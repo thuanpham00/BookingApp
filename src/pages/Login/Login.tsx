@@ -43,11 +43,11 @@ export default function Login() {
         location.reload()
 
         navigate(path.home)
-        toast.success("Login successfully !!!")
+        toast.success("Đăng nhập thành công !!!")
         setLoading(false)
       }
     } catch (error) {
-      toast.error("Error (auth/invalid-credential)")
+      toast.error("Lỗi xác thực/thông tin không hợp lệ")
       setLoading(false)
     }
   })
@@ -67,7 +67,7 @@ export default function Login() {
       location.reload()
 
       navigate(path.home)
-      toast.success("Login successfully !!!")
+      toast.success("Đăng nhập thành công !!!")
     } catch (error) {
       console.log(error)
     }
@@ -127,7 +127,7 @@ export default function Login() {
           messageError={errors.password?.message}
           register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
         />
-        <Button nameButton="Đăng nhập" disable={loading} loading={loading} />
+        <Button type="submit" nameButton="Đăng nhập" disable={loading} loading={loading} />
       </form>
       <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 

@@ -59,24 +59,27 @@ export default function useRouterElement() {
       element: <RejectedRouter />,
       children: [
         {
-          path: path.login,
-          element: (
-            <RegisterLayout>
-              <Suspense>
-                <Login />
-              </Suspense>
-            </RegisterLayout>
-          )
-        },
-        {
-          path: path.register,
-          element: (
-            <RegisterLayout>
-              <Suspense>
-                <Register />
-              </Suspense>
-            </RegisterLayout>
-          )
+          path: "",
+          // sử dụng <Outlet/> bên trong component <RegisterLayout/> để truyền component con vào
+          element: <RegisterLayout />, // sử dụng chung // fix re-render
+          children: [
+            {
+              path: path.login,
+              element: (
+                <Suspense>
+                  <Login />
+                </Suspense>
+              )
+            },
+            {
+              path: path.register,
+              element: (
+                <Suspense>
+                  <Register />
+                </Suspense>
+              )
+            }
+          ]
         }
       ]
     }

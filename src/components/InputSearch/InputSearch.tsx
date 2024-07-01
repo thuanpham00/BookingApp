@@ -22,7 +22,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 // chỗ này hay - nâng cao
 // do sử dung ref truyền ref từ component cha xuống component con nên dùng forwardRef
-const InputSearch = forwardRef<HTMLInputElement, InputProps>(function InputProps(
+const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   {
     children,
     classNameList,

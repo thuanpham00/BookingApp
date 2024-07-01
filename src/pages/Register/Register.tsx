@@ -40,11 +40,11 @@ export default function Register() {
           confirmPassword: data.confirmPassword
         })
         navigate(path.login)
-        toast.success("Sign up successfully !!!")
+        toast.success("Đăng ký thành công !!!")
         setLoading(false)
       }
     } catch (error) {
-      toast.error("Error (auth/email-already-in-use)")
+      toast.error("Lỗi xác thực/email đã được sử dụng")
       setLoading(false)
     }
   })

@@ -52,3 +52,7 @@
 ### Lỗi tồn động :
 
 - làm thêm hàm chuyển 2 giá trị airport chéo
+
+
+#### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)
+#### Dùng react.memo() để fix tình trạng component chung re-render khi không cần thiết
