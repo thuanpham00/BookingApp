@@ -1,11 +1,11 @@
 import { airportCodeList } from "src/types/flight.type"
 import AirportCodeItem from "../AirportCodeItem"
-import { InputName } from "../../Flight"
+import { InputAirport } from "../../Flight"
 
 interface Props {
   listAirport: airportCodeList
-  inputName: InputName
-  handleItemClick: (inputName: InputName, value: string) => void
+  inputName: InputAirport
+  handleItemClick: (inputName: InputAirport, value: string) => void
 }
 
 let country: string | null = null
