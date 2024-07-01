@@ -5,7 +5,7 @@ interface Props {
 
 export default function Breadcrumb({ name, name2 }: Props) {
   return (
-    <div className="flex gap-1 items-center px-1 pt-3 pb-2 border-b border-b-[#bbb]">
+    <div className="flex gap-1 items-center px-1 py-4 border-b border-b-[#bbb]">
       <span className="text-base text-[#0077b6] font-semibold">{name} </span>
       <svg
         xmlns="http://www.w3.org/2000/svg"

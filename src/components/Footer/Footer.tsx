@@ -5,9 +5,9 @@ export default function Footer() {
     <footer className="bg-[#022d5c] text-[#f2f2f2]">
       <div className="container py-8 px-3">
         <div className="flex items-center justify-between pb-4 border-b border-b-[#4e6c8d]">
-          <h2 className="font-semibold text-2xl">Easy Access</h2>
+          <h2 className="font-semibold text-2xl">Dễ dàng truy cập</h2>
           <div className="flex items-center gap-8">
-            <span className="font-semibold text-2xl">Connect with Us</span>
+            <span className="font-semibold text-2xl">Kết nối với chúng tôi</span>
             <div className="flex gap-2">
               <Link
                 to="https://www.facebook.com/domaybatduoctao912"
@@ -57,7 +57,7 @@ export default function Footer() {
         <div className="py-4 flex items-start justify-between flex-wrap border-b border-b-[#4e6c8d]">
           <div className="flex-1">
             <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
-              Quick Links
+              ĐƯỜNG DẪN NHANH
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
@@ -65,7 +65,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Popular Airlines
+                  Hãng hàng không nổi tiếng
                 </Link>
               </li>
               <li className="mb-2">
@@ -73,7 +73,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Popular Flight Routes
+                  Đường bay phổ biến
                 </Link>
               </li>
               <li className="mb-2">
@@ -81,7 +81,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Top U.S. Destinations
+                  Các điểm đến hàng đầu ở Hoa Kỳ
                 </Link>
               </li>
               <li className="mb-2">
@@ -89,7 +89,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Top International Destinations
+                  Các điểm đến quốc tế hàng đầu
                 </Link>
               </li>
               <li className="mb-2">
@@ -97,7 +97,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Site Directories
+                  Thư mục trang web
                 </Link>
               </li>
               <li className="mb-2">
@@ -105,7 +105,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Stay Connected
+                  Giữ liên lạc
                 </Link>
               </li>
               <li className="mb-2">
@@ -113,7 +113,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  International Sites
+                  Giữ liên lạc
                 </Link>
               </li>
             </ul>
@@ -121,7 +121,7 @@ export default function Footer() {
 
           <div className="flex-1">
             <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
-              BOOK
+              BOOKING
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
@@ -129,7 +129,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Cheap Flights
+                  Chuyến bay giá rẻ
                 </Link>
               </li>
               <li className="mb-2">
@@ -137,7 +137,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Cheap Hotels
+                  Khách sạn giá rẻ
                 </Link>
               </li>
               <li className="mb-2">
@@ -145,7 +145,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Car Rentals
+                  Cho thuê ô tô
                 </Link>
               </li>
               <li className="mb-2">
@@ -153,7 +153,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Vacation Packages
+                  Gói kỳ nghỉ
                 </Link>
               </li>
               <li className="mb-2">
@@ -161,7 +161,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Group Travel
+                  Du lịch theo nhóm
                 </Link>
               </li>
               <li className="mb-2">
@@ -169,7 +169,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Save & Earn $
+                  Tiết kiệm và kiếm $
                 </Link>
               </li>
             </ul>
@@ -177,7 +177,7 @@ export default function Footer() {
 
           <div className="flex-1">
             <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
-              TRAVELER TOOLS
+              CÔNG CỤ DU LỊCH
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
@@ -185,7 +185,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Gift Cards
+                  Thẻ quà tặng
                 </Link>
               </li>
               <li className="mb-2">
@@ -193,7 +193,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Check My Booking
+                  Kiểm tra đặt chỗ của tôi
                 </Link>
               </li>
               <li className="mb-2">
@@ -201,7 +201,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Customer Support
+                  Hỗ trợ khách hàng
                 </Link>
               </li>
               <li className="mb-2">
@@ -209,7 +209,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Online Check-in
+                  Đăng ký trực tuyến
                 </Link>
               </li>
               <li className="mb-2">
@@ -217,7 +217,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Airline Baggage Fees
+                  Phí hành lý hàng không
                 </Link>
               </li>
               <li className="mb-2">
@@ -225,7 +225,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Check Flight Status
+                  Kiểm tra tình trạng chuyến bay
                 </Link>
               </li>
               <li className="mb-2">
@@ -233,7 +233,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Travel Blog
+                  Blog du lịch
                 </Link>
               </li>
               <li className="mb-2">
@@ -241,7 +241,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Local Guides
+                  Hướng dẫn viên địa phương
                 </Link>
               </li>
             </ul>
@@ -249,7 +249,7 @@ export default function Footer() {
 
           <div className="flex-1">
             <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
-              ABOUT AMADEUS
+              GIỚI THIỆU
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
@@ -257,7 +257,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  About Us
+                  Về chúng tôi
                 </Link>
               </li>
               <li className="mb-2">
@@ -265,7 +265,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Press Room
+                  Phòng báo chí
                 </Link>
               </li>
               <li className="mb-2">
@@ -273,7 +273,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Careers
+                  Nghề nghiệp
                 </Link>
               </li>
               <li className="mb-2">
@@ -281,7 +281,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Affiliate Program
+                  Chương trình liên kết
                 </Link>
               </li>
               <li className="mb-2">
@@ -289,7 +289,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Client Testimonial
+                  Lời chứng thực của khách hàng
                 </Link>
               </li>
               <li className="mb-2">
@@ -297,7 +297,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Advertise with Us
+                  Quảng cáo với chúng tôi
                 </Link>
               </li>
               <li className="mb-2">
@@ -305,7 +305,7 @@ export default function Footer() {
                   to="#"
                   className="font-medium text-sm hover:underline duration-200 cursor-pointer"
                 >
-                  Newsletter
+                  Bản tin
                 </Link>
               </li>
             </ul>

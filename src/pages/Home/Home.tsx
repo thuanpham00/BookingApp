@@ -1,15 +1,22 @@
 import { Helmet } from "react-helmet-async"
-import bg1 from "../../img/Home/banner.jpg"
+import bg1 from "../../img/bgLogin/bg-1.jpg"
 import bg2 from "../../img/Home/banner2.jpg"
 import bg3 from "../../img/bgLogin/bg-5.jpg"
+import bg4 from "../../img/bgLogin/bg-6.png"
+import tour1 from "../../img/Home/tour1.jpg"
+import tour2 from "../../img/Home/tour2.jpg"
+import tour3 from "../../img/Home/tour3.jpg"
+import tour4 from "../../img/Home/tour4.jpg"
+import tour5 from "../../img/Home/tour5.jpg"
+import tour6 from "../../img/Home/tour6.jpg"
 import iconSVG from "../../img/svg/travel-luggage-svgrepo-com.svg"
 import ChangeAutoBg from "src/components/ChangeAutoBg"
 
-const backgroundList = [bg1, bg2, bg3]
+const backgroundList = [bg1, bg2, bg3, bg4]
 
 export default function Home() {
   return (
-    <div className="h-[1000px]">
+    <div>
       <Helmet>
         <title>Trang chủ</title>
         <meta name="description" content="Trang chủ - Amadeus Booking" />
@@ -18,7 +25,7 @@ export default function Home() {
       <div className="w-full h-[600px] relative">
         <ChangeAutoBg
           className="transition-all ease-linear duration-1000 w-full h-full filter brightness-75"
-          indexEnd={2}
+          indexEnd={3}
           listImg={backgroundList}
         />
 
@@ -34,7 +41,7 @@ export default function Home() {
       </div>
       <div className="container">
         <div className="mt-4 flex items-center gap-8">
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 hover:translate-y-[-10px] transition-all duration-200 cursor-pointer">
+          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +64,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 hover:translate-y-[-10px] transition-all duration-200 cursor-pointer">
+          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +88,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 hover:translate-y-[-10px] transition-all duration-200 cursor-pointer">
+          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col justify-between">
               <img src={iconSVG} alt="icon" className="w-10 h-10" />
               <h3 className="my-2 text-textColor font-semibold text-lg">Hướng dẫn viên du lịch</h3>
@@ -91,7 +98,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 hover:translate-y-[-10px] transition-all duration-200 cursor-pointer">
+          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,6 +120,236 @@ export default function Home() {
                 Chúng tôi luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi nơi. Đội ngũ chăm sóc khách hàng
                 chuyên nghiệp hoạt động 24/7 để giải đáp mọi thắc mắc.
               </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="my-16">
+          <h2 className="text-center text-textColor mt-4 text-3xl font-semibold">
+            Khám phá các tour du lịch nổi tiếng
+          </h2>
+          <div className="mt-4 grid grid-cols-12 gap-6">
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour1}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  PARIS
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">London to Paris</span>
+                  <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$899.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">1 giờ 30 phút bay</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour2}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  SPAIN
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">Dubai to Spain</span>
+                  <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$799.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">7 giờ - 8 giờ bay</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour3}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  AUSTRALIA
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">Bangkok to Australia</span>
+                  <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$549.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">9 giờ - 10 giờ bay</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour4}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  SING
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">VietNam to Singapore</span>
+                  <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$599.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">2 giờ - 3 giờ bay</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour5}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  VIET
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">Lao to VietNam</span>
+                  <span className="text-base block my-1 text-gray-500">Bay 2 chiều</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$300.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">1 giờ 30 phút bay</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+              <div className="w-full relative">
+                <img
+                  src={tour6}
+                  alt="tour"
+                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
+                />
+                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                  KOREA
+                </div>
+                <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
+                  <span className="text-lg text-textColor font-semibold">VietNam to Korea</span>
+                  <span className="text-base block my-1 text-gray-500">Bay 2 chiều</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base block text-gray-500">From</span>
+                    <span className="text-lg text-blueColor font-semibold">$700.00</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#2b2d42"
+                      className="mt-1 w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                    <span className="text-gray-500">4 giờ - 5 giờ bay</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
