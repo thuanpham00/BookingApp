@@ -68,7 +68,7 @@ class http {
       )
       // lấy accessToken từ kết quả trả về
       this.tokenAPI = response.data.access_token
-      console.log(response)
+      // console.log(response)
     } catch (error) {
       console.log(error)
     }
