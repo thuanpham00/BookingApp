@@ -9,10 +9,86 @@ import tour3 from "../../img/Home/tour3.jpg"
 import tour4 from "../../img/Home/tour4.jpg"
 import tour5 from "../../img/Home/tour5.jpg"
 import tour6 from "../../img/Home/tour6.jpg"
+import hotel1 from "../../img/Home/hotel1.jpg"
+import hotel2 from "../../img/Home/hotel2.jpg"
+import hotel3 from "../../img/Home/hotel3.jpg"
+import hotel4 from "../../img/Home/hotel4.jpg"
+import hotel5 from "../../img/Home/hotel5.jpg"
+import hotel6 from "../../img/Home/hotel6.jpg"
 import iconSVG from "../../img/svg/travel-luggage-svgrepo-com.svg"
 import ChangeAutoBg from "src/components/ChangeAutoBg"
+import SlideList from "./components/SlideList"
 
 const backgroundList = [bg1, bg2, bg3, bg4]
+
+export type ItemHotelType = {
+  imageHotel: string
+  nameHotel: string
+  addressHotel: string
+  review: number
+  rating: number
+  fromPrice: string
+  type: string
+}
+
+export type ListHotelType = ItemHotelType[]
+
+const listHotel: ListHotelType = [
+  {
+    imageHotel: hotel1,
+    nameHotel: "Hyatt Regency Maui Resort & Spa",
+    addressHotel: "200 Nohea Kai Dr, Lahaina, HI",
+    review: 130,
+    rating: 4.4,
+    fromPrice: "350$",
+    type: "Mỗi đêm"
+  },
+  {
+    imageHotel: hotel2,
+    nameHotel: "Four Seasons Resort Maui at Wailea",
+    addressHotel: "3900 Wailea Alanui Drive, Kihei, HI",
+    review: 51,
+    rating: 4.6,
+    fromPrice: "888$",
+    type: "Mỗi đêm"
+  },
+  {
+    imageHotel: hotel3,
+    nameHotel: "Ibis Styles London Heathrow",
+    addressHotel: "272 Bath Road, Harlington, England",
+    review: 68,
+    rating: 4.5,
+    fromPrice: "640$",
+    type: "Mỗi đêm"
+  },
+  {
+    imageHotel: hotel4,
+    nameHotel: "Hotel Europe Saint Severin Paris",
+    addressHotel: "38-40 Rue Saint Séverin, Paris, Paris",
+    review: 100,
+    rating: 4.8,
+    fromPrice: "410$",
+    type: "Mỗi đêm"
+  },
+  {
+    imageHotel: hotel5,
+    nameHotel: "The Millennium Hilton New York",
+    addressHotel: "124 E Huron St, New york",
+    review: 61,
+    rating: 4.3,
+    fromPrice: "300$",
+    type: "Mỗi đêm"
+  },
+  {
+    imageHotel: hotel6,
+    nameHotel: "Best Western Grant Park Hotel",
+    addressHotel: "124 E Huron St, Chicago",
+    review: 61,
+    rating: 4.3,
+    fromPrice: "220$",
+    type: "Mỗi đêm"
+  }
+]
 
 export default function Home() {
   return (
@@ -30,11 +106,11 @@ export default function Home() {
         />
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <h1 className="w-[1000px] text-center text-[#f2f2f2] text-5xl font-semibold">
+          <h1 className="w-[1000px] text-center text-[#f2f2f2] md:text-2xl lg:text-4xl font-semibold">
             Starts Your Trip with Amadeus Booking.
           </h1>
-          <h2 className="text-center text-[#f2f2f2] mt-4 text-xl">
-            Take a little break from the work strss of everyday. Discover plan trip and explore
+          <h2 className="text-center text-[#f2f2f2] mx-auto mt-4 md:w-[800px] lg:w-full md:text-lg lg:text-xl">
+            Take a little break from the work stress of everyday. Discover plan trip and explore
             beautiful destinations.
           </h2>
         </div>
@@ -125,11 +201,11 @@ export default function Home() {
         </div>
 
         <div className="my-16">
-          <h2 className="text-center text-textColor mt-4 text-3xl font-semibold">
+          <h2 className="text-center text-textColor mt-4 text-2xl font-semibold">
             Khám phá các tour du lịch nổi tiếng
           </h2>
-          <div className="mt-4 grid grid-cols-12 gap-6">
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+          <div className="mt-4 grid lg:grid-cols-12 md:grid-cols-6 gap-6">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour1}
@@ -137,16 +213,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  PARIS
+                  JP
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
-                  <span className="text-lg text-textColor font-semibold">London to Paris</span>
-                  <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
+                  <span className="text-lg text-textColor font-semibold">Hoa Ky to Japan</span>
+                  <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$899.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold">$700 - $1,500 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -161,12 +237,12 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">1 giờ 30 phút bay</span>
+                    <span className="text-gray-500">13h - 14h bay</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour2}
@@ -174,16 +250,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  SPAIN
+                  ES
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
                   <span className="text-lg text-textColor font-semibold">Dubai to Spain</span>
                   <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$799.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold">$400 - $800 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -198,12 +274,12 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">7 giờ - 8 giờ bay</span>
+                    <span className="text-gray-500">7h - 8h bay</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour3}
@@ -211,16 +287,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  AUSTRALIA
+                  AUS
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
                   <span className="text-lg text-textColor font-semibold">Bangkok to Australia</span>
-                  <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
+                  <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$549.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold">$300 - $700 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -235,12 +311,12 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">9 giờ - 10 giờ bay</span>
+                    <span className="text-gray-500">9h - 10h bay</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour4}
@@ -248,16 +324,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  SING
+                  SG
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
                   <span className="text-lg text-textColor font-semibold">VietNam to Singapore</span>
                   <span className="text-base block my-1 text-gray-500">Bay 1 chiều</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$599.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold"> $100 - $200 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -272,12 +348,12 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">2 giờ - 3 giờ bay</span>
+                    <span className="text-gray-500">2h - 3h bay</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour5}
@@ -285,16 +361,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  VIET
+                  VN
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
                   <span className="text-lg text-textColor font-semibold">Lao to VietNam</span>
-                  <span className="text-base block my-1 text-gray-500">Bay 2 chiều</span>
+                  <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$300.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold">$150 - $250 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -309,12 +385,12 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">1 giờ 30 phút bay</span>
+                    <span className="text-gray-500">1h - 2h bay</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 shadow-sm cursor-pointer hover:translate-y-[-10px] duration-200">
+            <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
                 <img
                   src={tour6}
@@ -322,16 +398,16 @@ export default function Home() {
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
                 <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
-                  KOREA
+                  KR
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
                   <span className="text-lg text-textColor font-semibold">VietNam to Korea</span>
-                  <span className="text-base block my-1 text-gray-500">Bay 2 chiều</span>
+                  <span className="text-base block my-1 text-gray-500">Bay khứ hồi</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-base block text-gray-500">From</span>
-                    <span className="text-lg text-blueColor font-semibold">$700.00</span>
+                    <span className="text-base block text-gray-500">Từ</span>
+                    <span className="text-lg text-blueColor font-semibold">$200 - $400 USD</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-[2px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -346,11 +422,20 @@ export default function Home() {
                         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                       />
                     </svg>
-                    <span className="text-gray-500">4 giờ - 5 giờ bay</span>
+                    <span className="text-gray-500">4h - 5h bay</span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="my-16">
+          <h2 className="text-center text-textColor mt-4 text-2xl font-semibold">
+            Các điểm đến khách sạn nổi tiếng
+          </h2>
+          <div className="mt-4">
+            <SlideList timeScroll={3000} productList={listHotel} />
           </div>
         </div>
       </div>

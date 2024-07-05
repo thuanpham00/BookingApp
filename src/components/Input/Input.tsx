@@ -14,12 +14,12 @@ export default function Input({
   className,
   nameInput,
   messageError,
-  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border  focus:border-gray-600",
+  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border font-semibold focus:border-gray-600",
   register,
   name,
   ...rest
 }: InputProps) {
-  const registerResult = register && name ? { ...register(name) } : ""
+  const registerResult = register && name ? { ...register(name) } : "" // theo dõi quản lý dữ liệu input
   const [openEye, setOpenEye] = useState(false)
 
   const toggle = () => {

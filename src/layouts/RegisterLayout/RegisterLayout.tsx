@@ -12,7 +12,6 @@ import { memo } from "react"
 const backgroundList = [bg1, bg2, bg3, bg4, bg5, bg6]
 
 function RegisterLayoutInner() {
-  console.log("hihi")
   return (
     <div>
       <ChangeAutoBg

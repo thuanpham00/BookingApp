@@ -42,13 +42,13 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
 ) {
   const registerResult = register && name ? { ...register(name) } : ""
   return (
-    <div className="relative">
+    <div className="flex-1 relative">
       <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{error}</span>
-      <div className="p-4 border border-textColor rounded-md flex items-center">
+      <div className="py-4 px-3 border border-gray-400 rounded-md flex items-center">
         {children}
         <input
           type="text"
-          className="w-[150px] px-2 outline-none bg-transparent text-base flex-grow"
+          className="px-2 outline-none bg-transparent text-base flex-grow"
           onClick={handleFocus}
           {...rest}
           {...registerResult}

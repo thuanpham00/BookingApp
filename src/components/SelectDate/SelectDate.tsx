@@ -26,12 +26,12 @@ export default function SelectDate({
   return (
     <div className="relative">
       <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{errors}</span>
-      <div className="py-[10px] px-6 border border-textColor rounded-md flex items-center">
+      <div className="py-[10px] px-2 border border-gray-400 rounded-md flex items-center">
         <Popover>
           <PopoverTrigger asChild>
             <ButtonShadcn
               variant={"outline"}
-              className="bg-transparent text-left shadow-none border-none"
+              className="bg-transparent text-left border-none shadow-none"
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {date ? format(date, "yyyy-MM-dd") : <span>Chọn ngày về</span>}

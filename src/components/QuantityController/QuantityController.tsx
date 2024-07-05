@@ -21,6 +21,7 @@ export default function QuantityController({
   name,
   ...rest
 }: Props) {
+  // ở đây chúng ta thao tác cộng trừ nhân chia value rồi truyền vào props, bên kia nhận props truyền vào 1 hàm (set lại giá trị của nó) - component cha chứa state
   const handleChangeValueInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const _value = Number(event.target.value)
 

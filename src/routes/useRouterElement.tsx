@@ -4,11 +4,18 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import RegisterLayout from "src/layouts/RegisterLayout"
-import Flight from "src/pages/Flight"
-
+// import Flight from "src/pages/Flight"
 // import Login from "src/pages/Login"
 // import Register from "src/pages/Register"
 // import Home from "src/pages/Home"
+
+/**
+ * Khi url thay đổi thì các component nào dùng các hook như
+ * useRoutes, useParams, useSearchParams,...
+ * sẽ bị re-render
+ * ví dụ component `App` dưới đây bị re-render khi mà url thay đổi
+ * vì dùng `useRouterElement` (đây là custom hook của `useRoutes`)
+ */
 
 function ProtectedRouter() {
   const { isAuthenticated } = useContext(AppContext)
@@ -23,6 +30,7 @@ function RejectedRouter() {
 const Home = lazy(() => import("src/pages/Home"))
 const Login = lazy(() => import("src/pages/Login"))
 const Register = lazy(() => import("src/pages/Register"))
+const Flight = lazy(() => import("src/pages/Flight"))
 
 export default function useRouterElement() {
   // nhập url theo path có thể điều hướng trang

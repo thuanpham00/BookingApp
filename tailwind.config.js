@@ -25,10 +25,12 @@ module.exports = {
       addComponents({
         ".container": {
           // set up class container mới
-          maxWidth: "90rem", // 1440px
+          maxWidth: "86rem", // 1376px
           width: "100%",
           marginLeft: "auto",
-          marginRight: "auto"
+          marginRight: "auto",
+          paddingLeft: "16px",
+          paddingRight: "16px"
         }
       })
     }),

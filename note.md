@@ -13,6 +13,7 @@
 - yarn add firebase
 - yarn add @floating-ui/react
 - yarn add framer-motion
+- yarn add react-transition-group - yarn add @types/react-transition-group
 
 ## ÔN TẬP KIẾN THỨC
 

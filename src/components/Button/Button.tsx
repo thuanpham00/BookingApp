@@ -5,6 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
   disable?: boolean
   loading?: boolean
+  classNameWrapper?: string
 }
 
 export default function Button({
@@ -12,11 +13,12 @@ export default function Button({
   className = "mt-2 py-3 bg-blueColor w-full text-[#f2f2f2] text-lg rounded-sm hover:bg-blueColor/80 duration-200",
   disable,
   loading,
+  classNameWrapper = "relative",
   ...rest
 }: ButtonProps) {
   const classNameResult = disable ? className + " cursor-not-allowed" : className
   return (
-    <div className="relative">
+    <div className={classNameWrapper}>
       <button className={classNameResult} disabled={disable} {...rest}>
         {nameButton}
       </button>
