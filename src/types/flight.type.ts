@@ -15,6 +15,52 @@ export type FlightOfferParamsConfig = {
   excludedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn loại trừ khỏi kết quả tìm kiếm chuyến bay.
 }
 
+export type flightSearchParams = {
+  originDestinations: [
+    {
+      id: string
+      originLocationCode: string
+      destinationLocationCode: string
+      departureDateTimeRange: {
+        date: string
+      }
+    }
+  ]
+  travelers: [
+    {
+      id: string
+      travelerType: string
+      count: number
+    },
+    {
+      id: string
+      travelerType: string
+      count: number
+    },
+    {
+      id: string
+      travelerType: string
+      count: number
+    }
+  ]
+  sources: string[]
+  searchCriteria: {
+    maxFlightOffers: number
+    flightFilters: {
+      cabinRestrictions: [
+        {
+          cabin: string
+          originDestinationIds: string[]
+        }
+      ]
+      carrierRestrictions: {
+        excludedCarrierCodes: string[]
+      }
+    }
+  }
+  currencyCode: string
+}
+
 export type airportCodeItem = {
   code: string
   airport: string

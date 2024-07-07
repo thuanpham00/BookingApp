@@ -34,7 +34,7 @@ export default function Header() {
           <div className="flex items-center justify-center gap-1">
             <strong>Nhận ưu đãi lớn!</strong>
             <span>Chọn từ hơn 500 hãng hàng không để có giá vé máy bay ngay bây giờ!</span>
-            <strong className="underline cursor-pointer">Khám phá!</strong>
+            <span className="underline cursor-pointer">Khám phá!</span>
           </div>
         </div>
       </div>

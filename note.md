@@ -50,9 +50,15 @@
 
 8. Flight Choice Prediction API: Nếu bạn muốn cung cấp các đề xuất chuyến bay dựa trên dữ liệu lịch sử và hành vi của khách hàng, bạn có thể sử dụng API này để dự đoán các lựa chọn chuyến bay phù hợp.
 
+![alt text](./src/img/doc/image.png)
+![alt text](./src/img/doc/image2.png)
+![alt text](./src/img/doc/image3.png)
+![alt text](./src/img/doc/image4.png)
+![alt text](./src/img/doc/image5.png)
+
 ### Lỗi tồn động :
 
-- làm thêm hàm chuyển 2 giá trị airport chéo
+- 
 
 
 #### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)

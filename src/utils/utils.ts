@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios"
+import { airportCodeItem } from "src/types/flight.type"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -29,10 +30,15 @@ export const convertToYYYYMMDD = (date: Date) => {
 }
 
 export const convertTravelClassToEng = (travelClass: string) => {
-  if (travelClass === "Hạng Phổ thông") return "ECONOMY"
-  else if (travelClass === "Hạng Phổ thông cao cấp") return "PREMIUM_ECONOMY"
-  else if (travelClass === "Hạng thương gia") return "BUSINESS"
-  else if (travelClass === "Hạng nhất") return "FIRST"
+  if (travelClass === "Hạng Phổ thông") {
+    return "ECONOMY"
+  } else if (travelClass === "Hạng Phổ thông cao cấp") {
+    return "PREMIUM_ECONOMY"
+  } else if (travelClass === "Hạng Thương gia") {
+    return "BUSINESS"
+  } else if (travelClass === "Hạng Nhất") {
+    return "FIRST"
+  }
 }
 
 export const getHourFromAPI = (hours: string) => {
@@ -59,3 +65,28 @@ export const getDurationFromAPI = (duration: string) => {
 // 2h5m || 2h11m
 // hours 2
 // minute
+
+// lấy hãng hàng không
+export const getAirlinesCode = (aircraft: { [code: string]: string }, code: string) => {
+  const carriedCode = aircraft[code]
+  return carriedCode
+}
+
+export const getCountryFromIataCode = (list: airportCodeItem[], code: string) => {
+  list.filter((item) => {
+    if (item.code === code) {
+      return item.country
+    }
+  })
+  return null
+}
+
+export const getPrice = (price: string) => {
+  if (price) {
+    const res = price.split(".")[0]
+    return res
+  }
+  return null
+}
+
+export const exchangePrice = (price: string) => {}

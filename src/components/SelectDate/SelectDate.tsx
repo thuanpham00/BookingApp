@@ -13,6 +13,7 @@ interface Props {
   convertToYYYYMMDD: (date: Date) => string
   errors: string
   name: string
+  text: string
 }
 
 export default function SelectDate({
@@ -21,7 +22,8 @@ export default function SelectDate({
   date,
   convertToYYYYMMDD,
   errors,
-  name
+  name,
+  text
 }: Props) {
   return (
     <div className="relative">
@@ -34,7 +36,7 @@ export default function SelectDate({
               className="bg-transparent text-left border-none shadow-none"
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "yyyy-MM-dd") : <span>Chọn ngày về</span>}
+              {date ? format(date, "yyyy-MM-dd") : <span>{text}</span>}
             </ButtonShadcn>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">

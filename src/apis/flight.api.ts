@@ -1,12 +1,9 @@
-import { FlightOfferParamsConfig, ResponseFlightSearch } from "src/types/flight.type"
+import { flightSearchParams, ResponseFlightSearch } from "src/types/flight.type"
 import Http from "src/utils/http"
 
 export const flightApi = {
   // tìm kiếm chuyến bay
-  flightOffersSearch: (params: FlightOfferParamsConfig, signal?: AbortSignal) => {
-    return Http.get<ResponseFlightSearch>("shopping/flight-offers", {
-      params,
-      signal
-    })
+  flightOffersSearch: (body: flightSearchParams) => {
+    return Http.post<ResponseFlightSearch>("shopping/flight-offers", body)
   }
 }

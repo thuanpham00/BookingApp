@@ -5,13 +5,9 @@ import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
-import { Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { airportCodes, travelClassList } from "src/constant/flightSearch"
-import {
-  FlightOfferParamsConfig,
-  ResponseFlightSearch,
-  airportCodeList
-} from "src/types/flight.type.ts"
+import { ResponseFlightSearch, airportCodeList, flightSearchParams } from "src/types/flight.type.ts"
 import Breadcrumb from "src/components/Breadcrumb/Breadcrumb"
 import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
@@ -20,19 +16,19 @@ import {
   convertTravelClassToEng,
   getCodeAirport,
   getDurationFromAPI,
-  getHourFromAPI
+  getHourFromAPI,
+  getPrice
 } from "src/utils/utils.ts"
 import schema, { schemaType } from "src/utils/rules.ts"
 import { yupResolver } from "@hookform/resolvers/yup"
 import InputSearch from "src/components/InputSearch/InputSearch"
 import QuantityController from "src/components/QuantityController"
 import SelectDate from "src/components/SelectDate"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
-import useQueryConfig from "src/hooks/useQueryConfig"
 import { Link } from "react-router-dom"
 
-type FormData = Pick<
+export type FormData = Pick<
   schemaType,
   | "originLocationCode"
   | "destinationLocationCode"
@@ -59,7 +55,6 @@ const schemaFormData = schema.pick([
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
 export default function Flight() {
-  const queryConfig = useQueryConfig()
   const {
     handleSubmit,
     register,
@@ -69,21 +64,6 @@ export default function Flight() {
   } = useForm<FormData>({
     resolver: yupResolver(schemaFormData)
   })
-
-  const getFlightOffersQuery = useQuery({
-    queryKey: ["flightOffers", queryConfig],
-    queryFn: () => {
-      const controller = new AbortController()
-      setTimeout(() => {
-        controller.abort() // // hủy request khi chờ quá lâu // 5 giây sau cho nó hủy // làm tự động
-      }, 5000)
-      return flightApi.flightOffersSearch(queryConfig as FlightOfferParamsConfig, controller.signal)
-    },
-    retry: 0 // số lần fetch khi yêu cầu thất bại
-  })
-
-  const listFlight_1 = getFlightOffersQuery?.data?.data as ResponseFlightSearch
-  console.log(listFlight_1)
 
   const [open, setOpen] = useState(false)
 
@@ -99,11 +79,12 @@ export default function Flight() {
   const [date, setDate] = useState<Date | null>(null) // ngày đi
   const [date2, setDate2] = useState<Date | null>(null) // ngày về
   const [travelClass, setTravelClass] = useState<string>("") // hạng vé
+  console.log(travelClass)
   const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
   const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
   const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
 
-  const [flightType, setFlightType] = useState("roundTrip")
+  const [flightType, setFlightType] = useState("oneWay")
   const [showPassenger, setShowPassenger] = useState(0)
   const [showReturnDate, setShowReturnDate] = useState(false)
 
@@ -211,13 +192,79 @@ export default function Flight() {
     // chỗ này type button // thực hiện click
   }
 
+  const searchFlightOffersMutation = useMutation({
+    mutationFn: (data: flightSearchParams) => {
+      return flightApi.flightOffersSearch(data as flightSearchParams)
+    }
+  })
+
+  const searchFlightList = searchFlightOffersMutation?.data?.data as ResponseFlightSearch
+  console.log(searchFlightList)
+
+  const [showInfoSearch, setShowInfoSearch] = useState(false)
   const handleSubmitSearch = handleSubmit((data) => {
     console.log(data)
+    // truyền các data mà form quản lý vào biến này để submit gọi api
+
+    const flightSearchParams: flightSearchParams = {
+      originDestinations: [
+        // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
+        {
+          // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
+          id: "1",
+          originLocationCode: data.originLocationCode,
+          destinationLocationCode: data.destinationLocationCode,
+          departureDateTimeRange: {
+            date: data.departureDate
+          }
+        }
+      ],
+      travelers: [
+        // 1 mảng chứa các đối tượng đại diện cho hành khách.
+        {
+          id: "1",
+          travelerType: "ADULT",
+          count: data.adults as number
+        },
+        {
+          id: "2",
+          travelerType: "CHILD",
+          count: data.children as number
+        },
+        {
+          id: "3",
+          travelerType: "SEATED_INFANT",
+          count: data.infants as number
+        }
+      ],
+      sources: ["GDS"], // nguồn dữ liệu
+      searchCriteria: {
+        // 1 đối tượng chứa các tiêu chí tìm kiếm.
+        maxFlightOffers: 5, // sl tìm kiếm
+        flightFilters: {
+          cabinRestrictions: [
+            {
+              cabin: data.travelClass, // khoang cabin
+              originDestinationIds: ["1"] // Bỏ originDestinationIds
+            }
+          ],
+          carrierRestrictions: {
+            excludedCarrierCodes: ["ER"]
+          }
+        }
+      },
+      currencyCode: "VND" // Đơn vị tiền tệ mong muốn
+    }
     // chỗ này type submit // thực hiện submit form
+    searchFlightOffersMutation.mutate(flightSearchParams, {
+      onSuccess: () => {
+        setShowInfoSearch(true)
+      }
+    })
   })
 
   return (
-    <div>
+    <div className="bg-[#e5eef4]">
       <Helmet>
         <title>Tìm kiếm chuyến bay</title>
         <meta name="description" content="Flight booking - Amadeus Booking" />
@@ -227,18 +274,18 @@ export default function Flight() {
         <Breadcrumb name="Chuyến bay" name2="Tìm kiếm chuyến bay" />
       </div>
 
-      <div className="w-full h-[600px] relative">
-        <img src={banner} alt="banner" className="w-full h-full" />
-        <div className="w-[70%] shadow-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-          <h2 className="bg-gray-300/50 rounded-tl-lg rounded-tr-lg py-6 px-6 border-b border-b-gray-300 text-2xl text-textColor font-semibold ">
+      <div className="w-full h-[550px] relative">
+        <img src={banner} alt="banner" className="w-full h-full filter brightness-50" />
+        <div className="w-[70%] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+          <h1 className="my-4 md:text-2xl lg:text-4xl text-[#f2f2f2] font-semibold">
             Search for flights to find the best options for your travel needs.
-          </h2>
+          </h1>
 
           <form
             autoComplete="off"
             onSubmit={handleSubmitSearch}
             noValidate
-            className="py-4 px-6 bg-[#f2f2f2]/80 rounded-bl-lg rounded-br-lg "
+            className="py-4 px-6 bg-[#f2f2f2]/80 rounded-lg shadow-md"
           >
             <div className="mt-2 flex items-center gap-4">
               <div className="flex items-center gap-1">
@@ -362,6 +409,7 @@ export default function Flight() {
                     {/* date ngày đi*/}
                     <div className={showReturnDate ? "w-[50%]" : "w-[100%]"}>
                       <SelectDate
+                        text="Ngày khởi hành"
                         control={control}
                         setDate={setDate}
                         date={date}
@@ -372,8 +420,9 @@ export default function Flight() {
                     </div>
 
                     {/* date ngày về */}
-                    <div className={showReturnDate ? "w-[50%]" : "opacity-0 w-[0%]"}>
+                    <div className={showReturnDate ? "w-[50%]" : "hidden w-[0%]"}>
                       <SelectDate
+                        text="Ngày về"
                         control={control}
                         setDate={setDate2}
                         date={date2}
@@ -520,132 +569,133 @@ export default function Flight() {
 
       <div className="container">
         <div className="py-8">
-          <h2 className="text-2xl text-center text-textColor font-semibold">
-            Khám Phá Các Chuyến Bay Quốc Tế
-          </h2>
-          <div className="mt-4">
-            <div className="">
-              {/* không load thì isPending */}
-              {!getFlightOffersQuery.isPending && (
-                <Fragment>
-                  <div className="bg-blueColor p-2 text-[#f2f2f2] font-semibold rounded-tl-md rounded-tr-md">
-                    Rẻ nhất
-                  </div>
-                  {listFlight_1?.data.map((item) => (
-                    <div key={item.id}>
-                      {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay */}
-                      <Link
-                        to=""
-                        className="flex items-center px-6 py-3 border border-textColor rounded-bl-md rounded-br-md w-full"
-                      >
-                        {item.itineraries.map((detail, index) => (
-                          <div key={index} className="w-full">
-                            {detail.segments.map((flight) => (
-                              <div key={flight.id} className="grid grid-cols-12 items-center">
-                                <div className="col-span-2">
-                                  <div className="flex items-center gap-4">
-                                    <div className="w-12 h-10">
-                                      <img
-                                        src={iconFlightRed}
-                                        alt="iconFlight"
-                                        className="w-full h-full"
-                                      />
-                                    </div>
-                                    <span className="text-textColor text-sm font-semibold">
-                                      {listFlight_1.dictionaries.carriers["CZ"]}
+          {/* không load thì isPending */}
+          {showInfoSearch && (
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-3">
+                <div className="bg-[#fff] shadow-md h-[500px]"></div>
+              </div>
+
+              <div className="col-span-9">
+                <div className="text-2xl text-textColor font-semibold mb-4">
+                  Chuyến bay từ {searchText} đến {searchText2}
+                </div>
+                {searchFlightList?.data.map((item) => (
+                  <div key={item.id}>
+                    {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay */}
+                    <Link
+                      to=""
+                      className="flex items-center px-6 py-3 w-full bg-[#fff] mb-4 shadow-sm"
+                    >
+                      {item.itineraries.map((detail, index) => (
+                        <div key={index} className="w-full">
+                          {/* các hành trình bay trong 1 chuyến bay - quá cảnh */}
+                          {detail.segments.map((flight) => (
+                            <div key={flight.id} className="grid grid-cols-12 items-center mb-2">
+                              <div className="col-span-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-9 h-8 flex-shrink-0">
+                                    <img
+                                      src={iconFlightRed}
+                                      alt="iconFlight"
+                                      className="w-full h-full"
+                                    />
+                                  </div>
+                                  <div className="flex-grow">
+                                    <span className="block text-textColor text-xs font-semibold">
+                                      {searchFlightList.dictionaries.carriers[flight.carrierCode]}
+                                    </span>
+                                    <span className="block text-textColor text-xs font-normal">
+                                      {searchFlightList.dictionaries.aircraft[flight.aircraft.code]}
                                     </span>
                                   </div>
                                 </div>
+                              </div>
 
-                                <div className="col-span-3">
-                                  <div className="flex flex-col items-center">
-                                    <div className="text-2xl font-semibold text-textColor">
-                                      {getHourFromAPI(flight.departure.at)}
-                                    </div>
-                                    <div className="mt-1 text-lg text-textColor font-semibold">
-                                      {flight.departure.iataCode}
-                                    </div>
+                              <div className="col-span-2">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-xl font-semibold text-textColor">
+                                    {getHourFromAPI(flight.departure.at)}
                                   </div>
-                                </div>
-
-                                <div className="col-span-2 relative">
-                                  <div className="text-center text-base font-medium">
-                                    {getDurationFromAPI(flight.duration)}
-                                    <div className="absolute left-16">
-                                      <div className="w-28 h-1 bg-textColor"></div>
-                                      <div className="absolute top-[-3px] left-28 triangle-2"></div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-span-3">
-                                  <div className="flex flex-col items-center">
-                                    <div className="text-2xl font-semibold text-textColor">
-                                      {getHourFromAPI(flight.arrival.at)}
-                                    </div>
-                                    <div className="mt-1 text-lg text-textColor font-semibold">
-                                      {flight.arrival.iataCode}
-                                    </div>
+                                  <div className="text-base text-textColor">
+                                    {flight.departure.iataCode}
                                   </div>
                                 </div>
                               </div>
-                            ))}
-                          </div>
-                        ))}
-                      </Link>
-                    </div>
-                  ))}
-                </Fragment>
-              )}
 
-              {/* đang load thì isPending*/}
-              {getFlightOffersQuery.isPending && (
-                <div className="flex items-center justify-center">
-                  <div
-                    role="status"
-                    className="max-w-4xl w-full p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-32 mb-2.5" />
-                        <div className="w-52 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-                      </div>
-                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-24" />
-                    </div>
-                    <div className="flex items-center justify-between pt-4">
-                      <div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-40 mb-2.5" />
-                        <div className="w-72 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-                      </div>
-                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-24" />
-                    </div>
-                    <div className="flex items-center justify-between pt-4">
-                      <div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-28 mb-2.5" />
-                        <div className="w-80 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-                      </div>
-                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-36" />
-                    </div>
-                    <div className="flex items-center justify-between pt-4">
-                      <div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-36 mb-2.5" />
-                        <div className="w-72 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-                      </div>
-                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-32" />
-                    </div>
-                    <div className="flex items-center justify-between pt-4">
-                      <div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-40 mb-2.5" />
-                        <div className="w-44 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-                      </div>
-                      <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-32" />
-                    </div>
-                    <span className="sr-only">Loading...</span>
+                              <div className="col-span-2 relative">
+                                <div className="text-center text-base font-medium">
+                                  {getDurationFromAPI(flight.duration)}
+                                </div>
+                                <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
+                                <div className="text-sm mt-1 text-center">
+                                  {flight.numberOfStops === 0 && detail.segments.length === 1
+                                    ? "Bay trực tiếp"
+                                    : ""}
+                                </div>
+                              </div>
+
+                              <div className="col-span-2">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-xl font-semibold text-textColor">
+                                    {getHourFromAPI(flight.arrival.at)}
+                                  </div>
+                                  <div className="text-base text-textColor">
+                                    {flight.arrival.iataCode}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="col-span-3">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-base text-textColor">
+                                    {getPrice(item.travelerPricings[0].price.base)}
+                                    <span>{item.travelerPricings[0].price.currency}</span>
+                                  </div>
+                                  <span className="text-sm">
+                                    dành cho {item.travelerPricings[0].travelerType}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </Link>
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {!showInfoSearch && (
+            <div role="status" className="flex items-center justify-center animate-pulse mx-auto">
+              <button
+                disabled
+                type="button"
+                className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-[#e5eef4] rounded-lg border border-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 inline-flex items-center"
+              >
+                <svg
+                  aria-hidden="true"
+                  role="status"
+                  className="inline w-5 h-5 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="#1C64F2"
+                  />
+                </svg>
+                Loading...
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

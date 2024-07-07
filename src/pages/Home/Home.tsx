@@ -98,7 +98,7 @@ export default function Home() {
         <meta name="description" content="Trang chủ - Amadeus Booking" />
       </Helmet>
 
-      <div className="w-full h-[600px] relative">
+      <div className="w-full h-[550px] relative">
         <ChangeAutoBg
           className="transition-all ease-linear duration-1000 w-full h-full filter brightness-75"
           indexEnd={3}
