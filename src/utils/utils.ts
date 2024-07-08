@@ -89,4 +89,4 @@ export const getPrice = (price: string) => {
   return null
 }
 
-export const exchangePrice = (price: string) => {}
+// export const exchangePrice = (price: string) => {}

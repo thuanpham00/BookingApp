@@ -17,7 +17,7 @@ export default function ProductItem({ item }: Props) {
         <span className="block text-lg text-textColor font-semibold">{item.nameHotel}</span>
         <span className="block text-base text-textColor font-medium">{item.addressHotel}</span>
         <div className="mt-4">
-          <span className="bg-[#f9b851] text-base p-1 rounded-md text-[#f2f2f2]">
+          <span className="bg-[#f9b851] text-base p-1 rounded-md text-whiteColor">
             {item.rating}/5
           </span>
           <span className="ml-2 text-textColor text-base">{item.review} (nhận xét)</span>

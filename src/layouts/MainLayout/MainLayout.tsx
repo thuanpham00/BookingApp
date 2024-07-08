@@ -7,7 +7,7 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   return (
-    <div className="w-full bg-[#f2f2f2]">
+    <div className="w-full bg-whiteColor">
       <Header />
       {children}
       <Footer />

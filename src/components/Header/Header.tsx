@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
 import logo from "../../img/favicon/FaviconFlight.png"
 import coVN from "../../img/lauguage/coVN.png"
-import coMy from "../../img/lauguage/coMy.jpg"
+import coMy from "../../img/lauguage/coMy.png"
 import hotel from "../../img/svg/hotel-svgrepo-com.svg"
 import { useContext } from "react"
 import { AppContext } from "src/context/useContext"
@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <header className="sticky left-0 top-0 z-10">
-      <div className=" bg-blueColor py-2 text-[#f2f2f2]">
+      <div className=" bg-blueColor py-2 text-whiteColor">
         <div className="container">
           <div className="flex items-center justify-center gap-1">
             <strong>Nhận ưu đãi lớn!</strong>
@@ -39,7 +39,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="bg-[#f2f2f2] py-2 shadow-md">
+      <div className="bg-whiteColor py-2 shadow-md">
         <div className="container">
           <div className="flex items-center justify-between cursor-pointer">
             <div className="flex items-center">
@@ -77,23 +77,23 @@ export default function Header() {
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <NavigationMenuLink>
-                          <div className="bg-[#f2f2f2] rounded-sm shadow-lg border border-gray-300">
+                          <div className="bg-whiteColor rounded-sm shadow-lg border border-gray-300">
                             <Link
                               to={path.flightSearch}
-                              className="block py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200"
+                              className="block py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200"
                             >
                               Tìm kiếm chuyến bay
                             </Link>
                             <Link
                               to={path.flightManage}
-                              className="block py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200"
+                              className="block py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200"
                             >
                               Quản lý đặt chỗ
                             </Link>
-                            <div className="py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200">
+                            <div className="py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200">
                               Lựa chọn chỗ ngồi
                             </div>
-                            <div className="py-3 px-2 min-w-[170px] bg-[#f2f2f2] hover:bg-gray-300 duration-200">
+                            <div className="py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200">
                               Giá vé có thương hiệu
                             </div>
                           </div>
@@ -212,7 +212,7 @@ export default function Header() {
                   </Link>
                   <Link
                     to={path.login}
-                    className="py-2 px-3 border-2 border-blueColor bg-blueColor text-[#f2f2f2] rounded-3xl duration-200 hover:bg-blueColor/80 hover:border-blueColor/80"
+                    className="py-2 px-3 border-2 border-blueColor bg-blueColor text-whiteColor rounded-3xl duration-200 hover:bg-blueColor/80 hover:border-blueColor/80"
                   >
                     Login
                   </Link>

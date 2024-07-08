@@ -2,17 +2,17 @@ import { Link } from "react-router-dom"
 
 export default function Footer() {
   return (
-    <footer className="bg-[#022d5c] text-[#f2f2f2]">
-      <div className="container py-8 px-3">
-        <div className="flex items-center justify-between pb-4 border-b border-b-[#4e6c8d]">
-          <h2 className="font-semibold text-2xl">Dễ dàng truy cập</h2>
+    <footer className="bg-[#022d5c] py-8">
+      <div className="container">
+        <div className="flex items-center justify-between pb-4 border-b text-whiteColor border-b-[#4e6c8d]">
+          <h2 className="font-semibold text-xl">Amadeus Booking</h2>
           <div className="flex items-center gap-8">
-            <span className="font-semibold text-2xl">Kết nối với chúng tôi</span>
+            <span className="font-semibold text-xl">Kết nối với chúng tôi</span>
             <div className="flex gap-2">
               <Link
                 to="https://www.facebook.com/domaybatduoctao912"
                 target="_blank"
-                className="w-7 h-7 bg-[#f2f2f2] rounded-full flex items-center justify-center"
+                className="w-7 h-7 bg-whiteColor rounded-full flex items-center justify-center"
               >
                 <svg
                   className="w-5 h-5"
@@ -33,7 +33,7 @@ export default function Footer() {
               <Link
                 to="https://www.instagram.com/minthuan_/"
                 target="_blank"
-                className="w-7 h-7 bg-[#f2f2f2] rounded-full flex items-center justify-center"
+                className="w-7 h-7 bg-whiteColor rounded-full flex items-center justify-center"
               >
                 <svg
                   className="w-5 h-5"
@@ -56,14 +56,14 @@ export default function Footer() {
 
         <div className="py-4 flex items-start justify-between flex-wrap border-b border-b-[#4e6c8d]">
           <div className="flex-1">
-            <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
+            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               ĐƯỜNG DẪN NHANH
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Hãng hàng không nổi tiếng
                 </Link>
@@ -71,7 +71,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Đường bay phổ biến
                 </Link>
@@ -79,7 +79,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Các điểm đến hàng đầu ở Hoa Kỳ
                 </Link>
@@ -87,7 +87,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Các điểm đến quốc tế hàng đầu
                 </Link>
@@ -95,7 +95,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Thư mục trang web
                 </Link>
@@ -103,7 +103,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Giữ liên lạc
                 </Link>
@@ -111,7 +111,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Giữ liên lạc
                 </Link>
@@ -120,14 +120,14 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
+            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               BOOKING
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Chuyến bay giá rẻ
                 </Link>
@@ -135,7 +135,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Khách sạn giá rẻ
                 </Link>
@@ -143,7 +143,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Cho thuê ô tô
                 </Link>
@@ -151,7 +151,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Gói kỳ nghỉ
                 </Link>
@@ -159,7 +159,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Du lịch theo nhóm
                 </Link>
@@ -167,7 +167,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Tiết kiệm và kiếm $
                 </Link>
@@ -176,14 +176,14 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
+            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               CÔNG CỤ DU LỊCH
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Thẻ quà tặng
                 </Link>
@@ -191,7 +191,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Kiểm tra đặt chỗ của tôi
                 </Link>
@@ -199,7 +199,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Hỗ trợ khách hàng
                 </Link>
@@ -207,7 +207,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Đăng ký trực tuyến
                 </Link>
@@ -215,7 +215,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Phí hành lý hàng không
                 </Link>
@@ -223,7 +223,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Kiểm tra tình trạng chuyến bay
                 </Link>
@@ -231,7 +231,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Blog du lịch
                 </Link>
@@ -239,7 +239,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Hướng dẫn viên địa phương
                 </Link>
@@ -248,14 +248,14 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="font-semibold text-base hover:underline duration-200 cursor-pointer">
+            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               GIỚI THIỆU
             </h4>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Về chúng tôi
                 </Link>
@@ -263,7 +263,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Phòng báo chí
                 </Link>
@@ -271,7 +271,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Nghề nghiệp
                 </Link>
@@ -279,7 +279,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Chương trình liên kết
                 </Link>
@@ -287,7 +287,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Lời chứng thực của khách hàng
                 </Link>
@@ -295,7 +295,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Quảng cáo với chúng tôi
                 </Link>
@@ -303,7 +303,7 @@ export default function Footer() {
               <li className="mb-2">
                 <Link
                   to="#"
-                  className="font-medium text-sm hover:underline duration-200 cursor-pointer"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
                   Bản tin
                 </Link>
@@ -313,8 +313,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <span>Phạm Minh Thuận</span>
-          <span>phamminhthuan912@gmail.com</span>
+          <span className="text-whiteColor">Phạm Minh Thuận</span>
+          <span className="text-whiteColor">phamminhthuan912@gmail.com</span>
         </div>
       </div>
     </footer>

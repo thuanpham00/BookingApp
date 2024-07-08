@@ -50,7 +50,7 @@ export default function Register() {
   })
 
   return (
-    <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-[#f2f2f2] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
+    <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-whiteColor absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
       <Helmet>
         <title>Đăng ký</title>
         <meta name="description" content="Đăng ký - Amadeus Booking" />

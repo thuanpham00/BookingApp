@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async"
-import banner from "../../img/Flight/banner.jpg"
+import banner from "../../img/Flight/banner.png"
 import iconFlightRed from "../../img/Flight/iconFlightRed.png"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
@@ -277,7 +277,7 @@ export default function Flight() {
       <div className="w-full h-[550px] relative">
         <img src={banner} alt="banner" className="w-full h-full filter brightness-50" />
         <div className="w-[70%] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-          <h1 className="my-4 md:text-2xl lg:text-4xl text-[#f2f2f2] font-semibold">
+          <h1 className="my-4 md:text-2xl lg:text-4xl text-whiteColor font-semibold">
             Search for flights to find the best options for your travel needs.
           </h1>
 
@@ -285,7 +285,7 @@ export default function Flight() {
             autoComplete="off"
             onSubmit={handleSubmitSearch}
             noValidate
-            className="py-4 px-6 bg-[#f2f2f2]/80 rounded-lg shadow-md"
+            className="py-4 px-6 bg-whiteColor/80 rounded-lg shadow-md"
           >
             <div className="mt-2 flex items-center gap-4">
               <div className="flex items-center gap-1">
@@ -320,7 +320,7 @@ export default function Flight() {
               {/* điểm xuất phát */}
               <InputSearch
                 placeholder="Bay từ"
-                classNameList="z-20 absolute top-16 left-0 h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
                 ref={inputRef}
                 filterList={filterAirportCodeList_1}
                 value={searchText}
@@ -338,7 +338,7 @@ export default function Flight() {
               {/* điểm đến */}
               <InputSearch
                 placeholder="Bay đến"
-                classNameList="z-20 absolute top-16 left-0 h-[300px] bg-[#f2f2f2] overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
                 ref={inputRef2}
                 filterList={filterAirportCodeList_2}
                 value={searchText2}
@@ -558,7 +558,7 @@ export default function Flight() {
                     classNameWrapper="w-[50%] relative"
                     type="submit"
                     nameButton="Tìm kiếm"
-                    className="px-8 py-[14px] bg-orangeColor w-full text-[#f2f2f2] text-lg rounded-md hover:bg-orangeColor/80 duration-200 font-semibold"
+                    className="px-8 py-[14px] bg-orangeColor w-full text-whiteColor text-lg rounded-md hover:bg-orangeColor/80 duration-200 font-semibold"
                   />
                 </div>
               </div>

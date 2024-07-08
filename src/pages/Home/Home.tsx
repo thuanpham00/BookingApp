@@ -1,20 +1,20 @@
 import { Helmet } from "react-helmet-async"
-import bg1 from "../../img/bgLogin/bg-1.jpg"
-import bg2 from "../../img/Home/banner2.jpg"
-import bg3 from "../../img/bgLogin/bg-5.jpg"
+import bg1 from "../../img/bgLogin/bg-1.png"
+import bg2 from "../../img/Home/banner2.png"
+import bg3 from "../../img/bgLogin/bg-5.png"
 import bg4 from "../../img/bgLogin/bg-6.png"
-import tour1 from "../../img/Home/tour1.jpg"
-import tour2 from "../../img/Home/tour2.jpg"
-import tour3 from "../../img/Home/tour3.jpg"
-import tour4 from "../../img/Home/tour4.jpg"
-import tour5 from "../../img/Home/tour5.jpg"
-import tour6 from "../../img/Home/tour6.jpg"
-import hotel1 from "../../img/Home/hotel1.jpg"
-import hotel2 from "../../img/Home/hotel2.jpg"
-import hotel3 from "../../img/Home/hotel3.jpg"
-import hotel4 from "../../img/Home/hotel4.jpg"
-import hotel5 from "../../img/Home/hotel5.jpg"
-import hotel6 from "../../img/Home/hotel6.jpg"
+import tour1 from "../../img/Home/tour1.png"
+import tour2 from "../../img/Home/tour2.png"
+import tour3 from "../../img/Home/tour3.png"
+import tour4 from "../../img/Home/tour4.png"
+import tour5 from "../../img/Home/tour5.png"
+import tour6 from "../../img/Home/tour6.png"
+import hotel1 from "../../img/Home/hotel1.png"
+import hotel2 from "../../img/Home/hotel2.png"
+import hotel3 from "../../img/Home/hotel3.png"
+import hotel4 from "../../img/Home/hotel4.png"
+import hotel5 from "../../img/Home/hotel5.png"
+import hotel6 from "../../img/Home/hotel6.png"
 import iconSVG from "../../img/svg/travel-luggage-svgrepo-com.svg"
 import ChangeAutoBg from "src/components/ChangeAutoBg"
 import SlideList from "./components/SlideList"
@@ -106,10 +106,10 @@ export default function Home() {
         />
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <h1 className="w-[1000px] text-center text-[#f2f2f2] md:text-2xl lg:text-4xl font-semibold">
+          <h1 className="w-[1000px] text-center text-whiteColor md:text-2xl lg:text-4xl font-semibold">
             Starts Your Trip with Amadeus Booking.
           </h1>
-          <h2 className="text-center text-[#f2f2f2] mx-auto mt-4 md:w-[800px] lg:w-full md:text-lg lg:text-xl">
+          <h2 className="text-center text-whiteColor mx-auto mt-4 md:w-[800px] lg:w-full md:text-lg lg:text-xl">
             Take a little break from the work stress of everyday. Discover plan trip and explore
             beautiful destinations.
           </h2>
@@ -212,7 +212,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   JP
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
@@ -249,7 +249,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   ES
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
@@ -286,7 +286,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   AUS
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
@@ -323,7 +323,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   SG
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
@@ -360,7 +360,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   VN
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">
@@ -397,7 +397,7 @@ export default function Home() {
                   alt="tour"
                   className="w-full h-[350px] rounded-tl-md rounded-tr-md"
                 />
-                <div className="px-4 py-1 text-[#f2f2f2] bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
+                <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   KR
                 </div>
                 <div className="p-4 bg-[#fff] rounded-bl-md rounded-br-md">

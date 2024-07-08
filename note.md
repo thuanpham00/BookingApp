@@ -14,7 +14,7 @@
 - yarn add @floating-ui/react
 - yarn add framer-motion
 - yarn add react-transition-group - yarn add @types/react-transition-group
-
+- yarn add rollup-plugin-visualizer
 ## ÔN TẬP KIẾN THỨC
 
 - useSearchParams() - dùng để lấy các `tham số truy vấn` trên URL xuống (page, limit, ....)

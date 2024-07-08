@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function Button({
   nameButton,
-  className = "mt-2 py-3 bg-blueColor w-full text-[#f2f2f2] text-lg rounded-sm hover:bg-blueColor/80 duration-200",
+  className = "mt-2 py-3 bg-blueColor w-full text-whiteColor text-lg rounded-sm hover:bg-blueColor/80 duration-200",
   disable,
   loading,
   classNameWrapper = "relative",

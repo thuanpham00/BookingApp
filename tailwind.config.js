@@ -15,7 +15,8 @@ module.exports = {
         primaryColor: "#f9f7f4",
         textColor: "#313541",
         blueColor: "#003b95",
-        orangeColor: "#ff4600"
+        orangeColor: "#ff4600",
+        whiteColor: "#f2f2f2"
       }
     }
   },
