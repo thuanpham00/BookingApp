@@ -1,7 +1,9 @@
 import { Helmet } from "react-helmet-async"
-import banner from "../../img/Flight/banner.png"
-import iconFlightRed from "../../img/Flight/iconFlightRed.png"
+import banner from "../../img/Flight/banner.webp"
+import iconFlightRed from "../../img/Flight/iconFlightRed.webp"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
+import iconFlight2 from "../../img/svg/flight.svg"
+import luggage from "../../img/svg/luggage-baggage-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
@@ -14,10 +16,11 @@ import Button from "src/components/Button/Button.tsx"
 import {
   convertToYYYYMMDD,
   convertTravelClassToEng,
+  exchangePrice,
   getCodeAirport,
+  getCountryAirport,
   getDurationFromAPI,
-  getHourFromAPI,
-  getPrice
+  getHourFromAPI
 } from "src/utils/utils.ts"
 import schema, { schemaType } from "src/utils/rules.ts"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -79,7 +82,7 @@ export default function Flight() {
   const [date, setDate] = useState<Date | null>(null) // ngày đi
   const [date2, setDate2] = useState<Date | null>(null) // ngày về
   const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-  console.log(travelClass)
+
   const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
   const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
   const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
@@ -87,6 +90,7 @@ export default function Flight() {
   const [flightType, setFlightType] = useState("oneWay")
   const [showPassenger, setShowPassenger] = useState(0)
   const [showReturnDate, setShowReturnDate] = useState(false)
+  const [showInfoSearch, setShowInfoSearch] = useState(false)
 
   const handleFlightTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFlightType(event.target.id)
@@ -96,8 +100,10 @@ export default function Flight() {
   useMemo(() => {
     if (flightType === "roundTrip") {
       setShowReturnDate(true)
+      setShowInfoSearch(false)
     } else {
       setShowReturnDate(false)
+      setShowInfoSearch(false)
     }
   }, [flightType])
 
@@ -201,24 +207,46 @@ export default function Flight() {
   const searchFlightList = searchFlightOffersMutation?.data?.data as ResponseFlightSearch
   console.log(searchFlightList)
 
-  const [showInfoSearch, setShowInfoSearch] = useState(false)
   const handleSubmitSearch = handleSubmit((data) => {
     console.log(data)
     // truyền các data mà form quản lý vào biến này để submit gọi api
 
     const flightSearchParams: flightSearchParams = {
-      originDestinations: [
-        // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
-        {
-          // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
-          id: "1",
-          originLocationCode: data.originLocationCode,
-          destinationLocationCode: data.destinationLocationCode,
-          departureDateTimeRange: {
-            date: data.departureDate
-          }
-        }
-      ],
+      originDestinations:
+        flightType === "roundTrip"
+          ? [
+              // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
+              {
+                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
+                id: "1",
+                originLocationCode: data.originLocationCode,
+                destinationLocationCode: data.destinationLocationCode,
+                departureDateTimeRange: {
+                  date: data.departureDate
+                }
+              },
+              {
+                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
+                id: "2",
+                originLocationCode: data.destinationLocationCode,
+                destinationLocationCode: data.originLocationCode,
+                departureDateTimeRange: {
+                  date: data.returnDate as string
+                }
+              }
+            ]
+          : [
+              // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
+              {
+                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
+                id: "1",
+                originLocationCode: data.originLocationCode,
+                destinationLocationCode: data.destinationLocationCode,
+                departureDateTimeRange: {
+                  date: data.departureDate
+                }
+              }
+            ],
       travelers: [
         // 1 mảng chứa các đối tượng đại diện cho hành khách.
         {
@@ -245,7 +273,7 @@ export default function Flight() {
           cabinRestrictions: [
             {
               cabin: data.travelClass, // khoang cabin
-              originDestinationIds: ["1"] // Bỏ originDestinationIds
+              originDestinationIds: flightType === "roundTrip" ? ["1", "2"] : ["1"]
             }
           ],
           carrierRestrictions: {
@@ -275,10 +303,18 @@ export default function Flight() {
       </div>
 
       <div className="w-full h-[550px] relative">
-        <img src={banner} alt="banner" className="w-full h-full filter brightness-50" />
+        <div
+          className="w-full h-full filter brightness-75"
+          style={{
+            backgroundImage: `url(${banner})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover"
+          }}
+        ></div>
         <div className="w-[70%] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
           <h1 className="my-4 md:text-2xl lg:text-4xl text-whiteColor font-semibold">
-            Search for flights to find the best options for your travel needs.
+            Tìm kiếm chuyến bay để có những lựa chọn tốt nhất cho nhu cầu du lịch của bạn.
           </h1>
 
           <form
@@ -287,6 +323,7 @@ export default function Flight() {
             noValidate
             className="py-4 px-6 bg-whiteColor/80 rounded-lg shadow-md"
           >
+            {/* loại chuyến bay */}
             <div className="mt-2 flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <input
@@ -374,6 +411,7 @@ export default function Flight() {
 
               {/* đổi 2 giá trị với nhau */}
               <button
+                aria-label="buttonChangeValue"
                 type="button"
                 onClick={exchangeTwoValues}
                 className="z-20 absolute left-1/2 -translate-x-1/2 top-3 flex items-center justify-center w-7 h-7 rounded-full text-blueColor border-2 border-blueColor bg-blue-100"
@@ -454,6 +492,7 @@ export default function Flight() {
                           </svg>
 
                           <input
+                            aria-label="Traveler"
                             type="text"
                             className="w-[35px] p-1 outline-none bg-transparent text-base flex-grow text-center"
                             value={showPassenger}
@@ -513,6 +552,7 @@ export default function Flight() {
                           variant="outline"
                           role="combobox"
                           aria-expanded={open}
+                          aria-label="TravelClass"
                           className="w-full justify-between bg-transparent border-none shadow-none text-base"
                         >
                           {travelClass
@@ -558,7 +598,7 @@ export default function Flight() {
                     classNameWrapper="w-[50%] relative"
                     type="submit"
                     nameButton="Tìm kiếm"
-                    className="px-8 py-[14px] bg-orangeColor w-full text-whiteColor text-lg rounded-md hover:bg-orangeColor/80 duration-200 font-semibold"
+                    className="px-8 py-[14px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
                   />
                 </div>
               </div>
@@ -570,7 +610,7 @@ export default function Flight() {
       <div className="container">
         <div className="py-8">
           {/* không load thì isPending */}
-          {showInfoSearch && (
+          {!searchFlightOffersMutation.isPending && showInfoSearch && (
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-3">
                 <div className="bg-[#fff] shadow-md h-[500px]"></div>
@@ -580,95 +620,249 @@ export default function Flight() {
                 <div className="text-2xl text-textColor font-semibold mb-4">
                   Chuyến bay từ {searchText} đến {searchText2}
                 </div>
-                {searchFlightList?.data.map((item) => (
-                  <div key={item.id}>
-                    {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay */}
-                    <Link
-                      to=""
-                      className="flex items-center px-6 py-3 w-full bg-[#fff] mb-4 shadow-sm"
-                    >
-                      {item.itineraries.map((detail, index) => (
-                        <div key={index} className="w-full">
-                          {/* các hành trình bay trong 1 chuyến bay - quá cảnh */}
-                          {detail.segments.map((flight) => (
-                            <div key={flight.id} className="grid grid-cols-12 items-center mb-2">
-                              <div className="col-span-3">
-                                <div className="flex items-center gap-2">
-                                  <div className="w-9 h-8 flex-shrink-0">
-                                    <img
-                                      src={iconFlightRed}
-                                      alt="iconFlight"
-                                      className="w-full h-full"
-                                    />
+                {/* 1 chiều */}
+                {flightType === "oneWay" &&
+                  searchFlightList?.data.map((item) => (
+                    <div key={item.id}>
+                      {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay - 1 chiều hay 2 chiều */}
+                      <Link to="" className="flex items-center w-full bg-[#fff] mb-4 shadow-sm">
+                        <div className="w-full">
+                          {/* 1 hành trình bay gồm nhiều đoạn bay - quá cảnh */}
+                          {item.itineraries[0].segments.map((flight) => (
+                            <div key={flight.id}>
+                              <div className="grid grid-cols-12 items-center p-6 pt-10 border-b border-b-gray-200">
+                                <div className="col-span-3 relative">
+                                  <div className="absolute -top-10 left-0 bg-gray-300 rounded-full p-1 text-xs flex items-center justify-center gap-[2px]">
+                                    <img src={iconFlight2} alt="icon" className="w-5 h-5" />
+                                    <span>{travelClass}</span>
                                   </div>
-                                  <div className="flex-grow">
-                                    <span className="block text-textColor text-xs font-semibold">
-                                      {searchFlightList.dictionaries.carriers[flight.carrierCode]}
-                                    </span>
-                                    <span className="block text-textColor text-xs font-normal">
-                                      {searchFlightList.dictionaries.aircraft[flight.aircraft.code]}
-                                    </span>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-9 h-8 flex-shrink-0">
+                                      <img
+                                        src={iconFlightRed}
+                                        alt="iconFlight"
+                                        className="w-full h-full"
+                                      />
+                                    </div>
+                                    <div className="flex-grow">
+                                      <span className="block text-textColor text-xs font-semibold">
+                                        {searchFlightList.dictionaries.carriers[flight.carrierCode]}
+                                      </span>
+                                      <span className="block text-textColor text-xs font-normal">
+                                        {
+                                          searchFlightList.dictionaries.aircraft[
+                                            flight.aircraft.code
+                                          ]
+                                        }
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="col-span-2">
-                                <div className="flex flex-col items-center">
-                                  <div className="text-xl font-semibold text-textColor">
-                                    {getHourFromAPI(flight.departure.at)}
-                                  </div>
-                                  <div className="text-base text-textColor">
-                                    {flight.departure.iataCode}
+                                <div className="col-span-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-2xl font-semibold text-textColor">
+                                      {getHourFromAPI(flight.departure.at)}
+                                    </div>
+                                    <div className="text-sm text-textColor">
+                                      {getCountryAirport(flight.departure.iataCode)}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="col-span-2 relative">
-                                <div className="text-center text-base font-medium">
-                                  {getDurationFromAPI(flight.duration)}
+                                <div className="col-span-2 relative">
+                                  <div className="text-center text-sm font-medium">
+                                    {getDurationFromAPI(flight.duration)}
+                                  </div>
+                                  <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
+                                  <div className="text-sm mt-1 text-center">
+                                    {flight.numberOfStops === 0 &&
+                                    item.itineraries[0].segments.length === 1
+                                      ? "Bay trực tiếp"
+                                      : ""}
+                                  </div>
                                 </div>
-                                <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
-                                <div className="text-sm mt-1 text-center">
-                                  {flight.numberOfStops === 0 && detail.segments.length === 1
-                                    ? "Bay trực tiếp"
-                                    : ""}
-                                </div>
-                              </div>
 
-                              <div className="col-span-2">
-                                <div className="flex flex-col items-center">
-                                  <div className="text-xl font-semibold text-textColor">
-                                    {getHourFromAPI(flight.arrival.at)}
-                                  </div>
-                                  <div className="text-base text-textColor">
-                                    {flight.arrival.iataCode}
+                                <div className="col-span-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-2xl font-semibold text-textColor">
+                                      {getHourFromAPI(flight.arrival.at)}
+                                    </div>
+                                    <div className="text-sm text-textColor">
+                                      {getCountryAirport(flight.arrival.iataCode)}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="col-span-3">
-                                <div className="flex flex-col items-center">
-                                  <div className="text-base text-textColor">
-                                    {getPrice(item.travelerPricings[0].price.base)}
-                                    <span>{item.travelerPricings[0].price.currency}</span>
+                                <div className="col-span-3">
+                                  <div className="flex items-start justify-center gap-2">
+                                    <img src={luggage} alt="luggage" className="mt-1 h-3 w-3" />
+
+                                    <div>
+                                      <span className="text-sm">Đã bao gồm hành lý:</span>
+                                      <div className="flex gap-1 justify-center text-sm">
+                                        <span> 1 x </span>
+                                        <div className="flex items-center gap-[2px]">
+                                          <span>
+                                            {item.travelerPricings[0].fareDetailsBySegment[0]
+                                              .includedCheckedBags.weight || "23"}
+                                          </span>
+                                          <span>
+                                            {item.travelerPricings[0].fareDetailsBySegment[0]
+                                              .includedCheckedBags.weightUnit || "KG"}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <span className="text-sm">
-                                    dành cho {item.travelerPricings[0].travelerType}
-                                  </span>
                                 </div>
                               </div>
                             </div>
                           ))}
+
+                          <div className="bg-[#f8f8f8] p-4">
+                            <div className="flex flex-col items-end">
+                              <span className="text-lg font-semibold">
+                                {exchangePrice(item.travelerPricings[0].price.total)}đ
+                              </span>
+                              <span className="text-gray-500 text-sm">
+                                Giá vé dành cho người lớn
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      ))}
-                    </Link>
-                  </div>
-                ))}
+                      </Link>
+                    </div>
+                  ))}
+
+                {/* 2 chiều */}
+                {flightType === "roundTrip" &&
+                  searchFlightList?.data.map((item) => (
+                    <div key={item.id}>
+                      {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay - 1 chiều hay 2 chiều */}
+                      <Link
+                        to=""
+                        className="flex flex-col items-center w-full bg-[#fff] mb-4 shadow-sm"
+                      >
+                        {item.itineraries.map((detail, index) => (
+                          <div key={index} className="w-full border-b border-b-gray-300">
+                            {/* 1 hành trình bay gồm nhiều đoạn bay - quá cảnh */}
+                            {detail.segments.map((flight) => (
+                              <div
+                                key={flight.id}
+                                className="grid grid-cols-12 items-center p-6 pt-10 border-b border-b-gray-200"
+                              >
+                                <div className="col-span-3 relative">
+                                  <div className="absolute -top-10 left-0 bg-gray-300 rounded-full p-1 text-xs flex items-center justify-center gap-[2px]">
+                                    <img src={iconFlight2} alt="icon" className="w-5 h-5" />
+                                    <span>{travelClass}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-9 h-8 flex-shrink-0">
+                                      <img
+                                        src={iconFlightRed}
+                                        alt="iconFlight"
+                                        className="w-full h-full"
+                                      />
+                                    </div>
+                                    <div className="flex-grow">
+                                      <span className="block text-textColor text-xs font-semibold">
+                                        {searchFlightList.dictionaries.carriers[flight.carrierCode]}
+                                      </span>
+                                      <span className="block text-textColor text-xs font-normal">
+                                        {
+                                          searchFlightList.dictionaries.aircraft[
+                                            flight.aircraft.code
+                                          ]
+                                        }
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-span-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-2xl font-semibold text-textColor">
+                                      {getHourFromAPI(flight.departure.at)}
+                                    </div>
+                                    <div className="text-sm text-textColor">
+                                      {getCountryAirport(flight.departure.iataCode)}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-span-2 relative">
+                                  <div className="text-center text-sm font-medium">
+                                    {getDurationFromAPI(flight.duration)}
+                                  </div>
+                                  <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
+                                  <div className="text-sm mt-1 text-center">
+                                    {flight.numberOfStops === 0 &&
+                                    item.itineraries[0].segments.length === 1
+                                      ? "Bay trực tiếp"
+                                      : ""}
+                                  </div>
+                                </div>
+
+                                <div className="col-span-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-2xl font-semibold text-textColor">
+                                      {getHourFromAPI(flight.arrival.at)}
+                                    </div>
+                                    <div className="text-sm text-textColor">
+                                      {getCountryAirport(flight.arrival.iataCode)}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-span-3">
+                                  <div className="flex items-start justify-center gap-2">
+                                    <img src={luggage} alt="luggage" className="mt-1 h-3 w-3" />
+
+                                    <div>
+                                      <span className="text-sm">Đã bao gồm hành lý:</span>
+                                      <div className="flex gap-1 justify-center text-sm">
+                                        <span> 1 x </span>
+                                        <div className="flex items-center gap-[2px]">
+                                          <span>
+                                            {
+                                              item.travelerPricings[0].fareDetailsBySegment[0]
+                                                .includedCheckedBags.weight
+                                            }
+                                          </span>
+                                          <span>
+                                            {
+                                              item.travelerPricings[0].fareDetailsBySegment[0]
+                                                .includedCheckedBags.weightUnit
+                                            }
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                        <div className="w-full bg-[#f8f8f8] p-4">
+                          <div className="flex justify-end">
+                            <div className="flex flex-col items-end">
+                              <span className="text-lg font-semibold">
+                                {exchangePrice(item.travelerPricings[0].price.total)}đ
+                              </span>
+                              <span className="text-xs text-gray-500">Giá mỗi người lớn</span>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
-          {!showInfoSearch && (
+          {searchFlightOffersMutation.isPending && !showInfoSearch && (
             <div role="status" className="flex items-center justify-center animate-pulse mx-auto">
               <button
                 disabled
@@ -692,7 +886,7 @@ export default function Flight() {
                     fill="#1C64F2"
                   />
                 </svg>
-                Loading...
+                Đang tìm chuyến bay...
               </button>
             </div>
           )}

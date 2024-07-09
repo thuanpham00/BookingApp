@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import logo from "../../img/favicon/FaviconFlight.png"
+import logo from "../../img/favicon/FaviconFlight.webp"
 import Input from "src/components/Input"
 import { Link, useNavigate } from "react-router-dom"
 import { path } from "src/constant/path"

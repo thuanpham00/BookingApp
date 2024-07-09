@@ -17,7 +17,7 @@ export default function Breadcrumb({ name, name2 }: Props) {
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
       </svg>
-      <span className="text-base text-[#0077b6] font-semibold cursor-pointer">{name2}</span>
+      <span className="text-base text-blueColor font-semibold cursor-pointer">{name2}</span>
       <div className="ml-[2px] mt-[2px] triangle"></div>
     </div>
   )

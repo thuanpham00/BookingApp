@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react"
-import { CSSTransition, TransitionGroup } from "react-transition-group"
 import ProductItem from "../ProductItem"
 import { ListHotelType } from "../../Home"
 
@@ -56,6 +55,8 @@ export default function SlideList({ productList, timeScroll }: Props) {
   return (
     <div className="flex relative">
       <button
+        type="button"
+        aria-label="prev" // cho trình duyệt đọc
         onClick={handlePrevImg}
         className="absolute top-1/2 -left-10 flex-shrink-0 flex items-center justify-center hover:bg-gray-300 duration-200 rounded-full w-10 h-10 hover:text-black/80"
       >
@@ -71,19 +72,17 @@ export default function SlideList({ productList, timeScroll }: Props) {
         </svg>
       </button>
 
-      <div className="flex items-center flex-nowrap gap-4 overflow-hidden">
-        <TransitionGroup component={null}>
-          {currentListProduct.map((item, index) => (
-            <CSSTransition key={index} timeout={500} classNames="slide">
-              <div className="flex-1 h-[420px]">
-                <ProductItem item={item} />
-              </div>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
+      <div className="w-full flex items-center gap-4">
+        {currentListProduct.map((item, index) => (
+          <div className="w-[25%]" key={index}>
+            <ProductItem item={item} />
+          </div>
+        ))}
       </div>
 
       <button
+        type="button"
+        aria-label="next"
         onClick={handleNextImg}
         className="absolute top-1/2 -right-10 flex-shrink-0 flex items-center justify-center hover:bg-gray-300 duration-200 rounded-full w-10 h-10 hover:text-black/80"
       >

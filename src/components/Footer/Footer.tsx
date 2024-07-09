@@ -12,6 +12,7 @@ export default function Footer() {
               <Link
                 to="https://www.facebook.com/domaybatduoctao912"
                 target="_blank"
+                aria-label="Facebook"
                 className="w-7 h-7 bg-whiteColor rounded-full flex items-center justify-center"
               >
                 <svg
@@ -33,6 +34,7 @@ export default function Footer() {
               <Link
                 to="https://www.instagram.com/minthuan_/"
                 target="_blank"
+                aria-label="Instagram"
                 className="w-7 h-7 bg-whiteColor rounded-full flex items-center justify-center"
               >
                 <svg
@@ -56,9 +58,9 @@ export default function Footer() {
 
         <div className="py-4 flex items-start justify-between flex-wrap border-b border-b-[#4e6c8d]">
           <div className="flex-1">
-            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
+            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               ĐƯỜNG DẪN NHANH
-            </h4>
+            </h3>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
@@ -120,9 +122,9 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
+            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               BOOKING
-            </h4>
+            </h3>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
@@ -176,9 +178,9 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
+            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               CÔNG CỤ DU LỊCH
-            </h4>
+            </h3>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link
@@ -248,9 +250,9 @@ export default function Footer() {
           </div>
 
           <div className="flex-1">
-            <h4 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
+            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               GIỚI THIỆU
-            </h4>
+            </h3>
             <ul className="mt-4">
               <li className="mb-2">
                 <Link

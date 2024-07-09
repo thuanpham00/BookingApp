@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { airportCodeItem } from "src/types/flight.type"
+import { airportCodes } from "src/constant/flightSearch"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -72,15 +72,6 @@ export const getAirlinesCode = (aircraft: { [code: string]: string }, code: stri
   return carriedCode
 }
 
-export const getCountryFromIataCode = (list: airportCodeItem[], code: string) => {
-  list.filter((item) => {
-    if (item.code === code) {
-      return item.country
-    }
-  })
-  return null
-}
-
 export const getPrice = (price: string) => {
   if (price) {
     const res = price.split(".")[0]
@@ -89,4 +80,30 @@ export const getPrice = (price: string) => {
   return null
 }
 
-// export const exchangePrice = (price: string) => {}
+// 123456
+export const exchangePrice = (price: string) => {
+  const array = (getPrice(price) as string).split("").reverse()
+  let n = array.length
+  for (let i = 3; i < n; i += 4) {
+    array.splice(i, 0, ",") // chèn vô
+    n++
+  }
+  if (array[array.length - 1] === ",") {
+    array.pop()
+  }
+
+  // split tách chuỗi
+  // join nối chuỗi
+  return array.reverse().join("")
+}
+
+export const getCountryAirport = (code: string) => {
+  if (code) {
+    const res = airportCodes.find((item) => item.code === code) // tìm được phần tử đầu tiên thì trả về true
+
+    if (res) {
+      return res.country + " - " + res.code
+    }
+  }
+  return null
+}

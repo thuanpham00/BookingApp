@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import logo from "../../img/favicon/FaviconFlight.png"
+import logo from "../../img/favicon/FaviconFlight.webp"
 import Input from "src/components/Input"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"

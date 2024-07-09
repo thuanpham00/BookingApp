@@ -16,16 +16,15 @@ export type FlightOfferParamsConfig = {
 }
 
 export type flightSearchParams = {
-  originDestinations: [
-    {
-      id: string
-      originLocationCode: string
-      destinationLocationCode: string
-      departureDateTimeRange: {
-        date: string
-      }
+  originDestinations: {
+    id: string
+    originLocationCode: string
+    destinationLocationCode: string
+    departureDateTimeRange: {
+      date: string
     }
-  ]
+  }[]
+
   travelers: [
     {
       id: string

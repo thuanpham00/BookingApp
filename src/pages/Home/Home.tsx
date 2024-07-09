@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet-async"
-import bg1 from "../../img/bgLogin/bg-1.png"
+import bg1 from "../../img/bgLogin/bg-1.webp"
 import bg2 from "../../img/Home/banner2.webp"
-import bg3 from "../../img/bgLogin/bg-5.png"
-import bg4 from "../../img/bgLogin/bg-6.png"
+import bg3 from "../../img/bgLogin/bg-5.webp"
+import bg4 from "../../img/bgLogin/bg-6.webp"
 import tour1 from "../../img/Home/tour1.webp"
 import tour2 from "../../img/Home/tour2.webp"
 import tour3 from "../../img/Home/tour3.webp"
@@ -62,6 +62,15 @@ const listHotel: ListHotelType = [
     type: "Mỗi đêm"
   },
   {
+    imageHotel: hotel6,
+    nameHotel: "Best Western Grant Park Hotel",
+    addressHotel: "124 E Huron St, Chicago",
+    review: 61,
+    rating: 4.3,
+    fromPrice: "220$",
+    type: "Mỗi đêm"
+  },
+  {
     imageHotel: hotel4,
     nameHotel: "Hotel Europe Saint Severin Paris",
     addressHotel: "38-40 Rue Saint Séverin, Paris, Paris",
@@ -78,21 +87,12 @@ const listHotel: ListHotelType = [
     rating: 4.3,
     fromPrice: "300$",
     type: "Mỗi đêm"
-  },
-  {
-    imageHotel: hotel6,
-    nameHotel: "Best Western Grant Park Hotel",
-    addressHotel: "124 E Huron St, Chicago",
-    review: 61,
-    rating: 4.3,
-    fromPrice: "220$",
-    type: "Mỗi đêm"
   }
 ]
 
 export default function Home() {
   return (
-    <div>
+    <div className="h-[2500px]">
       <Helmet>
         <title>Trang chủ</title>
         <meta name="description" content="Trang chủ - Amadeus Booking" />
@@ -117,7 +117,7 @@ export default function Home() {
       </div>
       <div className="container">
         <div className="mt-4 flex items-center gap-8">
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
+          <div className="bg-[#fff] rounded-3xl flex-1 min-h-[200px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,13 +134,13 @@ export default function Home() {
                 />
               </svg>
               <h3 className="my-2 text-textColor font-semibold text-lg">Đặt phòng dễ dàng</h3>
-              <p className="text-gray-500 font-normal text-base">
+              <p className="text-textColor font-normal text-base">
                 Trải nghiệm đặt phòng nhanh chóng và tiện lợi với hệ thống của chúng tôi. Chỉ cần
                 vài bước đơn giản để tìm và đặt ngay phòng khách sạn phù hợp.
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
+          <div className="bg-[#fff] rounded-3xl flex-1 min-h-[200px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -158,23 +158,23 @@ export default function Home() {
               </svg>
 
               <h3 className="my-2 text-textColor font-semibold text-lg">Điểm đến tốt nhất</h3>
-              <p className="text-gray-500 font-normal text-base">
+              <p className="text-textColor font-normal text-base">
                 Khám phá những điểm đến tuyệt vời nhất với chúng tôi. Chúng tôi cung cấp những gợi ý
                 lý tưởng cho chuyến du lịch của bạn.
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
+          <div className="bg-[#fff] rounded-3xl flex-1 min-h-[200px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col justify-between">
               <img src={iconSVG} alt="icon" className="w-10 h-10" />
               <h3 className="my-2 text-textColor font-semibold text-lg">Hướng dẫn viên du lịch</h3>
-              <p className="text-gray-500 font-normal text-base">
+              <p className="text-textColor font-normal text-base">
                 Trải nghiệm chuyến đi hoàn hảo với sự hỗ trợ của các hướng dẫn viên chuyên nghiệp.
                 Hiểu rõ hơn về văn hóa và lịch sử mỗi điểm đến.
               </p>
             </div>
           </div>
-          <div className="flex-1 min-h-[220px] p-4 border border-gray-300 cursor-pointer">
+          <div className="bg-[#fff] rounded-3xl flex-1 min-h-[200px] p-4 border border-gray-300 cursor-pointer">
             <div className="flex flex-col">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +192,7 @@ export default function Home() {
               </svg>
 
               <h3 className="my-2 text-textColor font-semibold text-lg">Hỗ trợ khách hàng 24/7</h3>
-              <p className="text-gray-500 font-normal text-base">
+              <p className="text-textColor font-normal text-base">
                 Chúng tôi luôn sẵn sàng hỗ trợ bạn mọi lúc, mọi nơi. Đội ngũ chăm sóc khách hàng
                 chuyên nghiệp hoạt động 24/7 để giải đáp mọi thắc mắc.
               </p>
@@ -207,11 +207,13 @@ export default function Home() {
           <div className="mt-4 grid lg:grid-cols-12 md:grid-cols-6 gap-6">
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour1}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour1}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   JP
                 </div>
@@ -244,11 +246,13 @@ export default function Home() {
             </div>
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour2}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour2}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   ES
                 </div>
@@ -281,11 +285,13 @@ export default function Home() {
             </div>
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour3}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour3}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   AUS
                 </div>
@@ -318,11 +324,13 @@ export default function Home() {
             </div>
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour4}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour4}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   SG
                 </div>
@@ -355,11 +363,13 @@ export default function Home() {
             </div>
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour5}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour5}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   VN
                 </div>
@@ -392,11 +402,13 @@ export default function Home() {
             </div>
             <div className="lg:col-span-4 md:col-span-3 shadow-sm cursor-pointer hover:shadow-2xl duration-200">
               <div className="w-full relative">
-                <img
-                  src={tour6}
-                  alt="tour"
-                  className="w-full h-[350px] rounded-tl-md rounded-tr-md"
-                />
+                <div className="w-full h-[350px]">
+                  <img
+                    src={tour6}
+                    alt="tour"
+                    className="w-full h-full rounded-tl-md rounded-tr-md"
+                  />
+                </div>
                 <div className="px-4 py-1 text-whiteColor bg-blueColor block absolute -top-2 left-5 rounded-sm text-sm">
                   KR
                 </div>
