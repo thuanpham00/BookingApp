@@ -9,19 +9,37 @@ const authEndpoint = "https://test.api.amadeus.com/v1/security/oauth2/token"
 const APIkey = "LrkpfAKnVraTBXv6mMgkdUymcgyRYSRA"
 const APIsecret = "KYm4yBAxE0wNG7OO"
 
+// instance: tạo các yêu cầu http (get, post, put, del), cấu hình sẵn, quản lý token
 class http {
-  instance: AxiosInstance
+  instanceV1: AxiosInstance
+  instanceV2: AxiosInstance
   private tokenAPI: string | null
   constructor() {
     this.tokenAPI = null // khởi tạo
-    this.instance = axios.create({
+
+    this.instanceV1 = axios.create({
+      baseURL: "https://test.api.amadeus.com/v1/",
+      timeout: 10000, // thời gian chờ
+      headers: {
+        "Content-Type": "application/json" // yêu cầu server trả về kết quả json
+      }
+    })
+
+    this.instanceV2 = axios.create({
       baseURL: "https://test.api.amadeus.com/v2/",
       timeout: 10000, // thời gian chờ
       headers: {
         "Content-Type": "application/json" // yêu cầu server trả về kết quả json
       }
     })
-    this.instance.interceptors.request.use(
+
+    this.setUpInstance(this.instanceV1)
+    this.setUpInstance(this.instanceV2)
+  }
+
+  // xử lý chung
+  setUpInstance(instance: AxiosInstance) {
+    instance.interceptors.request.use(
       async (config) => {
         if (!this.tokenAPI) {
           await this.getAccessToken()
@@ -35,7 +53,7 @@ class http {
         return Promise.reject(error)
       }
     )
-    this.instance.interceptors.response.use(
+    instance.interceptors.response.use(
       (response) => {
         // console.log(response)
         return response
@@ -75,5 +93,7 @@ class http {
   }
 }
 
-const Http = new http().instance
+const Http = new http()
+export const HttpV1 = Http.instanceV1
+export const HttpV2 = Http.instanceV2
 export default Http

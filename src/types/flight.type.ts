@@ -15,7 +15,7 @@ export type FlightOfferParamsConfig = {
   excludedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn loại trừ khỏi kết quả tìm kiếm chuyến bay.
 }
 
-export type flightSearchParams = {
+export type FlightSearchParams = {
   originDestinations: {
     id: string
     originLocationCode: string
@@ -58,6 +58,84 @@ export type flightSearchParams = {
     }
   }
   currencyCode: string
+}
+
+export type FlightPricingParams = {
+  data: {
+    type: string // "flight-offers-pricing"
+    flightOffers: {
+      type: string // "flight-offer"
+      id: string
+      source: string // e.g., "GDS"
+      instantTicketingRequired: boolean
+      nonHomogeneous: boolean
+      oneWay: boolean
+      lastTicketingDate: string // e.g., "2020-08-04"
+      numberOfBookableSeats: number
+      itineraries: {
+        duration: string // e.g., "PT32H15M"
+        segments: {
+          departure: {
+            iataCode: string // e.g., "SYD"
+            terminal: string // e.g., "1"
+            at: string // e.g., "2021-02-01T19:15:00"
+          }
+          arrival: {
+            iataCode: string // e.g., "SIN"
+            terminal: string // e.g., "1"
+            at: string // e.g., "2021-02-02T00:30:00"
+          }
+          carrierCode: string // e.g., "TR"
+          number: string // e.g., "13"
+          aircraft: {
+            code: string // e.g., "789"
+          }
+          operating: {
+            carrierCode: string // e.g., "TR"
+          }
+          duration: string // e.g., "PT8H15M"
+          id: string
+          numberOfStops: number
+          blacklistedInEU: boolean
+        }[]
+      }[]
+      price: {
+        currency: string // e.g., "EUR"
+        total: string // e.g., "546.70"
+        base: string // e.g., "334.00"
+        fees: {
+          amount: string // e.g., "0.00"
+          type: string // e.g., "SUPPLIER"
+        }[]
+        grandTotal: string // e.g., "546.70"
+      }
+      pricingOptions: {
+        fareType: string[] // e.g., ["PUBLISHED"]
+        includedCheckedBagsOnly: boolean
+      }
+      validatingAirlineCodes: string[] // e.g., ["HR"]
+      travelerPricings: {
+        travelerId: string
+        fareOption: string // e.g., "STANDARD"
+        travelerType: string // e.g., "ADULT"
+        price: {
+          currency: string // e.g., "EUR"
+          total: string // e.g., "546.70"
+          base: string // e.g., "334.00"
+        }
+        fareDetailsBySegment: {
+          segmentId: string
+          cabin: string // e.g., "ECONOMY"
+          fareBasis: string // e.g., "O2TR24"
+          class: string // e.g., "O"
+          includedCheckedBags: {
+            weight: number // e.g., 20
+            weightUnit: string // e.g., "KG"
+          }
+        }[]
+      }[]
+    }[]
+  }
 }
 
 export type airportCodeItem = {

@@ -7,9 +7,14 @@ import luggage from "../../img/svg/luggage-baggage-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { airportCodes, travelClassList } from "src/constant/flightSearch"
-import { ResponseFlightSearch, airportCodeList, flightSearchParams } from "src/types/flight.type.ts"
+import {
+  ResponseFlightSearch,
+  airportCodeList,
+  FlightSearchParams,
+  FlightPricingParams
+} from "src/types/flight.type.ts"
 import Breadcrumb from "src/components/Breadcrumb/Breadcrumb"
 import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
@@ -30,6 +35,7 @@ import SelectDate from "src/components/SelectDate"
 import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 
 export type FormData = Pick<
   schemaType,
@@ -82,14 +88,12 @@ export default function Flight() {
   const [date, setDate] = useState<Date | null>(null) // ngày đi
   const [date2, setDate2] = useState<Date | null>(null) // ngày về
   const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-
   const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
   const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
   const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
 
   const [flightType, setFlightType] = useState("oneWay")
   const [showPassenger, setShowPassenger] = useState(0)
-  const [showReturnDate, setShowReturnDate] = useState(false)
   const [showInfoSearch, setShowInfoSearch] = useState(false)
 
   const handleFlightTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,10 +103,8 @@ export default function Flight() {
   // chỉ cần flightType thay đổi giá trị nó chạy lại hàm này
   useMemo(() => {
     if (flightType === "roundTrip") {
-      setShowReturnDate(true)
       setShowInfoSearch(false)
     } else {
-      setShowReturnDate(false)
       setShowInfoSearch(false)
     }
   }, [flightType])
@@ -137,13 +139,18 @@ export default function Flight() {
     return () => document.removeEventListener("mousedown", clickOutHideListAirport)
   }, [])
 
-  const handleChangeValue = (input: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (input === "input_1") {
-      setSearchText(event.target.value)
-    } else if (input === "input_2") {
-      setSearchText2(event.target.value)
-    }
-  }
+  //`useCallback()`: khi cta không muốn function của cta được khởi tạo lại mỗi lần component chúng ta re-render - nếu có thay đổi nó mới chạy lại - re-render
+  //`useMemo()`: tương tự, khi chúng ta muốn một biến không bị làm mới lại mỗi lần component re-render. - nếu có thay đổi nó mới chạy lại - re-render
+  const handleChangeValue = useCallback(
+    (input: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (input === "input_1") {
+        setSearchText(event.target.value)
+      } else if (input === "input_2") {
+        setSearchText2(event.target.value)
+      }
+    },
+    []
+  )
 
   const filterAirportCodeList_1 = useMemo(
     () =>
@@ -198,20 +205,18 @@ export default function Flight() {
     // chỗ này type button // thực hiện click
   }
 
-  const searchFlightOffersMutation = useMutation({
-    mutationFn: (data: flightSearchParams) => {
-      return flightApi.flightOffersSearch(data as flightSearchParams)
+  const flightOffersSearchMutation = useMutation({
+    mutationFn: (data: FlightSearchParams) => {
+      return flightApi.flightOffersSearch(data as FlightSearchParams)
     }
   })
 
-  const searchFlightList = searchFlightOffersMutation?.data?.data as ResponseFlightSearch
-  console.log(searchFlightList)
+  const flightList = flightOffersSearchMutation?.data?.data as ResponseFlightSearch
 
   const handleSubmitSearch = handleSubmit((data) => {
-    console.log(data)
     // truyền các data mà form quản lý vào biến này để submit gọi api
 
-    const flightSearchParams: flightSearchParams = {
+    const body: FlightSearchParams = {
       originDestinations:
         flightType === "roundTrip"
           ? [
@@ -284,12 +289,37 @@ export default function Flight() {
       currencyCode: "VND" // Đơn vị tiền tệ mong muốn
     }
     // chỗ này type submit // thực hiện submit form
-    searchFlightOffersMutation.mutate(flightSearchParams, {
+    flightOffersSearchMutation.mutate(body, {
       onSuccess: () => {
         setShowInfoSearch(true)
       }
     })
   })
+
+  const flightOffersPriceMutation = useMutation({
+    mutationFn: (data: FlightPricingParams) => {
+      return flightApi.flightOffersPrice(data)
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
+
+  const flightPriceList = (item: string) => {
+    const body: FlightPricingParams = {
+      data: {
+        type: "flight-offers-pricing",
+        flightOffers: [flightList.data[Number(item) - 1]]
+      }
+    }
+    flightOffersPriceMutation.mutate(body, {
+      onSuccess: () => {
+        toast.success("Thành công")
+      }
+    })
+  }
+
+  console.log(flightOffersPriceMutation.data?.data)
 
   return (
     <div className="bg-[#e5eef4]">
@@ -439,13 +469,13 @@ export default function Flight() {
                   {/* Khứ hồi hoặc 1 chiều */}
                   <div
                     className={
-                      showReturnDate
+                      flightType === "roundTrip"
                         ? "w-[70%] flex justify-start gap-2"
                         : "w-[70%] flex justify-start"
                     }
                   >
                     {/* date ngày đi*/}
-                    <div className={showReturnDate ? "w-[50%]" : "w-[100%]"}>
+                    <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
                       <SelectDate
                         text="Ngày khởi hành"
                         control={control}
@@ -458,7 +488,7 @@ export default function Flight() {
                     </div>
 
                     {/* date ngày về */}
-                    <div className={showReturnDate ? "w-[50%]" : "hidden w-[0%]"}>
+                    <div className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}>
                       <SelectDate
                         text="Ngày về"
                         control={control}
@@ -553,7 +583,7 @@ export default function Flight() {
                           role="combobox"
                           aria-expanded={open}
                           aria-label="TravelClass"
-                          className="w-full justify-between bg-transparent border-none shadow-none text-base"
+                          className="w-full flex justify-center bg-transparent border-none shadow-none text-base text-center"
                         >
                           {travelClass
                             ? travelClassList.find((item) => item.value === travelClass)?.value
@@ -595,6 +625,7 @@ export default function Flight() {
                   </div>
 
                   <Button
+                    disable={flightOffersSearchMutation.isPending}
                     classNameWrapper="w-[50%] relative"
                     type="submit"
                     nameButton="Tìm kiếm"
@@ -610,7 +641,7 @@ export default function Flight() {
       <div className="container">
         <div className="py-8">
           {/* không load thì isPending */}
-          {!searchFlightOffersMutation.isPending && showInfoSearch && (
+          {!flightOffersSearchMutation.isPending && showInfoSearch && (
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-3">
                 <div className="bg-[#fff] shadow-md h-[500px]"></div>
@@ -622,7 +653,7 @@ export default function Flight() {
                 </div>
                 {/* 1 chiều */}
                 {flightType === "oneWay" &&
-                  searchFlightList?.data.map((item) => (
+                  flightList?.data.map((item) => (
                     <div key={item.id}>
                       {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay - 1 chiều hay 2 chiều */}
                       <Link to="" className="flex items-center w-full bg-[#fff] mb-4 shadow-sm">
@@ -646,14 +677,10 @@ export default function Flight() {
                                     </div>
                                     <div className="flex-grow">
                                       <span className="block text-textColor text-xs font-semibold">
-                                        {searchFlightList.dictionaries.carriers[flight.carrierCode]}
+                                        {flightList.dictionaries.carriers[flight.carrierCode]}
                                       </span>
-                                      <span className="block text-textColor text-xs font-normal">
-                                        {
-                                          searchFlightList.dictionaries.aircraft[
-                                            flight.aircraft.code
-                                          ]
-                                        }
+                                      <span className="block text-textColor text-xs font-normal truncate w-[150px]">
+                                        {flightList.dictionaries.aircraft[flight.aircraft.code]}
                                       </span>
                                     </div>
                                   </div>
@@ -720,14 +747,21 @@ export default function Flight() {
                             </div>
                           ))}
 
-                          <div className="bg-[#f8f8f8] p-4">
-                            <div className="flex flex-col items-end">
-                              <span className="text-lg font-semibold">
-                                {exchangePrice(item.travelerPricings[0].price.total)}đ
-                              </span>
-                              <span className="text-gray-500 text-sm">
-                                Giá vé dành cho người lớn
-                              </span>
+                          <div className="bg-[#f8f8f8] p-2">
+                            <div className="flex items-center justify-end gap-2">
+                              <div className="flex flex-col items-end">
+                                <span className="text-lg font-semibold">
+                                  {exchangePrice(item.travelerPricings[0].price.total)}đ
+                                </span>
+                                <span className="text-gray-500 text-sm">
+                                  Giá vé dành cho người lớn
+                                </span>
+                              </div>
+                              <Button
+                                onClick={() => flightPriceList(item.id)}
+                                nameButton="Giá chi tiết"
+                                className="px-3 py-2 bg-[#e5eef4] w-full text-blueColor text-sm rounded-full hover:bg-blueColor duration-200 font-semibold border border-blueColor hover:text-whiteColor"
+                              />
                             </div>
                           </div>
                         </div>
@@ -737,7 +771,7 @@ export default function Flight() {
 
                 {/* 2 chiều */}
                 {flightType === "roundTrip" &&
-                  searchFlightList?.data.map((item) => (
+                  flightList?.data.map((item) => (
                     <div key={item.id}>
                       {/* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay - 1 chiều hay 2 chiều */}
                       <Link
@@ -750,7 +784,7 @@ export default function Flight() {
                             {detail.segments.map((flight) => (
                               <div
                                 key={flight.id}
-                                className="grid grid-cols-12 items-center p-6 pt-10 border-b border-b-gray-200"
+                                className="grid grid-cols-12 items-center p-6 pb-4 pt-10 border-b border-b-gray-200"
                               >
                                 <div className="col-span-3 relative">
                                   <div className="absolute -top-10 left-0 bg-gray-300 rounded-full p-1 text-xs flex items-center justify-center gap-[2px]">
@@ -767,14 +801,10 @@ export default function Flight() {
                                     </div>
                                     <div className="flex-grow">
                                       <span className="block text-textColor text-xs font-semibold">
-                                        {searchFlightList.dictionaries.carriers[flight.carrierCode]}
+                                        {flightList.dictionaries.carriers[flight.carrierCode]}
                                       </span>
-                                      <span className="block text-textColor text-xs font-normal">
-                                        {
-                                          searchFlightList.dictionaries.aircraft[
-                                            flight.aircraft.code
-                                          ]
-                                        }
+                                      <span className="block text-textColor text-xs font-normal truncate w-[150px]">
+                                        {flightList.dictionaries.aircraft[flight.aircraft.code]}
                                       </span>
                                     </div>
                                   </div>
@@ -825,16 +855,12 @@ export default function Flight() {
                                         <span> 1 x </span>
                                         <div className="flex items-center gap-[2px]">
                                           <span>
-                                            {
-                                              item.travelerPricings[0].fareDetailsBySegment[0]
-                                                .includedCheckedBags.weight
-                                            }
+                                            {item.travelerPricings[0].fareDetailsBySegment[0]
+                                              .includedCheckedBags.weight || "23"}
                                           </span>
                                           <span>
-                                            {
-                                              item.travelerPricings[0].fareDetailsBySegment[0]
-                                                .includedCheckedBags.weightUnit
-                                            }
+                                            {item.travelerPricings[0].fareDetailsBySegment[0]
+                                              .includedCheckedBags.weightUnit || "KG"}
                                           </span>
                                         </div>
                                       </div>
@@ -845,14 +871,20 @@ export default function Flight() {
                             ))}
                           </div>
                         ))}
-                        <div className="w-full bg-[#f8f8f8] p-4">
-                          <div className="flex justify-end">
+                        <div className="w-full bg-[#f8f8f8] p-2">
+                          <div className="flex items-center justify-end gap-2">
                             <div className="flex flex-col items-end">
                               <span className="text-lg font-semibold">
                                 {exchangePrice(item.travelerPricings[0].price.total)}đ
                               </span>
-                              <span className="text-xs text-gray-500">Giá mỗi người lớn</span>
+                              <span className="text-gray-500 text-sm">
+                                Giá vé dành cho người lớn
+                              </span>
                             </div>
+                            <Button
+                              nameButton="Giá chi tiết"
+                              className="px-3 py-2 bg-[#e5eef4] w-full text-blueColor text-sm rounded-full hover:bg-blueColor duration-200 font-semibold border border-blueColor hover:text-whiteColor"
+                            />
                           </div>
                         </div>
                       </Link>
@@ -862,7 +894,7 @@ export default function Flight() {
             </div>
           )}
 
-          {searchFlightOffersMutation.isPending && !showInfoSearch && (
+          {flightOffersSearchMutation.isPending && !showInfoSearch && (
             <div role="status" className="flex items-center justify-center animate-pulse mx-auto">
               <button
                 disabled
@@ -900,6 +932,7 @@ export default function Flight() {
 // nếu không dùng state cục bộ thì không thể truyền props xuống các component con
 // vì thường các trường dữ liệu của input chỉ quản lý trong component đó (validate...) submit đi
 
-{
-  /* render ra tất cả hành trình bay (chuyến bay - quá cảnh) của 1 chuyến bay */
-}
+// onClick vào ô input thì nó re-render vì
+// nó thực hiện onClick={handleFocus} và handleFocus nhân vào 1 hàm xử lý set state lại dẫn đến component re-render
+
+// component chỉ re-render khi props hoặc state thay đổi
