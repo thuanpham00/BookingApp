@@ -29,18 +29,6 @@ export const convertToYYYYMMDD = (date: Date) => {
   return `${year}-${month}-${day}`
 }
 
-export const convertTravelClassToEng = (travelClass: string) => {
-  if (travelClass === "Hạng Phổ thông") {
-    return "ECONOMY"
-  } else if (travelClass === "Hạng Phổ thông cao cấp") {
-    return "PREMIUM_ECONOMY"
-  } else if (travelClass === "Hạng Thương gia") {
-    return "BUSINESS"
-  } else if (travelClass === "Hạng Nhất") {
-    return "FIRST"
-  }
-}
-
 export const getHourFromAPI = (hours: string) => {
   if (hours) {
     const result = hours.split("T")

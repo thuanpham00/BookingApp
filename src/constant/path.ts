@@ -3,6 +3,7 @@ export const path = {
   login: "/login",
   register: "/register",
 
+  flight: "/flight",
   flightSearch: "/flight/search",
   flightManage: "/flight/manage"
 } as const

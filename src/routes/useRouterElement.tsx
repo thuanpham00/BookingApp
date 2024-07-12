@@ -3,11 +3,8 @@ import { Navigate, Outlet, useRoutes } from "react-router-dom"
 import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
+import MainLayout2 from "src/layouts/MainLayout2"
 import RegisterLayout from "src/layouts/RegisterLayout"
-// import Flight from "src/pages/Flight"
-// import Login from "src/pages/Login"
-// import Register from "src/pages/Register"
-// import Home from "src/pages/Home"
 
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
@@ -16,6 +13,11 @@ import RegisterLayout from "src/layouts/RegisterLayout"
  * ví dụ component `App` dưới đây bị re-render khi mà url thay đổi
  * vì dùng `useRouterElement` (đây là custom hook của `useRoutes`)
  */
+
+const Login = lazy(() => import("src/pages/Login"))
+const Register = lazy(() => import("src/pages/Register"))
+const Flight = lazy(() => import("src/pages/Flight"))
+const FlightSearch = lazy(() => import("src/pages/FlightSearch"))
 
 function ProtectedRouter() {
   const { isAuthenticated } = useContext(AppContext)
@@ -27,38 +29,51 @@ function RejectedRouter() {
   return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
 }
 
-const Home = lazy(() => import("src/pages/Home"))
-const Login = lazy(() => import("src/pages/Login"))
-const Register = lazy(() => import("src/pages/Register"))
-const Flight = lazy(() => import("src/pages/Flight"))
-
 export default function useRouterElement() {
   // nhập url theo path có thể điều hướng trang
   // component <Suspenses></Suspenses> - dùng kĩ thuật Lazy load - lướt tới đâu load tới đó
   const routerElement = useRoutes([
     {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <Suspense>
-            <Home />
-          </Suspense>
-        </MainLayout>
-      )
+      path: "",
+      element: <MainLayout />, // sử dụng chung // fix re-render
+      children: [
+        // trang chuyến bay sẽ là trang mặc định nên gắn 2 route cùng 1 layout
+        {
+          path: path.home,
+          element: (
+            <Suspense>
+              <Flight />
+            </Suspense>
+          )
+        },
+        {
+          path: path.flight,
+          element: (
+            <Suspense>
+              <Flight />
+            </Suspense>
+          )
+        }
+      ]
     },
     {
       path: "",
       element: <ProtectedRouter />,
       children: [
         {
-          path: path.flightSearch,
-          element: (
-            <MainLayout>
-              <Suspense>
-                <Flight />
-              </Suspense>
-            </MainLayout>
-          )
+          path: "",
+          // sử dụng <Outlet/> bên trong component <MainLayout2/> để truyền component con vào
+          element: <MainLayout2 />, // sử dụng chung // fix re-render
+          children: [
+            {
+              path: path.flightSearch,
+              element: (
+                <Suspense>
+                  <FlightSearch />
+                </Suspense>
+              )
+            }
+          ]
         }
       ]
     },

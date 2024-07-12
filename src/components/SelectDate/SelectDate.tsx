@@ -9,11 +9,12 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any
   setDate: (date: Date) => void
-  date: Date | null
+  date: Date | null | string
   convertToYYYYMMDD: (date: Date) => string
   errors: string
   name: string
   text: string
+  className?: string
 }
 
 export default function SelectDate({
@@ -23,19 +24,20 @@ export default function SelectDate({
   convertToYYYYMMDD,
   errors,
   name,
-  text
+  text,
+  className = "py-[10px] px-2 border border-gray-400 rounded-md flex items-center"
 }: Props) {
   return (
     <div className="relative">
       <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{errors}</span>
-      <div className="py-[10px] px-2 border border-gray-400 rounded-md flex items-center">
+      <div className={className}>
         <Popover>
           <PopoverTrigger asChild>
             <ButtonShadcn
               variant={"outline"}
-              className="bg-transparent text-left border-none shadow-none"
+              className="bg-transparent hover:bg-transparent text-left border-none shadow-none text-base flex gap-1"
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <CalendarIcon className="h-4 w-4" />
               {date ? format(date, "yyyy-MM-dd") : <span>{text}</span>}
             </ButtonShadcn>
           </PopoverTrigger>

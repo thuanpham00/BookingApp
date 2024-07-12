@@ -146,8 +146,101 @@ export type airportCodeItem = {
 
 export type airportCodeList = airportCodeItem[]
 
+export type ResponseFlightItem = {
+  // Thông tin chung về chuyến bay
+  type: string // Loại đối tượng (e.g., "flight-offer")
+  id: string // ID duy nhất của chuyến bay
+  source: string // Nguồn của dữ liệu
+  instantTicketingRequired: boolean // Có yêu cầu phát hành vé ngay lập tức không
+  nonHomogeneous: boolean // Có không đồng nhất không (e.g., nhiều hạng ghế)
+  oneWay: boolean // Là chuyến bay một chiều không
+  lastTicketingDate: string // Ngày cuối cùng có thể đặt vé
+  numberOfBookableSeats: number // Số lượng chỗ ngồi có thể đặt
+
+  // Thông tin chi tiết về hành trình
+  // 1 chuyến bay sẽ có nhiều hành trình, quá cảnh
+  itineraries: [
+    {
+      duration: string // Tổng thời gian của hành trình
+      segments: [
+        {
+          departure: {
+            iataCode: string // Mã IATA của sân bay khởi hành
+            terminal: string // Nhà ga khởi hành
+            at: string // Thời gian khởi hành
+          }
+          arrival: {
+            iataCode: string // Mã IATA của sân bay đến
+            terminal: string // Nhà ga đến
+            at: string // Thời gian đến
+          }
+          carrierCode: string // Mã hãng hàng không
+          number: string // Số hiệu chuyến bay
+          aircraft: {
+            code: string // Mã máy bay
+          }
+          operating: {
+            carrierCode: string // Mã hãng hàng không vận hành
+          }
+          duration: string // Thời gian bay của đoạn này
+          id: string // ID của đoạn bay
+          numberOfStops: number // Số lần dừng
+          blacklistedInEU: boolean // Có bị cấm bay trong EU không
+        }
+      ]
+    }
+  ]
+
+  // Thông tin giá cả của chuyến bay
+  price: {
+    currency: string // Loại tiền tệ
+    total: string // Tổng giá
+    base: string // Giá cơ bản
+    fees: {
+      amount: string // Số tiền của phí
+      type: string // Loại phí
+    }[]
+    grandTotal: string // Tổng giá bao gồm tất cả các phí
+  }
+
+  // Tùy chọn giá vé
+  pricingOptions: {
+    fareType: string[] // Loại giá vé (e.g., "PUBLISHED")
+    includedCheckedBagsOnly: boolean // Chỉ bao gồm hành lý ký gửi
+  }
+
+  // Mã hãng hàng không xác nhận vé
+  validatingAirlineCodes: string[]
+
+  // Giá vé cho từng hành khách
+  travelerPricings: [
+    {
+      travelerId: string // ID của hành khách
+      fareOption: string // Tùy chọn giá vé
+      travelerType: string // Loại hành khách (e.g., "ADULT")
+      price: {
+        currency: string // Loại tiền tệ
+        total: string // Tổng giá
+        base: string // Giá cơ bản
+      }
+      fareDetailsBySegment: [
+        {
+          segmentId: string // ID của đoạn bay
+          cabin: string // Hạng ghế (e.g., "ECONOMY")
+          fareBasis: string // Cơ sở giá vé
+          class: string // Lớp (e.g., "E")
+          includedCheckedBags: {
+            weight: number // Trọng lượng hành lý ký gửi
+            weightUnit: string // Đơn vị trọng lượng (e.g., "KG")
+          }
+        }
+      ]
+    }
+  ]
+}
+
 // Định nghĩa kiểu dữ liệu cho phản hồi của API Flight Offer Search
-export type ResponseFlightSearch = {
+export type ResponseFlightList = {
   // Metadata của phản hồi
   meta: {
     // Tổng số kết quả trả về
@@ -159,100 +252,7 @@ export type ResponseFlightSearch = {
   }
 
   // Dữ liệu chính của các chuyến bay
-  data: [
-    {
-      // Thông tin chung về chuyến bay
-      type: string // Loại đối tượng (e.g., "flight-offer")
-      id: string // ID duy nhất của chuyến bay
-      source: string // Nguồn của dữ liệu
-      instantTicketingRequired: boolean // Có yêu cầu phát hành vé ngay lập tức không
-      nonHomogeneous: boolean // Có không đồng nhất không (e.g., nhiều hạng ghế)
-      oneWay: boolean // Là chuyến bay một chiều không
-      lastTicketingDate: string // Ngày cuối cùng có thể đặt vé
-      numberOfBookableSeats: number // Số lượng chỗ ngồi có thể đặt
-
-      // Thông tin chi tiết về hành trình
-      // 1 chuyến bay sẽ có nhiều hành trình, quá cảnh
-      itineraries: [
-        {
-          duration: string // Tổng thời gian của hành trình
-          segments: [
-            {
-              departure: {
-                iataCode: string // Mã IATA của sân bay khởi hành
-                terminal: string // Nhà ga khởi hành
-                at: string // Thời gian khởi hành
-              }
-              arrival: {
-                iataCode: string // Mã IATA của sân bay đến
-                terminal: string // Nhà ga đến
-                at: string // Thời gian đến
-              }
-              carrierCode: string // Mã hãng hàng không
-              number: string // Số hiệu chuyến bay
-              aircraft: {
-                code: string // Mã máy bay
-              }
-              operating: {
-                carrierCode: string // Mã hãng hàng không vận hành
-              }
-              duration: string // Thời gian bay của đoạn này
-              id: string // ID của đoạn bay
-              numberOfStops: number // Số lần dừng
-              blacklistedInEU: boolean // Có bị cấm bay trong EU không
-            }
-          ]
-        }
-      ]
-
-      // Thông tin giá cả của chuyến bay
-      price: {
-        currency: string // Loại tiền tệ
-        total: string // Tổng giá
-        base: string // Giá cơ bản
-        fees: {
-          amount: string // Số tiền của phí
-          type: string // Loại phí
-        }[]
-        grandTotal: string // Tổng giá bao gồm tất cả các phí
-      }
-
-      // Tùy chọn giá vé
-      pricingOptions: {
-        fareType: string[] // Loại giá vé (e.g., "PUBLISHED")
-        includedCheckedBagsOnly: boolean // Chỉ bao gồm hành lý ký gửi
-      }
-
-      // Mã hãng hàng không xác nhận vé
-      validatingAirlineCodes: string[]
-
-      // Giá vé cho từng hành khách
-      travelerPricings: [
-        {
-          travelerId: string // ID của hành khách
-          fareOption: string // Tùy chọn giá vé
-          travelerType: string // Loại hành khách (e.g., "ADULT")
-          price: {
-            currency: string // Loại tiền tệ
-            total: string // Tổng giá
-            base: string // Giá cơ bản
-          }
-          fareDetailsBySegment: [
-            {
-              segmentId: string // ID của đoạn bay
-              cabin: string // Hạng ghế (e.g., "ECONOMY")
-              fareBasis: string // Cơ sở giá vé
-              class: string // Lớp (e.g., "E")
-              includedCheckedBags: {
-                weight: number // Trọng lượng hành lý ký gửi
-                weightUnit: string // Đơn vị trọng lượng (e.g., "KG")
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  data: ResponseFlightItem[]
 
   // Từ điển chứa thông tin bổ sung
   dictionaries: {
@@ -270,6 +270,94 @@ export type ResponseFlightSearch = {
     }
     carriers: {
       [code: string]: string // Hãng hàng không
+    }
+  }
+}
+
+export type ResponseFlightPrice = {
+  data: {
+    type: string
+    flightOffers: Array<{
+      type: string
+      id: string
+      source: string
+      instantTicketingRequired: boolean
+      nonHomogeneous: boolean
+      lastTicketingDate: string
+      itineraries: Array<{
+        segments: Array<{
+          departure: {
+            iataCode: string
+            at: string
+            terminal?: string
+          }
+          arrival: {
+            iataCode: string
+            terminal?: string
+            at: string
+          }
+          carrierCode: string
+          number: string
+          aircraft: {
+            code: string
+          }
+          operating: {
+            carrierCode: string
+          }
+          id: string
+          numberOfStops: number
+          duration: string
+        }>
+      }>
+      price: {
+        currency: string
+        total: string
+        base: string
+        fees: Array<{
+          amount: string
+          type: string
+        }>
+        grandTotal: string
+        billingCurrency: string
+      }
+      pricingOptions: {
+        fareType: string[]
+        includedCheckedBagsOnly: boolean
+      }
+      validatingAirlineCodes: string[]
+      travelerPricings: Array<{
+        travelerId: string
+        fareOption: string
+        travelerType: string
+        price: {
+          currency: string
+          total: string
+          base: string
+          taxes: Array<{
+            amount: string
+            code: string
+          }>
+        }
+        fareDetailsBySegment: Array<{
+          segmentId: string
+          cabin: string
+          fareBasis: string
+          class: string
+          includedCheckedBags: {
+            quantity: number
+          }
+        }>
+      }>
+      paymentCardRequired: boolean
+    }>
+  }
+
+  dictionaries: {
+    locations: {
+      [key: string]: {
+        cityCode: string
+        countryCode: string
+      }
     }
   }
 }

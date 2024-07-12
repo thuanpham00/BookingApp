@@ -2,12 +2,16 @@
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { InputAirport } from "src/pages/Flight/Flight"
-import AirportCodeList from "src/pages/Flight/components/AirportCodeList"
+import AirportCodeList from "src/pages/FlightSearch/components/AirportCodeList"
+
 import { airportCodeItem } from "src/types/flight.type"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   children: React.ReactNode
   classNameList: string
+  classNameBlock?: string
+  classNameDesc?: string
+  classNameInput?: string
   filterList: airportCodeItem[]
   value: string
   showList: boolean
@@ -18,6 +22,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   inputName: InputAirport
   error?: string
+  desc: string
 }
 
 // chỗ này hay - nâng cao
@@ -26,6 +31,9 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   {
     children,
     classNameList,
+    classNameBlock = "py-4 px-3 border-2 border-gray-300 rounded-md flex items-center",
+    classNameDesc = "pl-2 text-textColor",
+    classNameInput = "px-2 outline-none bg-transparent text-2xl flex-grow font-semibold",
     filterList,
     value,
     showList,
@@ -36,25 +44,29 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
     inputName,
     name,
     error,
+    desc,
     ...rest
   }: InputProps,
   ref
 ) {
   const registerResult = register && name ? { ...register(name) } : ""
   return (
-    <div className="flex-1 relative">
+    <div className="w-[50%] relative">
       <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{error}</span>
-      <div className="py-4 px-3 border border-gray-400 rounded-md flex items-center">
+      <div className={classNameBlock}>
         {children}
-        <input
-          type="text"
-          className="px-2 outline-none bg-transparent text-base flex-grow"
-          onClick={handleFocus}
-          {...rest}
-          {...registerResult}
-          value={value}
-          onChange={handleChangeValue}
-        />
+        <div className="flex flex-col">
+          <span className={classNameDesc}>{desc}</span>
+          <input
+            type="text"
+            className={classNameInput}
+            onClick={handleFocus}
+            {...rest}
+            {...registerResult}
+            value={value}
+            onChange={handleChangeValue}
+          />
+        </div>
       </div>
       <div className={classNameList} ref={ref}>
         {showList && (

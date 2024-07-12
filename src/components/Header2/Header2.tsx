@@ -5,7 +5,7 @@ import logo from "../../img/favicon/FaviconFlight.webp"
 import coVN from "../../img/lauguage/coVN.webp"
 import coMy from "../../img/lauguage/coMy.webp"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { AppContext } from "src/context/useContext"
 import Popover from "../Popover"
 import { getNameToEmail } from "src/utils/utils"
@@ -19,7 +19,7 @@ import {
   NavigationMenuTrigger
 } from "../ui/navigation-menu"
 
-export default function Header() {
+export default function Header2() {
   const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile } = useContext(AppContext)
 
   const handleLogOut = () => {
@@ -27,38 +27,14 @@ export default function Header() {
     setIsAuthenticated(false)
     setIsProfile(null)
   }
-  const [showHeader, setShowHeader] = useState(false)
-  const [scrollWindow, setScrollWindow] = useState(0)
-
-  const handleScrollWindow = () => {
-    const currentScrollY = window.scrollY
-    setScrollWindow(currentScrollY)
-  }
-
-  // nếu scrollWindow có thay đổi thì nó tham chiếu tới chạy lại hàm này
-  useEffect(() => {
-    if (scrollWindow > 100) {
-      setShowHeader(true)
-    } else {
-      setShowHeader(false)
-    }
-  }, [scrollWindow])
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScrollWindow)
-
-    return () => window.removeEventListener("scroll", handleScrollWindow)
-  }, [])
 
   return (
-    <header
-      className={`sticky top-0 left-0 z-40 bg-whiteColor duration-100 transition-all ease-linear transform shadow-lg ${showHeader ? "h-auto opacity-100 p-4" : "h-0 opacity-0"}`}
-    >
+    <header className={`sticky top-0 left-0 z-40 bg-whiteColor shadow-lg px-4 py-2`}>
       <div className="container">
         <div className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center">
             <Link to={path.home} className="flex items-center">
-              <div className="w-10 h-10">
+              <div className="w-14 h-14">
                 <img src={logo} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="text-xl text-textColor font-semibold">Booking.</div>

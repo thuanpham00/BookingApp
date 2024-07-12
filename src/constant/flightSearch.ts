@@ -124,15 +124,15 @@ export const airportCodes: airportCodeItem[] = [
 // các loại vé
 export const travelClassList = [
   {
-    value: "Hạng Phổ thông"
+    value: "ECONOMY"
   },
   {
-    value: "Hạng Phổ thông cao cấp"
+    value: "PREMIUM_ECONOMY"
   },
   {
-    value: "Hạng Thương gia"
+    value: "BUSINESS"
   },
   {
-    value: "Hạng Nhất"
+    value: "FIRST"
   }
 ]

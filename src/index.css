@@ -8,58 +8,13 @@ html {
 }
 
 body {
+  background-color: #e5eef4;
   font-weight: 400;
   scrollbar-color: #ccc #eee;
   font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
   /* độ dày chữ : 400 mặc định */
 }
 
-.triangle {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 6px 6px 0px 6px;
-  border-color: #003b95 transparent transparent transparent;
-}
-
-.triangle-2 {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 5px 10px 5px 10px;
-  border-color: transparent transparent transparent #313541;
-}
-
-svg {
-  display: block;
-  margin: 0 auto;
-}
-
-#motionPath {
-  stroke-dasharray: 342;
-  stroke-dashoffset: 342;
-  stroke-width: 1;
-  animation: line 6s linear infinite;
-}
-
-#airplane {
-  transform: translate(-30px, -20.5px);
-  animation: airplaneSize 6s linear infinite;
-}
-
-@keyframes airplaneSize {
-  0% {
-  }
-  100% {
-    transform: scale(0.1) translate(-30px, -20.5px);
-  }
-}
-
-@keyframes line {
-  from {
-    stroke-dashoffset: 342;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
+.bgGradient {
+  background: linear-gradient(to right, #141E30, #243B55);
 }

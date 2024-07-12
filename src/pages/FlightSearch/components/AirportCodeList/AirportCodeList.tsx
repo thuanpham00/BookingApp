@@ -1,6 +1,6 @@
 import { airportCodeList } from "src/types/flight.type"
 import AirportCodeItem from "../AirportCodeItem"
-import { InputAirport } from "../../Flight"
+import { InputAirport } from "../../FlightSearch"
 
 interface Props {
   listAirport: airportCodeList

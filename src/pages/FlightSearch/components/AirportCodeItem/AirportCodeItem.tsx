@@ -1,6 +1,6 @@
 import { airportCodeItem } from "src/types/flight.type"
 import iconFlight2 from "src/img/svg/flight-airplane-svgrepo-com.svg"
-import { InputAirport } from "../../Flight"
+import { InputAirport } from "../../FlightSearch"
 
 interface Props {
   item: airportCodeItem

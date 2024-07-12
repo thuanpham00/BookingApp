@@ -14,16 +14,10 @@ export default function useQueryConfig() {
       destinationLocationCode: queryParam.destinationLocationCode || "ICN", // mã sân bay Incheon, Hàn Quốc
       departureDate: queryParam.departureDate || "2024-12-01", // Ngày khởi hành mong muốn // ngày trong tương lai
       returnDate: queryParam.returnDate,
-      adults: queryParam.adults || "2", // Số lượng người lớn
+      adults: queryParam.adults || "1", // Số lượng người lớn
       children: queryParam.children, // Số lượng trẻ em
       infants: queryParam.adults, // Số lượng em bé // Ngày trở về mong muốn
-      currencyCode: queryParam.currencyCode, // Mã tiền tệ
-      nonStop: queryParam.nonStop, // Chỉ muốn chuyến bay trực tiếp
-      travelClass: queryParam.travelClass, // Hạng ghế mong muốn
-      max: queryParam.max || "1", // Số lượng kết quả chuyến bay cần lấy
-      maxPrice: queryParam.maxPrice, // Giới hạn giá tối đa cho các kết quả chuyến bay
-      includedAirlineCodes: queryParam.includedAirlineCodes, // Các mã hãng hàng không muốn bao gồm (Vietnam Airlines, Korean Air)
-      excludedAirlineCodes: queryParam.excludedAirlineCodes // Các mã hãng hàng không muốn loại trừ (Cathay Pacific)
+      travelClass: queryParam.travelClass // Hạng ghế mong muốn
     },
     isUndefined
   )

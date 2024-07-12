@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-[#022d5c] py-8">
       <div className="container">
         <div className="flex items-center justify-between pb-4 border-b text-whiteColor border-b-[#4e6c8d]">
-          <h2 className="font-semibold text-xl">Amadeus Booking</h2>
+          <h2 className="font-semibold text-xl">Booking</h2>
           <div className="flex items-center gap-8">
             <span className="font-semibold text-xl">Kết nối với chúng tôi</span>
             <div className="flex gap-2">
@@ -56,8 +56,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="py-4 flex items-start justify-between flex-wrap border-b border-b-[#4e6c8d]">
-          <div className="flex-1">
+        <div className="py-4 grid grid-cols-4 md:grid-cols-12 gap-4 flex-wrap border-b border-b-[#4e6c8d]">
+          <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               ĐƯỜNG DẪN NHANH
             </h3>
@@ -121,7 +121,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="flex-1">
+          <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               BOOKING
             </h3>
@@ -177,7 +177,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="flex-1">
+          <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               CÔNG CỤ DU LỊCH
             </h3>
@@ -249,7 +249,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="flex-1">
+          <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
               GIỚI THIỆU
             </h3>
