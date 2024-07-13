@@ -24,7 +24,7 @@ interface Props {
 }
 
 export default function FlightItem({ item, list }: Props) {
-  const [showPopup, setShowPopup] = useState(false)
+  // const [showPopup, setShowPopup] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
 
   const handleDetailFlight = () => {
@@ -46,7 +46,7 @@ export default function FlightItem({ item, list }: Props) {
     }
     flightOffersPriceMutation.mutate(body, {
       onSuccess: () => {
-        setShowPopup(true)
+        // setShowPopup(true)
       }
     })
   }
