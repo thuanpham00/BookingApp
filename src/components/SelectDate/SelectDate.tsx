@@ -25,11 +25,13 @@ export default function SelectDate({
   errors,
   name,
   text,
-  className = "py-[10px] px-2 border border-gray-400 rounded-md flex items-center"
+  className = "py-[10px] px-2 border border-gray-400 rounded-md flex items-center justify-center"
 }: Props) {
   return (
     <div className="relative">
-      <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{errors}</span>
+      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-red-500 font-medium min-h-[1.25rem] block">
+        {errors}
+      </span>
       <div className={className}>
         <Popover>
           <PopoverTrigger asChild>

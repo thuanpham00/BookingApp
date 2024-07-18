@@ -4,7 +4,6 @@ import { isAxiosError } from "./utils"
 import { toast } from "react-toastify"
 
 // cấu hình cơ bản của baseURL
-
 const authEndpoint = "https://test.api.amadeus.com/v1/security/oauth2/token"
 const APIkey = "LrkpfAKnVraTBXv6mMgkdUymcgyRYSRA"
 const APIsecret = "KYm4yBAxE0wNG7OO"

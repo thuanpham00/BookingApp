@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export default function Footer() {
   return (
-    <footer className="bg-[#022d5c] py-8">
+    <footer className="w-full absolute bottom-0 bg-[#022d5c] py-8">
       <div className="container">
         <div className="flex items-center justify-between pb-4 border-b text-whiteColor border-b-[#4e6c8d]">
           <h2 className="font-semibold text-xl">Booking</h2>

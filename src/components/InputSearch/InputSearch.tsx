@@ -33,7 +33,7 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
     classNameList,
     classNameBlock = "py-4 px-3 border-2 border-gray-300 rounded-md flex items-center",
     classNameDesc = "pl-2 text-textColor",
-    classNameInput = "px-2 outline-none bg-transparent text-2xl flex-grow font-semibold",
+    classNameInput = "px-2 outline-none bg-transparent md:text-xl lg:text-2xl flex-grow font-semibold",
     filterList,
     value,
     showList,
@@ -52,7 +52,9 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   const registerResult = register && name ? { ...register(name) } : ""
   return (
     <div className="w-[50%] relative">
-      <span className="absolute -top-5 left-0 text-red-500 min-h-[1.25rem] block">{error}</span>
+      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-red-500 font-medium min-h-[1.25rem] block">
+        {error}
+      </span>
       <div className={classNameBlock}>
         {children}
         <div className="flex flex-col">

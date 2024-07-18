@@ -1,10 +1,71 @@
-import { airportCodeItem } from "src/types/flight.type"
+import bannerAl1 from "../img/Home/airline/al1.webp"
+import bannerAl2 from "../img/Home/airline/al2.webp"
+import bannerAl3 from "../img/Home/airline/al3.webp"
+import bannerAl4 from "../img/Home/airline/al4.webp"
+import bannerAl5 from "../img/Home/airline/al5.webp"
+import bannerAl6 from "../img/Home/airline/al6.webp"
+import bannerAl7 from "../img/Home/airline/al7.webp"
+import bannerAl8 from "../img/Home/airline/al8.webp"
+import bannerAl9 from "../img/Home/airline/al9.webp"
+import bannerAl10 from "../img/Home/airline/al10.webp"
+import bannerAl11 from "../img/Home/airline/al11.webp"
+import bannerAl12 from "../img/Home/airline/al12.webp"
+import bannerAl13 from "../img/Home/airline/al13.webp"
+import bannerAl14 from "../img/Home/airline/al14.webp"
+import bannerAl15 from "../img/Home/airline/al15.webp"
+import bannerAl16 from "../img/Home/airline/al16.webp"
+import bannerAl17 from "../img/Home/airline/al17.webp"
+import bannerAl18 from "../img/Home/airline/al18.webp"
+import bannerAl19 from "../img/Home/airline/al19.webp"
+import bannerAl20 from "../img/Home/airline/al20.webp"
+import bannerAl21 from "../img/Home/airline/al21.webp"
+import bannerAl22 from "../img/Home/airline/al22.webp"
+import bannerAl23 from "../img/Home/airline/al23.webp"
+import bannerAl24 from "../img/Home/airline/al24.webp"
+import bannerAl25 from "../img/Home/airline/al25.webp"
+import bannerAl26 from "../img/Home/airline/al26.webp"
+import bannerAl27 from "../img/Home/airline/al27.webp"
+import bannerAl28 from "../img/Home/airline/al28.webp"
+
+import { airportCodeItem, countryItem } from "src/types/flight.type"
+
+export const bannerAirLineList = [
+  bannerAl1,
+  bannerAl2,
+  bannerAl3,
+  bannerAl4,
+  bannerAl5,
+  bannerAl6,
+  bannerAl7,
+  bannerAl8,
+  bannerAl9,
+  bannerAl10,
+  bannerAl11,
+  bannerAl12,
+  bannerAl13,
+  bannerAl14,
+  bannerAl15,
+  bannerAl16,
+  bannerAl17,
+  bannerAl18,
+  bannerAl19,
+  bannerAl20,
+  bannerAl21,
+  bannerAl22,
+  bannerAl23,
+  bannerAl24,
+  bannerAl25,
+  bannerAl26,
+  bannerAl27,
+  bannerAl28
+]
 
 // mã sân bay
 export const airportCodes: airportCodeItem[] = [
   { code: "SGN", airport: "Sân bay Quốc tế Tân Sơn Nhất", country: "Việt Nam" },
   { code: "HAN", airport: "Sân bay Quốc tế Nội Bài", country: "Việt Nam" },
   { code: "DAD", airport: "Sân bay Quốc tế Đà Nẵng", country: "Việt Nam" },
+  { code: "CXR", airport: "Sân bay Quốc tế Cam Ranh", country: "Việt Nam" },
 
   { code: "PNH", airport: "Sân bay Quốc tế Phnom Penh", country: "Campuchia" },
   { code: "REP", airport: "Sân bay Quốc tế Siem Reap", country: "Campuchia" },
@@ -36,9 +97,12 @@ export const airportCodes: airportCodeItem[] = [
   { code: "ICN", airport: "Sân bay Quốc tế Incheon", country: "Hàn Quốc" },
   { code: "PUS", airport: "Sân bay Quốc tế Gimhae", country: "Hàn Quốc" },
   { code: "GMP", airport: "Sân bay Gimpo", country: "Hàn Quốc" },
+  { code: "CJU", airport: "Sân bay Quốc tế Jeju", country: "Hàn Quốc" },
+  { code: "TAE", airport: "Sân bay Quốc tế Daegu", country: "Hàn Quốc" },
 
   { code: "BKK", airport: "Sân bay Quốc tế Suvarnabhumi", country: "Thái Lan" },
   { code: "HKT", airport: "Sân bay Quốc tế Phuket", country: "Thái Lan" },
+  { code: "CNX", airport: "Sân bay Quốc tế Chiang Mai", country: "Thái Lan" },
 
   { code: "SIN", airport: "Sân bay Quốc tế Changi", country: "Singapore" },
 
@@ -47,8 +111,12 @@ export const airportCodes: airportCodeItem[] = [
 
   { code: "CGK", airport: "Sân bay Quốc tế Soekarno-Hatta", country: "Indonesia" },
   { code: "DPS", airport: "Sân bay Quốc tế Ngurah Rai", country: "Indonesia" },
+
   { code: "MNL", airport: "Sân bay Quốc tế Ninoy Aquino", country: "Philippines" },
   { code: "CEB", airport: "Sân bay Quốc tế Mactan-Cebu", country: "Philippines" },
+  { code: "DVO", airport: "Sân bay Quốc tế Francisco Bangoy", country: "Philippines" },
+  { code: "KLO", airport: "Sân bay Quốc tế Kalibo", country: "Philippines" },
+  { code: "PPS", airport: "Sân bay Quốc tế Puerto Princesa", country: "Philippines" },
 
   { code: "DEL", airport: "Sân bay Quốc tế Indira Gandhi", country: "Ấn Độ" },
   { code: "BOM", airport: "Sân bay Quốc tế Chhatrapati Shivaji", country: "Ấn Độ" },
@@ -58,6 +126,7 @@ export const airportCodes: airportCodeItem[] = [
   { code: "MAA", airport: "Sân bay Quốc tế Chennai", country: "Ấn Độ" },
 
   { code: "HKG", airport: "Sân bay Quốc tế Hong Kong", country: "Hồng Kông" },
+
   { code: "TPE", airport: "Sân bay Quốc tế Đào Viên Đài Loan", country: "Đài Loan" },
   {
     code: "DXB",
@@ -69,31 +138,43 @@ export const airportCodes: airportCodeItem[] = [
     airport: "Sân bay Quốc tế Abu Dhabi",
     country: "Các Tiểu vương quốc Ả Rập Thống nhất"
   },
+
   { code: "LHR", airport: "Sân bay Heathrow", country: "Anh" },
   { code: "LGW", airport: "Sân bay Gatwick", country: "Anh" },
+
   { code: "CDG", airport: "Sân bay Charles de Gaulle", country: "Pháp" },
   { code: "ORY", airport: "Sân bay Orly", country: "Pháp" },
+
   { code: "FRA", airport: "Sân bay Quốc tế Frankfurt", country: "Đức" },
   { code: "MUC", airport: "Sân bay Quốc tế Munich", country: "Đức" },
+
   { code: "AMS", airport: "Sân bay Schiphol", country: "Hà Lan" },
+
   { code: "MAD", airport: "Sân bay Adolfo Suárez Madrid-Barajas", country: "Tây Ban Nha" },
+
   { code: "BCN", airport: "Sân bay El Prat", country: "Tây Ban Nha" },
+
   { code: "JFK", airport: "Sân bay Quốc tế John F. Kennedy", country: "Hoa Kỳ" },
   { code: "LAX", airport: "Sân bay Quốc tế Los Angeles", country: "Hoa Kỳ" },
   { code: "ORD", airport: "Sân bay Quốc tế O'Hare", country: "Hoa Kỳ" },
   { code: "SFO", airport: "Sân bay Quốc tế San Francisco", country: "Hoa Kỳ" },
   { code: "MIA", airport: "Sân bay Quốc tế Miami", country: "Hoa Kỳ" },
   { code: "ATL", airport: "Sân bay Quốc tế Hartsfield-Jackson", country: "Hoa Kỳ" },
+
   { code: "YYZ", airport: "Sân bay Quốc tế Toronto Pearson", country: "Canada" },
   { code: "YVR", airport: "Sân bay Quốc tế Vancouver", country: "Canada" },
+
   { code: "MEX", airport: "Sân bay Quốc tế Benito Juárez", country: "Mexico" },
+
   { code: "SYD", airport: "Sân bay Quốc tế Sydney", country: "Úc" },
   { code: "MEL", airport: "Sân bay Quốc tế Melbourne", country: "Úc" },
   { code: "BNE", airport: "Sân bay Quốc tế Brisbane", country: "Úc" },
   { code: "DOH", airport: "Sân bay Quốc tế Hamad", country: "Qatar" },
   { code: "TLV", airport: "Sân bay Ben Gurion", country: "Israel" },
+
   { code: "IST", airport: "Sân bay Quốc tế Istanbul", country: "Thổ Nhĩ Kỳ" },
   { code: "SAW", airport: "Sân bay Sabiha Gökçen", country: "Thổ Nhĩ Kỳ" },
+
   { code: "JNB", airport: "Sân bay Quốc tế OR Tambo", country: "Nam Phi" },
   { code: "CPT", airport: "Sân bay Quốc tế Cape Town", country: "Nam Phi" },
   { code: "ADD", airport: "Sân bay Quốc tế Bole", country: "Ethiopia" },
@@ -115,10 +196,65 @@ export const airportCodes: airportCodeItem[] = [
   { code: "KTM", airport: "Sân bay Quốc tế Tribhuvan", country: "Nepal" },
   { code: "DAC", airport: "Sân bay Quốc tế Hazrat Shahjalal", country: "Bangladesh" },
   { code: "CMB", airport: "Sân bay Quốc tế Bandaranaike", country: "Sri Lanka" },
+
   { code: "MLE", airport: "Sân bay Quốc tế Velana", country: "Maldives" },
+  { code: "GAN", airport: "Sân bay Quốc tế Gan", country: "Maldives" },
 
   { code: "RGN", airport: "Sân bay Quốc tế Yangon", country: "Myanmar" },
-  { code: "BWN", airport: "Sân bay Quốc tế Brunei", country: "Brunei" }
+  { code: "BWN", airport: "Sân bay Quốc tế Brunei", country: "Brunei" },
+
+  { code: "LPQ", airport: "Sân bay Quốc tế Luang Prabang", country: "Lào" },
+  { code: "VTE", airport: "Sân bay Quốc tế Wattay", country: "Lào" }
+]
+
+export const countries: countryItem[] = [
+  { code: "VN", country: "Việt Nam" },
+  { code: "KH", country: "Campuchia" },
+  { code: "JP", country: "Nhật Bản" },
+  { code: "CN", country: "Trung Quốc" },
+  { code: "KR", country: "Hàn Quốc" },
+  { code: "TH", country: "Thái Lan" },
+  { code: "SG", country: "Singapore" },
+  { code: "MY", country: "Malaysia" },
+  { code: "ID", country: "Indonesia" },
+  { code: "PH", country: "Philippines" },
+  { code: "IN", country: "Ấn Độ" },
+  { code: "HK", country: "Hồng Kông" },
+  { code: "TW", country: "Đài Loan" },
+  { code: "AE", country: "Các Tiểu vương quốc Ả Rập Thống nhất" },
+  { code: "GB", country: "Anh" },
+  { code: "FR", country: "Pháp" },
+  { code: "DE", country: "Đức" },
+  { code: "NL", country: "Hà Lan" },
+  { code: "ES", country: "Tây Ban Nha" },
+  { code: "US", country: "Hoa Kỳ" },
+  { code: "CA", country: "Canada" },
+  { code: "MX", country: "Mexico" },
+  { code: "AU", country: "Úc" },
+  { code: "QA", country: "Qatar" },
+  { code: "IL", country: "Israel" },
+  { code: "TR", country: "Thổ Nhĩ Kỳ" },
+  { code: "ZA", country: "Nam Phi" },
+  { code: "ET", country: "Ethiopia" },
+  { code: "KE", country: "Kenya" },
+  { code: "TZ", country: "Tanzania" },
+  { code: "NG", country: "Nigeria" },
+  { code: "GH", country: "Ghana" },
+  { code: "MA", country: "Morocco" },
+  { code: "DZ", country: "Algeria" },
+  { code: "TN", country: "Tunisia" },
+  { code: "EG", country: "Ai Cập" },
+  { code: "SA", country: "Saudi Arabia" },
+  { code: "JO", country: "Jordan" },
+  { code: "LB", country: "Lebanon" },
+  { code: "BH", country: "Bahrain" },
+  { code: "KW", country: "Kuwait" },
+  { code: "NP", country: "Nepal" },
+  { code: "BD", country: "Bangladesh" },
+  { code: "LK", country: "Sri Lanka" },
+  { code: "MV", country: "Maldives" },
+  { code: "MM", country: "Myanmar" },
+  { code: "BN", country: "Brunei" }
 ]
 
 // các loại vé
@@ -134,5 +270,16 @@ export const travelClassList = [
   },
   {
     value: "FIRST"
+  }
+]
+
+export const typeFlightList = [
+  {
+    text: "One Way",
+    value: "oneWay"
+  },
+  {
+    text: "Round Trip",
+    value: "roundTrip"
   }
 ]

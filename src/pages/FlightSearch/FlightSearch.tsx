@@ -1,25 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Helmet } from "react-helmet-async"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
-import bg from "../../img/Flight/backGround.jpg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { airportCodes, travelClassList } from "src/constant/flightSearch"
-import { ResponseFlightList, airportCodeList, FlightSearchParams } from "src/types/flight.type.ts"
+import { airportCodes, travelClassList, typeFlightList } from "src/constant/flightSearch"
+import {
+  ResponseFlightList,
+  airportCodeList,
+  FlightOfferParamsConfig
+} from "src/types/flight.type.ts"
 import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
-import { convertToYYYYMMDD, getCodeAirport } from "src/utils/utils.ts"
-import { schemaType } from "src/utils/rules.ts"
+import { convertToYYYYMMDD, getCodeAirport, getCountry } from "src/utils/utils.ts"
 import InputSearch from "src/components/InputSearch/InputSearch"
 import QuantityController from "src/components/QuantityController"
 import SelectDate from "src/components/SelectDate"
-import { useMutation } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import FlightItem from "./components/FlightItem"
-import { InputAirport, InputController } from "../Flight/Flight"
+import { InputAirport, InputController, schemaFormData } from "../Flight/Flight"
 import useQueryConfig from "src/hooks/useQueryConfig"
-import { useLocation } from "react-router-dom"
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { schemaType } from "src/utils/rules"
+import { path } from "src/constant/path"
+import { omit } from "lodash"
+
+const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
 export type FormData = Pick<
   schemaType,
@@ -31,12 +40,71 @@ export type FormData = Pick<
   | "adults"
   | "children"
   | "infants"
+  | "flightType"
 >
 
-const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
+/**
+ * Flow hoạt động giữa Flight & FlightSearch
+ * Flight submitForm đi -> navigate tới FlightSearch kèm (các parameter)
+ * - sau đó dùng useSearchParams lấy các parameter trên Url xuống truyền vô queryConfig (gồm các params)
+ * - truyền các params vào defaultValue (giá trị mặc định cho Form)
+ * - tiếp tục useEffect 1 lần các state đã lưu ra input
+ * - fetch api với queryConfig từ url
+ */
 
+/**
+ * thao tác thực hiện navigate -> cập nhật queryConfig -> fetch lại api (re-render lại dữ liệu)
+ */
 export default function FlightSearch() {
+  // xử lý header
+  const [showHeader, setShowHeader] = useState(false)
+  const [scrollWindow, setScrollWindow] = useState(0)
+
+  const handleScrollWindow = () => {
+    const currentScrollY = window.scrollY
+    setScrollWindow(currentScrollY)
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollWindow)
+
+    return () => window.removeEventListener("scroll", handleScrollWindow)
+  }, [])
+
+  // nếu scrollWindow có thay đổi thì nó tham chiếu tới chạy lại hàm này
+  useEffect(() => {
+    if (scrollWindow > 200) {
+      setShowHeader(true)
+    } else {
+      setShowHeader(false)
+    }
+  }, [scrollWindow])
+
+  // xử lý form
+  const navigate = useNavigate()
   const queryConfig = useQueryConfig()
+  const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false)
+  const [airportCodeList, setAirportCodeList] = useState<airportCodeList>([])
+  const [showListAirport, setShowListAirport] = useState<boolean>(false)
+  const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef2 = useRef<HTMLInputElement>(null)
+
+  // quản lý state lưu trữ của form
+  const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
+  const [searchText2, setSearchText2] = useState<string>("") // mã airport đích
+  const [date, setDate] = useState<Date | null>(null) // ngày đi
+  const [date2, setDate2] = useState<Date | null>(null) // ngày về
+  const [travelClass, setTravelClass] = useState<string>("") // hạng vé
+  const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
+  const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
+  const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
+
+  const [flightType, setFlightType] = useState("oneWay")
+  const [showPassenger, setShowPassenger] = useState(0)
+  const location = useLocation()
+  const { state } = location
 
   const {
     handleSubmit,
@@ -54,61 +122,24 @@ export default function FlightSearch() {
       travelClass: queryConfig.travelClass,
       departureDate: queryConfig.departureDate,
       returnDate: queryConfig.returnDate
-    }
+    },
+    resolver: yupResolver(schemaFormData)
   })
 
-  const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<airportCodeList>([])
-  const [showListAirport, setShowListAirport] = useState<boolean>(false)
-  const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const inputRef2 = useRef<HTMLInputElement>(null)
-
-  // quản lý state lưu trữ của form
-  const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
-  const [searchText2, setSearchText2] = useState<string>("") // mã airport đích
-  const [date, setDate] = useState<Date | string | null>(null) // ngày đi
-  const [date2, setDate2] = useState<Date | string | null>(null) // ngày về
-  const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-  const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
-  const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
-  const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
-
-  const [flightType, setFlightType] = useState("oneWay")
-  const [showPassenger, setShowPassenger] = useState(0)
-  const [showInfoSearch, setShowInfoSearch] = useState(false)
-
-  const location = useLocation()
-  const { state } = location
-
-  console.log(state)
   useEffect(() => {
-    setSearchText(state.originLocationCode)
-    setSearchText2(state.destinationLocationCode)
-    setDate(state.departureDate)
-    setDate2(state.returnDate)
-    setTravelClass(state.travelClass)
-    setNumberAdults(state.adults as number)
-    setNumberChildren(state.children as number)
-    setNumberInfants(state.infants as number)
-    setFlightType(state.flightType)
-    setShowPassenger(state.adults + state.children + state.infants)
-  }, [state])
-
-  console.log(numberAdults, numberChildren, numberInfants)
-
-  const handleFlightTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFlightType(event.target.id)
-  }
-
-  // chỉ cần flightType thay đổi giá trị nó chạy lại hàm này
-  useMemo(() => {
-    if (flightType === "roundTrip") {
-      setShowInfoSearch(false)
-    } else {
-      setShowInfoSearch(false)
+    if (state) {
+      setSearchText(state.originLocationCode)
+      setSearchText2(state.destinationLocationCode)
+      setDate(state.departureDate)
+      setDate2(state.returnDate)
+      setTravelClass(state.travelClass)
+      setNumberAdults(Number(state.adults))
+      setNumberChildren(Number(state.children))
+      setNumberInfants(Number(state.infants))
+      setFlightType(state.flightType as string)
+      setShowPassenger(Number(state.adults) + Number(state.children) + Number(state.infants))
     }
-  }, [flightType])
+  }, [state])
 
   useEffect(() => {
     fetchDataAirport().then((res) => {
@@ -173,10 +204,10 @@ export default function FlightSearch() {
   const handleItemClick = (inputName: InputAirport, value: string) => {
     setValue(inputName, getCodeAirport(value) as string) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
     if (inputName === "originLocationCode") {
-      setSearchText(value) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
+      setSearchText(getCodeAirport(value) as string) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
       setShowListAirport(false)
     } else if (inputName === "destinationLocationCode") {
-      setSearchText2(value)
+      setSearchText2(getCodeAirport(value) as string)
       setShowListAirport2(false)
     }
   }
@@ -190,12 +221,12 @@ export default function FlightSearch() {
     } else if (nameQuantity === "infants") {
       setNumberInfants(value)
     }
-    setShowPassenger(numberAdults + numberChildren + numberInfants)
+    setShowPassenger((numberAdults + numberChildren + numberInfants) as number)
   }
 
   useMemo(() => {
-    setShowPassenger(numberChildren + numberInfants)
-  }, [numberChildren, numberInfants])
+    setShowPassenger((numberChildren + numberInfants + numberAdults) as number)
+  }, [numberChildren, numberInfants, numberAdults])
 
   const exchangeTwoValues = () => {
     setSearchText(searchText2)
@@ -205,434 +236,450 @@ export default function FlightSearch() {
     // chỗ này type button // thực hiện click
   }
 
-  const flightOffersSearchMutation = useMutation({
-    mutationFn: (data: FlightSearchParams) => {
-      return flightApi.flightOffersSearch(data as FlightSearchParams)
-    }
+  const flightOffersSearchQuery = useQuery({
+    queryKey: ["flightSearchList", queryConfig],
+    queryFn: () => {
+      const controller = new AbortController()
+      setTimeout(() => {
+        controller.abort()
+      }, 10000) // hết 10s mà chưa fetch ra api nó tự động hủy // kiểu tự động
+      return flightApi.flightOfferSearchGet(
+        queryConfig as FlightOfferParamsConfig,
+        controller.signal
+      )
+    },
+    retry: 1, // số lần fetch lại khi thất bại
+    placeholderData: keepPreviousData, // giữ data cũ
+    staleTime: 5 * 60 * 1000 // dưới 5 phút không refetch
   })
 
-  const flightList = flightOffersSearchMutation?.data?.data as ResponseFlightList
+  const flightList = flightOffersSearchQuery?.data?.data as ResponseFlightList
 
   const handleSubmitSearch = handleSubmit((data) => {
-    // truyền các data mà form quản lý vào biến này để submit gọi api
-
-    const body: FlightSearchParams = {
-      originDestinations:
-        flightType === "roundTrip"
-          ? [
-              // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
-              {
-                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
-                id: "1",
-                originLocationCode: data.originLocationCode,
-                destinationLocationCode: data.destinationLocationCode,
-                departureDateTimeRange: {
-                  date: data.departureDate
-                }
-              },
-              {
-                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
-                id: "2",
-                originLocationCode: data.destinationLocationCode,
-                destinationLocationCode: data.originLocationCode,
-                departureDateTimeRange: {
-                  date: data.returnDate as string
-                }
-              }
-            ]
-          : [
-              // 1 mảng chứ các đối tượng đại diện cho các chuyến bay gồm id, điểm bắt đầu, điểm đích, ngày đi, ngày về (nếu có)
-              {
-                // 1 điểm bắt đầu và 1 điểm đích trong quá trình tìm
-                id: "1",
-                originLocationCode: data.originLocationCode,
-                destinationLocationCode: data.destinationLocationCode,
-                departureDateTimeRange: {
-                  date: data.departureDate
-                }
-              }
-            ],
-      travelers: [
-        // 1 mảng chứa các đối tượng đại diện cho hành khách.
-        {
-          id: "1",
-          travelerType: "ADULT",
-          count: data.adults as number
-        },
-        {
-          id: "2",
-          travelerType: "CHILD",
-          count: data.children as number
-        },
-        {
-          id: "3",
-          travelerType: "SEATED_INFANT",
-          count: data.infants as number
-        }
-      ],
-      sources: ["GDS"], // nguồn dữ liệu
-      searchCriteria: {
-        // 1 đối tượng chứa các tiêu chí tìm kiếm.
-        maxFlightOffers: 5, // sl tìm kiếm
-        flightFilters: {
-          cabinRestrictions: [
-            {
-              cabin: data.travelClass, // khoang cabin
-              originDestinationIds: flightType === "roundTrip" ? ["1", "2"] : ["1"]
-            }
-          ],
-          carrierRestrictions: {
-            excludedCarrierCodes: ["ER"]
+    // nếu chuyến bay roundTrip -> có returnDate
+    // ngược lại oneWay -> không có returnDate -> loại bỏ đi (omit)
+    // do clone lại tất cả ...queryConfig nên nó sẽ dính input cũ trước đó (returnDate) cần dùng omit loại đi -> submit
+    const config =
+      flightType === "roundTrip"
+        ? {
+            ...queryConfig,
+            originLocationCode: data.originLocationCode,
+            destinationLocationCode: data.destinationLocationCode,
+            departureDate: data.departureDate,
+            returnDate: data.returnDate as string,
+            adults: String(data.adults),
+            children: String(data.children),
+            infants: String(data.infants),
+            travelClass: data.travelClass
           }
-        }
-      },
-      currencyCode: "VND" // Đơn vị tiền tệ mong muốn
-    }
-    // chỗ này type submit // thực hiện submit form
-    flightOffersSearchMutation.mutate(body, {
-      onSuccess: () => {
-        setShowInfoSearch(true)
-      }
-    })
+        : omit(
+            {
+              ...queryConfig,
+              originLocationCode: data.originLocationCode,
+              destinationLocationCode: data.destinationLocationCode,
+              departureDate: data.departureDate,
+              adults: String(data.adults),
+              children: String(data.children),
+              infants: String(data.infants),
+              travelClass: data.travelClass
+            },
+            ["returnDate"]
+          )
+
+    navigate({
+      pathname: path.flightSearch,
+      search: createSearchParams(config).toString()
+    }) // navigate đi -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
   })
 
-  useEffect(() => {
-    handleSubmitSearch()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  console.log(flightType)
   return (
     <div>
       <Helmet>
         <title>Tìm kiếm chuyến bay</title>
-        <meta name="description" content="Flight booking - Amadeus Booking" />
+        <meta name="description" content="Tìm kiếm chuyến bay - Booking." />
       </Helmet>
 
-      <div className="relative">
+      <div className="relative z-10">
+        <div className="w-full h-[450px] bgGradient"></div>
+
         <div
-          className="w-full h-[450px]"
-          style={{
-            backgroundImage: `url(${bg})`,
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover"
-          }}
+          className={`w-full bg-[#003566] ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
           <div className="container">
-            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="pl-2 py-4">
-              {/* loại chuyến bay */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <input
-                    type="radio"
-                    name="flight"
-                    id="oneWay"
-                    checked={flightType === "oneWay"}
-                    onChange={handleFlightTypeChange}
-                    className="w-5 h-5"
-                  />
-                  <label htmlFor="oneWay" className="text-base text-textColor font-semibold">
-                    Một chiều
-                  </label>
+            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="py-4">
+              <div className="grid md:grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap">
+                {/* loại chuyến bay */}
+                <div className="md:col-span-1 lg:col-span-1 px-2 py-[24px] bg-[#fffcf2]/50 rounded-md relative">
+                  <Popover open={open2} onOpenChange={setOpen2}>
+                    <PopoverTrigger asChild>
+                      <ButtonShadcn
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open2}
+                        aria-label="FlightType"
+                        className="flex justify-center bg-transparent border-none shadow-none text-base text-center truncate w-full hover:bg-transparent"
+                      >
+                        {flightType
+                          ? typeFlightList.find((item) => item.value === flightType)?.text
+                          : "Loại bay"}
+                      </ButtonShadcn>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[100px] p-0">
+                      <Command>
+                        <CommandList>
+                          <CommandGroup>
+                            {typeFlightList.map((item, index) => (
+                              <Controller
+                                key={index}
+                                control={control}
+                                name="flightType" // tên trường dữ liệu
+                                render={({ field }) => (
+                                  <CommandItem
+                                    key={item.value}
+                                    value={item.value}
+                                    onSelect={(currentValue) => {
+                                      field.onChange(currentValue) // quản lý và cập nhật trường dữ liệu
+                                      setOpen2(false)
+                                      setFlightType(currentValue)
+                                    }}
+                                  >
+                                    {item.text}
+                                  </CommandItem>
+                                )}
+                              />
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <span className="absolute -top-5 left-0 mb-2 text-red-500 font-medium min-h-[1.25rem] block">
+                    {errors.travelClass?.message}
+                  </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="radio"
-                    name="flight"
-                    id="roundTrip"
-                    checked={flightType === "roundTrip"}
-                    onChange={handleFlightTypeChange}
-                    className="w-5 h-5"
-                  />
-                  <label htmlFor="roundTrip" className="text-base text-textColor font-semibold">
-                    Khứ hồi
-                  </label>
-                </div>
-              </div>
 
-              <div className="mt-2 w-full flex items-center gap-2 flex-wrap">
-                <div className="w-[40%] flex relative gap-2">
-                  {/* điểm xuất phát */}
-                  <InputSearch
-                    placeholder="Bay từ"
-                    classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                    classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
-                    classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[200px] truncate"
-                    ref={inputRef}
-                    filterList={filterAirportCodeList_1}
-                    value={searchText}
-                    showList={showListAirport}
-                    handleItemClick={handleItemClick}
-                    inputName="originLocationCode"
-                    handleChangeValue={handleChangeValue("input_1")}
-                    handleFocus={handleFocusAirportList("1")}
-                    register={register}
-                    name="originLocationCode"
-                    error={errors.originLocationCode?.message}
-                    desc="Từ"
-                    classNameDesc="pl-2 text-textColor"
-                  >
-                    <img src={iconFlight} alt="icon flight" className="w-10 h-10 flex-shrink-0" />
-                  </InputSearch>
-                  {/* điểm đến */}
-                  <InputSearch
-                    placeholder="Bay đến"
-                    classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                    classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
-                    classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[200px] truncate"
-                    ref={inputRef2}
-                    filterList={filterAirportCodeList_2}
-                    value={searchText2}
-                    showList={showListAirport2}
-                    handleItemClick={handleItemClick}
-                    inputName="destinationLocationCode"
-                    handleChangeValue={handleChangeValue("input_2")}
-                    handleFocus={handleFocusAirportList("2")}
-                    register={register}
-                    name="destinationLocationCode"
-                    error={errors.destinationLocationCode?.message}
-                    desc="Đến"
-                    classNameDesc="pl-2 text-textColor"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-10 w-10 flex-shrink-0"
+                <div className="md:col-span-5 lg:col-span-4">
+                  <div className="flex relative gap-2">
+                    {/* điểm xuất phát */}
+                    <InputSearch
+                      placeholder="Bay từ"
+                      classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
+                      classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[150px] truncate"
+                      ref={inputRef}
+                      filterList={filterAirportCodeList_1}
+                      value={searchText}
+                      showList={showListAirport}
+                      handleItemClick={handleItemClick}
+                      inputName="originLocationCode"
+                      handleChangeValue={handleChangeValue("input_1")}
+                      handleFocus={handleFocusAirportList("1")}
+                      register={register}
+                      name="originLocationCode"
+                      error={errors.originLocationCode?.message}
+                      desc="Từ"
+                      classNameDesc="pl-2 text-textColor"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                      />
-                    </svg>
-                  </InputSearch>
-
-                  {/* đổi 2 giá trị với nhau */}
-                  <button
-                    aria-label="buttonChangeValue"
-                    type="button"
-                    onClick={exchangeTwoValues}
-                    className="z-20 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full text-blueColor border-2 border-blueColor bg-blue-100"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-5 w-5"
+                      <img src={iconFlight} alt="icon flight" className="w-10 h-10 flex-shrink-0" />
+                    </InputSearch>
+                    {/* điểm đến */}
+                    <InputSearch
+                      placeholder="Bay đến"
+                      classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
+                      classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[150px] truncate"
+                      ref={inputRef2}
+                      filterList={filterAirportCodeList_2}
+                      value={searchText2}
+                      showList={showListAirport2}
+                      handleItemClick={handleItemClick}
+                      inputName="destinationLocationCode"
+                      handleChangeValue={handleChangeValue("input_2")}
+                      handleFocus={handleFocusAirportList("2")}
+                      register={register}
+                      name="destinationLocationCode"
+                      error={errors.destinationLocationCode?.message}
+                      desc="Đến"
+                      classNameDesc="pl-2 text-textColor"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-10 w-10 flex-shrink-0"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                        />
+                      </svg>
+                    </InputSearch>
+
+                    {/* đổi 2 giá trị với nhau */}
+                    <button
+                      aria-label="buttonChangeValue"
+                      type="button"
+                      onClick={exchangeTwoValues}
+                      className="z-20 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full text-blueColor border-2 border-blueColor bg-blue-100"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-5 w-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
 
-                <div className="w-[20%] flex justify-between items-center gap-2">
-                  {/* Khứ hồi hoặc 1 chiều */}
-                  <div className="w-full flex justify-start gap-2">
-                    {/* date ngày đi*/}
-                    <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
-                      <SelectDate
-                        text="Ngày khởi hành"
-                        control={control}
-                        setDate={setDate}
-                        date={date}
-                        name="departureDate"
-                        errors={errors.departureDate?.message as string}
-                        convertToYYYYMMDD={convertToYYYYMMDD}
-                        className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full"
-                      />
-                    </div>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <div className="flex justify-between items-center gap-2">
+                    {/* Khứ hồi hoặc 1 chiều */}
+                    <div className="w-full flex gap-2">
+                      {/* date ngày đi*/}
+                      <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
+                        <SelectDate
+                          text="Ngày khởi hành"
+                          control={control}
+                          setDate={setDate}
+                          date={date}
+                          name="departureDate"
+                          errors={errors.departureDate?.message as string}
+                          convertToYYYYMMDD={convertToYYYYMMDD}
+                          className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                        />
+                      </div>
 
-                    {/* date ngày về */}
-                    <div className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}>
-                      <SelectDate
-                        text="Ngày về"
-                        control={control}
-                        setDate={setDate2}
-                        date={date2}
-                        name="returnDate"
-                        errors={errors.returnDate?.message as string}
-                        convertToYYYYMMDD={convertToYYYYMMDD}
-                        className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full"
-                      />
+                      {/* date ngày về */}
+                      <div className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}>
+                        <SelectDate
+                          text="Ngày về"
+                          control={control}
+                          setDate={setDate2}
+                          date={date2}
+                          name="returnDate"
+                          errors={errors.returnDate?.message as string}
+                          convertToYYYYMMDD={convertToYYYYMMDD}
+                          className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="w-[25%] flex gap-2">
-                  {/* hành khách */}
-                  <div className="w-[50%] px-4 py-[25px] bg-[#fffcf2]/50 rounded-md flex items-center justify-center">
-                    <Popover>
-                      <PopoverTrigger>
-                        <div className="w-full flex items-center cursor-pointer">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-5 w-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                <div className="md:col-span-2 lg:col-span-3">
+                  <div className="flex gap-2">
+                    {/* hành khách */}
+                    <div className="flex-1 px-2 bg-[#fffcf2]/50 rounded-md flex items-center justify-center">
+                      <Popover>
+                        <PopoverTrigger>
+                          <div className="w-full flex items-center cursor-pointer">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="h-5 w-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                              />
+                            </svg>
+
+                            <input
+                              aria-label="Traveler"
+                              type="text"
+                              className="w-[35px] py-1 outline-none bg-transparent text-base text-center"
+                              value={showPassenger}
+                              readOnly
                             />
-                          </svg>
 
-                          <input
-                            aria-label="Traveler"
-                            type="text"
-                            className="w-[35px] py-1 outline-none bg-transparent text-base text-center"
-                            value={showPassenger}
-                            readOnly
-                          />
+                            <span className="text-base text-textColor font-semibold">Khách</span>
+                          </div>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div>
+                            <QuantityController
+                              nameQuantity="Người lớn (12 tuổi trở lên)"
+                              value={numberAdults}
+                              onValueInput={handleChangeQuantity("adults")}
+                              onIncrease={handleChangeQuantity("adults")}
+                              onDecrease={handleChangeQuantity("adults")}
+                              register={register} // đăng ký trường dữ liệu để quản lý
+                              name="adults"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <QuantityController
+                              nameQuantity="Trẻ em (Từ 2 - 12 tuổi)"
+                              value={numberChildren}
+                              onValueInput={handleChangeQuantity("children")}
+                              onIncrease={handleChangeQuantity("children")}
+                              onDecrease={handleChangeQuantity("children")}
+                              register={register} // đăng ký trường dữ liệu để quản lý
+                              name="children"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <QuantityController
+                              nameQuantity="Em bé (Dưới 2 tuổi)"
+                              value={numberInfants}
+                              onValueInput={handleChangeQuantity("infants")}
+                              onIncrease={handleChangeQuantity("infants")}
+                              onDecrease={handleChangeQuantity("infants")}
+                              register={register} // đăng ký trường dữ liệu để quản lý
+                              name="infants"
+                            />
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
 
-                          <span className="text-base text-textColor font-semibold">Khách</span>
-                        </div>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div>
-                          <QuantityController
-                            nameQuantity="Người lớn (12 tuổi trở lên)"
-                            value={numberAdults}
-                            onValueInput={handleChangeQuantity("adults")}
-                            onIncrease={handleChangeQuantity("adults")}
-                            onDecrease={handleChangeQuantity("adults")}
-                            register={register} // đăng ký trường dữ liệu để quản lý
-                            name="adults"
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <QuantityController
-                            nameQuantity="Trẻ em (Từ 2 - 12 tuổi)"
-                            value={numberChildren}
-                            onValueInput={handleChangeQuantity("children")}
-                            onIncrease={handleChangeQuantity("children")}
-                            onDecrease={handleChangeQuantity("children")}
-                            register={register} // đăng ký trường dữ liệu để quản lý
-                            name="children"
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <QuantityController
-                            nameQuantity="Em bé (Dưới 2 tuổi)"
-                            value={numberInfants}
-                            onValueInput={handleChangeQuantity("infants")}
-                            onIncrease={handleChangeQuantity("infants")}
-                            onDecrease={handleChangeQuantity("infants")}
-                            register={register} // đăng ký trường dữ liệu để quản lý
-                            name="infants"
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-
-                  {/* hạng vé */}
-                  <div className="w-[50%] px-2 py-[22px] bg-[#fffcf2]/50 rounded-md relative">
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <ButtonShadcn
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={open}
-                          aria-label="TravelClass"
-                          className="flex justify-center bg-transparent border-none shadow-none text-sm text-center truncate w-full"
-                        >
-                          {travelClass
-                            ? travelClassList.find((item) => item.value === travelClass)?.value
-                            : "Chọn hạng vé"}
-                        </ButtonShadcn>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-0">
-                        <Command>
-                          <CommandList>
-                            <CommandGroup>
-                              {travelClassList.map((item, index) => (
-                                <Controller
-                                  key={index}
-                                  control={control}
-                                  name="travelClass" // tên trường dữ liệu
-                                  render={({ field }) => (
-                                    <CommandItem
-                                      key={item.value}
-                                      value={item.value}
-                                      onSelect={(currentValue) => {
-                                        field.onChange(currentValue) // quản lý và cập nhật trường dữ liệu
-                                        setOpen(false)
-                                        setTravelClass(currentValue)
-                                      }}
-                                    >
-                                      {item.value}
-                                    </CommandItem>
-                                  )}
-                                />
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <span className="absolute -top-5 left-0 mb-2 text-red-500 min-h-[1.25rem] block">
-                      {errors.travelClass?.message}
-                    </span>
+                    {/* hạng vé */}
+                    <div className="flex-1 py-[24px] bg-[#fffcf2]/50 rounded-md relative">
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <ButtonShadcn
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            aria-label="TravelClass"
+                            className="flex justify-center bg-transparent border-none shadow-none text-sm text-center truncate w-full hover:bg-transparent"
+                          >
+                            {travelClass
+                              ? travelClassList.find((item) => item.value === travelClass)?.value
+                              : "Chọn hạng vé"}
+                          </ButtonShadcn>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                          <Command>
+                            <CommandList>
+                              <CommandGroup>
+                                {travelClassList.map((item, index) => (
+                                  <Controller
+                                    key={index}
+                                    control={control}
+                                    name="travelClass" // tên trường dữ liệu
+                                    render={({ field }) => (
+                                      <CommandItem
+                                        key={item.value}
+                                        value={item.value}
+                                        onSelect={(currentValue) => {
+                                          field.onChange(currentValue) // quản lý và cập nhật trường dữ liệu
+                                          setOpen(false)
+                                          setTravelClass(currentValue)
+                                        }}
+                                      >
+                                        {item.value}
+                                      </CommandItem>
+                                    )}
+                                  />
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <span className="absolute -top-5 left-0 mb-2 text-red-500 font-medium min-h-[1.25rem] block">
+                        {errors.travelClass?.message}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="w-[10%]">
+                <div className="md:col-span-2 lg:col-span-1">
                   <Button
-                    disable={flightOffersSearchMutation.isPending}
-                    classNameWrapper="w-full relative"
+                    disable={flightOffersSearchQuery.isPending}
+                    classNameWrapper="w-full flex-1 relative"
                     type="submit"
                     nameButton="Tìm kiếm"
-                    className="px-8 py-4 bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
+                    className="px-8 md:py-[30px] lg:py-[17px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
                   />
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <div className="w-full absolute top-28 left-1/2 -translate-x-1/2">
-          <div className="container">
-            <div className="py-8">
-              {/* không load thì isPending */}
-              {!flightOffersSearchMutation.isPending && showInfoSearch && (
-                <div className="grid grid-cols-12 gap-4">
-                  <div className="col-span-3">
-                    <div className="bg-[#fff] shadow-md h-[500px]"></div>
-                  </div>
 
-                  <div className="col-span-9">
-                    <div className="text-2xl text-whiteColor font-semibold mb-4">
-                      Chuyến bay từ {searchText} đến {searchText2}
+        <div className="w-full absolute md:top-48 lg:top-28 left-1/2 -translate-x-1/2">
+          <div className="container">
+            {/* không load thì isPending */}
+            {!flightOffersSearchQuery.isFetching && (
+              <div>
+                {flightList?.data.length > 0 && (
+                  <div className="py-8 grid grid-cols-12 gap-4">
+                    <div className="col-span-3">
+                      <div className="bg-[#f2f2f2] shadow-md h-[500px] rounded">
+                        <div className="p-4">
+                          <div className="text-lg tex-textColor font-semibold">Bộ lọc tìm kiếm</div>
+                          <div className="mt-4 flex items-center gap-2">
+                            <input type="checkbox" id="nonStop" className="w-4 h-4" />
+                            <label
+                              htmlFor="nonStop"
+                              className="text-base text-textColor font-medium"
+                            >
+                              Bay trực tiếp
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    {flightList?.data.map((item) => (
-                      <div key={item.id}>
-                        <FlightItem item={item} list={flightList} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                    <div className="col-span-9">
+                      <h1 className="text-3xl text-whiteColor font-semibold mb-4">
+                        Chuyến bay từ
+                        {"  "}
+                        {getCountry(airportCodes, searchText)}
+                        {" - "}
+                        {searchText} đến
+                        {"  "}
+                        {getCountry(airportCodes, searchText2)}
+                        {" - "}
+                        {searchText2}
+                      </h1>
 
-            {flightOffersSearchMutation.isPending && !showInfoSearch && (
-              <div role="status" className="flex items-center justify-center animate-pulse mx-auto">
+                      {flightList?.data.map((item) => (
+                        <div key={item.id}>
+                          <FlightItem item={item} list={flightList} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {flightList?.data.length === 0 && (
+                  <div className="py-8 my-16 text-center text-2xl text-white font-semibold">
+                    Không tìm thấy chuyến bay. Quý khách vui lòng lựa chọn lại!!!
+                  </div>
+                )}
+              </div>
+            )}
+
+            {flightOffersSearchQuery.isFetching && (
+              <div
+                role="status"
+                className="py-8 flex items-center justify-center animate-pulse mx-auto"
+              >
                 <button
                   disabled
                   type="button"
@@ -665,12 +712,3 @@ export default function FlightSearch() {
     </div>
   )
 }
-
-// Dùng thêm state cục bộ để quản lý dữ liệu input kết hợp với useForm sử dụng setValue để quản lý dữ liệu trước khi submit đi
-// nếu không dùng state cục bộ thì không thể truyền props xuống các component con
-// vì thường các trường dữ liệu của input chỉ quản lý trong component đó (validate...) submit đi
-
-// onClick vào ô input thì nó re-render vì
-// nó thực hiện onClick={handleFocus} và handleFocus nhân vào 1 hàm xử lý set state lại dẫn đến component re-render
-
-// component chỉ re-render khi props hoặc state thay đổi

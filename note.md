@@ -15,14 +15,30 @@
 - yarn add framer-motion
 - yarn add react-transition-group - yarn add @types/react-transition-group
 - yarn add rollup-plugin-visualizer
-## ÔN TẬP KIẾN THỨC
 
+## ÔN TẬP KIẾN THỨC
+* Tổng hợp hook đã xài
+- useRoutes() - array router
+- createSearchParams() - dùng để `tạo đường dẫn` cho các tham số truy vấn
 - useSearchParams() - dùng để lấy các `tham số truy vấn` trên URL xuống (page, limit, ....)
 - useParams() - dùng để lấy các `tham số định danh` trên URL xuống (id...)
+- useNavigate() - vùa điều hướng trang - vừa lưu state
+- <Outlet/> chứa các component con - thuộc react router dom
+- <Navigate> component điều hướng trang - thuộc react router dom
+- useState()
+- useEffect()
+- useMemo()
+- useCallback()
+- forwardRef() - truyền ref vào component 
+- useRef() - truyền ref vào phần tử
+- useQuery()
+- useMutation()
 
-- sử dụng setInterval và setTimeout nhớ clear nó đi
 
-- dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
+
+* sử dụng setInterval và setTimeout nhớ clear nó đi
+
+* dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
 
 ## Firebase
 
@@ -58,8 +74,8 @@
 
 ### Lỗi tồn động :
 
-- 
-
+-
 
 #### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)
+
 #### Dùng react.memo() để fix tình trạng component chung re-render khi không cần thiết

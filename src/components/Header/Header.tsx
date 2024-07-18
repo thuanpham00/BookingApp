@@ -35,6 +35,12 @@ export default function Header() {
     setScrollWindow(currentScrollY)
   }
 
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollWindow)
+
+    return () => window.removeEventListener("scroll", handleScrollWindow)
+  }, [])
+
   // nếu scrollWindow có thay đổi thì nó tham chiếu tới chạy lại hàm này
   useEffect(() => {
     if (scrollWindow > 100) {
@@ -43,12 +49,6 @@ export default function Header() {
       setShowHeader(false)
     }
   }, [scrollWindow])
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScrollWindow)
-
-    return () => window.removeEventListener("scroll", handleScrollWindow)
-  }, [])
 
   return (
     <header
@@ -146,7 +146,7 @@ export default function Header() {
                 </div>
               }
             >
-              <div className="flex gap-1 items-center p-2 border-2 border-gray-300 duration-200 hover:bg-[#ddd]/80 text-textColor rounded-sm text-sm">
+              <div className="flex gap-1 items-center p-2 duration-200 hover:text-gray-500 text-textColor rounded-sm text-sm">
                 <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
                 Ngôn ngữ
               </div>
@@ -184,7 +184,7 @@ export default function Header() {
                   </div>
                 }
               >
-                <div className="py-[6px] px-3 border-2 border-blueColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
+                <div className="py-[6px] px-3 border-2 border-textColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

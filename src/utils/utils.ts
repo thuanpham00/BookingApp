@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { airportCodes } from "src/constant/flightSearch"
+import { airportCodeItem, countryItem } from "src/types/flight.type"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -94,4 +95,30 @@ export const getCountryAirport = (code: string) => {
     }
   }
   return null
+}
+
+export function getDate(date: string) {
+  if (date) {
+    const res = date.split("T")[0]
+    return res
+  }
+  return null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getCountry(list: airportCodeItem[] | countryItem[], code: string) {
+  if (code) {
+    const res = list.find((item) => item.code === code)
+    if (res) {
+      return res.country
+    }
+  }
+  return null
+}
+
+export function changeTravelerType(type: string) {
+  if (type === "ADULT") {
+    return "Người lớn"
+  } else if (type === "CHILD") return "Trẻ em"
+  else if (type === "HELD_INFANT") return "Em bé"
 }

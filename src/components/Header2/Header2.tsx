@@ -29,7 +29,7 @@ export default function Header2() {
   }
 
   return (
-    <header className={`sticky top-0 left-0 z-40 bg-whiteColor shadow-lg px-4 py-2`}>
+    <header className="bg-whiteColor shadow-lg px-4 py-2">
       <div className="container">
         <div className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center">
@@ -39,6 +39,7 @@ export default function Header2() {
               </div>
               <div className="text-xl text-textColor font-semibold">Booking.</div>
             </Link>
+
             <nav className="ml-8 flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -107,7 +108,7 @@ export default function Header2() {
 
           <div className="flex items-center gap-2">
             <Popover
-              className="sticky top-0 left-0 z-30"
+              className="sticky top-0 left-0"
               renderPopover={
                 <div className="shadow-lg rounded flex flex-col border border-gray-300">
                   <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
@@ -122,7 +123,7 @@ export default function Header2() {
                 </div>
               }
             >
-              <div className="flex gap-1 items-center p-2 border-2 border-gray-300 duration-200 hover:bg-[#ddd]/80 text-textColor rounded-sm text-sm">
+              <div className="flex gap-1 items-center p-2 duration-200 text-textColor rounded-sm text-sm hover:text-gray-500">
                 <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
                 Ngôn ngữ
               </div>
@@ -160,7 +161,7 @@ export default function Header2() {
                   </div>
                 }
               >
-                <div className="py-[6px] px-3 border-2 border-blueColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
+                <div className="py-[6px] px-3 border-2 border-textColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -187,13 +188,13 @@ export default function Header2() {
                   to={path.register}
                   className="py-2 px-3 border-2 border-blueColor duration-200 hover:bg-[#ddd]/80 rounded-sm text-sm"
                 >
-                  Register
+                  Đăng ký
                 </Link>
                 <Link
                   to={path.login}
                   className="py-2 px-3 border-2 border-blueColor bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 hover:border-blueColor/80 rounded-sm text-sm"
                 >
-                  Login
+                  Đăng nhập
                 </Link>
               </div>
             )}

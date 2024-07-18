@@ -19,7 +19,7 @@ export default function Popover({
 }: Props) {
   const arrowRef = useRef<HTMLElement>(null)
   const { x, y, refs, strategy, middlewareData } = useFloating({
-    middleware: [offset(6), shift(), arrow({ element: arrowRef })],
+    middleware: [offset(10), shift(), arrow({ element: arrowRef })],
     placement: PlacementInitialState
   })
 
@@ -52,7 +52,8 @@ export default function Popover({
                 top: y ?? 0,
                 left: x ?? 0,
                 width: "max-content",
-                transformOrigin: `${middlewareData.arrow?.x}`
+                transformOrigin: `${middlewareData.arrow?.x}`,
+                zIndex: 50
               }}
               initial={{ opacity: 0, transform: "scale(0)" }}
               animate={{ opacity: 1, transform: "scale(1)" }}

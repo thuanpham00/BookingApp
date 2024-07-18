@@ -32,7 +32,8 @@ const schema = yup
     travelClass: yup.string().required("Bắt buộc"),
     adults: yup.number(),
     children: yup.number(),
-    infants: yup.number()
+    infants: yup.number(),
+    flightType: yup.string()
   })
   .required()
 
