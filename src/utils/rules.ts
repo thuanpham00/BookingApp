@@ -25,12 +25,12 @@ const schema = yup
       .min(6, "Độ dài từ 6-20 kí tự")
       .max(20, "Độ dài từ 6-20 kí tự")
       .oneOf([yup.ref("password")], "Password không khớp"),
-    originLocationCode: yup.string().required("Bắt buộc"),
-    destinationLocationCode: yup.string().required("Bắt buộc"),
-    departureDate: yup.string().required("Bắt buộc"),
+    originLocationCode: yup.string().required(),
+    destinationLocationCode: yup.string().required(),
+    departureDate: yup.string().required(),
     returnDate: yup.string(),
-    travelClass: yup.string().required("Bắt buộc"),
-    adults: yup.number(),
+    travelClass: yup.string().required(),
+    adults: yup.number().required(),
     children: yup.number(),
     infants: yup.number(),
     flightType: yup.string()

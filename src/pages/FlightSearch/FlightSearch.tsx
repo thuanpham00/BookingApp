@@ -22,11 +22,12 @@ import { flightApi } from "src/apis/flight.api"
 import FlightItem from "./components/FlightItem"
 import { InputAirport, InputController, schemaFormData } from "../Flight/Flight"
 import useQueryConfig from "src/hooks/useQueryConfig"
-import { createSearchParams, useLocation, useNavigate } from "react-router-dom"
+import { createSearchParams, Link, useLocation, useNavigate } from "react-router-dom"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { schemaType } from "src/utils/rules"
 import { path } from "src/constant/path"
 import { omit } from "lodash"
+import AsideFilterFlight from "./components/AsideFilterFlight"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -49,12 +50,11 @@ export type FormData = Pick<
  * - sau đó dùng useSearchParams lấy các parameter trên Url xuống truyền vô queryConfig (gồm các params)
  * - truyền các params vào defaultValue (giá trị mặc định cho Form)
  * - tiếp tục useEffect 1 lần các state đã lưu ra input
- * - fetch api với queryConfig từ url
+ * - truyền queryConfig vào api để fetch
+ *
+ * Thao tác thực hiện navigate -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
  */
 
-/**
- * thao tác thực hiện navigate -> cập nhật queryConfig -> fetch lại api (re-render lại dữ liệu)
- */
 export default function FlightSearch() {
   // xử lý header
   const [showHeader, setShowHeader] = useState(false)
@@ -255,6 +255,7 @@ export default function FlightSearch() {
 
   const flightList = flightOffersSearchQuery?.data?.data as ResponseFlightList
 
+  // xử lý navigate form
   const handleSubmitSearch = handleSubmit((data) => {
     // nếu chuyến bay roundTrip -> có returnDate
     // ngược lại oneWay -> không có returnDate -> loại bỏ đi (omit)
@@ -292,7 +293,6 @@ export default function FlightSearch() {
     }) // navigate đi -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
   })
 
-  console.log(flightType)
   return (
     <div>
       <Helmet>
@@ -301,13 +301,13 @@ export default function FlightSearch() {
       </Helmet>
 
       <div className="relative z-10">
-        <div className="w-full h-[450px] bgGradient"></div>
+        <div className="w-full h-[450px]"></div>
 
         <div
           className={`w-full bg-[#003566] ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
           <div className="container">
-            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="py-4">
+            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="py-2">
               <div className="grid md:grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap">
                 {/* loại chuyến bay */}
                 <div className="md:col-span-1 lg:col-span-1 px-2 py-[24px] bg-[#fffcf2]/50 rounded-md relative">
@@ -354,9 +354,6 @@ export default function FlightSearch() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <span className="absolute -top-5 left-0 mb-2 text-red-500 font-medium min-h-[1.25rem] block">
-                    {errors.travelClass?.message}
-                  </span>
                 </div>
 
                 <div className="md:col-span-5 lg:col-span-4">
@@ -364,9 +361,9 @@ export default function FlightSearch() {
                     {/* điểm xuất phát */}
                     <InputSearch
                       placeholder="Bay từ"
-                      classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
-                      classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[150px] truncate"
+                      classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef}
                       filterList={filterAirportCodeList_1}
                       value={searchText}
@@ -386,9 +383,9 @@ export default function FlightSearch() {
                     {/* điểm đến */}
                     <InputSearch
                       placeholder="Bay đến"
-                      classNameList="z-20 absolute top-16 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 text-textColor"
-                      classNameInput="px-2 outline-none bg-transparent text-2xl flex-grow font-semibold w-[150px] truncate"
+                      classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef2}
                       filterList={filterAirportCodeList_2}
                       value={searchText2}
@@ -463,7 +460,8 @@ export default function FlightSearch() {
                           name="departureDate"
                           errors={errors.departureDate?.message as string}
                           convertToYYYYMMDD={convertToYYYYMMDD}
-                          className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                          className="py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                          classNameError="py-6 border-2 border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
                         />
                       </div>
 
@@ -477,7 +475,7 @@ export default function FlightSearch() {
                           name="returnDate"
                           errors={errors.returnDate?.message as string}
                           convertToYYYYMMDD={convertToYYYYMMDD}
-                          className="py-6 bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                          className="py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
                         />
                       </div>
                     </div>
@@ -487,7 +485,9 @@ export default function FlightSearch() {
                 <div className="md:col-span-2 lg:col-span-3">
                   <div className="flex gap-2">
                     {/* hành khách */}
-                    <div className="flex-1 px-2 bg-[#fffcf2]/50 rounded-md flex items-center justify-center">
+                    <div
+                      className={`flex-1 px-2 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center justify-center ${showPassenger === 0 ? "border-red-500 bg-red-100" : "border-textColor bg-[#fffcf2]/50"}`}
+                    >
                       <Popover>
                         <PopoverTrigger>
                           <div className="w-full flex items-center cursor-pointer">
@@ -556,7 +556,9 @@ export default function FlightSearch() {
                     </div>
 
                     {/* hạng vé */}
-                    <div className="flex-1 py-[24px] bg-[#fffcf2]/50 rounded-md relative">
+                    <div
+                      className={`flex-1 py-[24px] rounded-md border-2 relative ${errors.travelClass?.message ? "bg-red-100 border-red-500" : "bg-[#fffcf2]/50 border-textColor"}`}
+                    >
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                           <ButtonShadcn
@@ -569,6 +571,22 @@ export default function FlightSearch() {
                             {travelClass
                               ? travelClassList.find((item) => item.value === travelClass)?.value
                               : "Chọn hạng vé"}
+                            {errors.travelClass?.message && (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="red"
+                                className="ml-1 h-6 w-6 flex-shrink-0"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                />
+                              </svg>
+                            )}
                           </ButtonShadcn>
                         </PopoverTrigger>
                         <PopoverContent className="w-[200px] p-0">
@@ -600,9 +618,6 @@ export default function FlightSearch() {
                           </Command>
                         </PopoverContent>
                       </Popover>
-                      <span className="absolute -top-5 left-0 mb-2 text-red-500 font-medium min-h-[1.25rem] block">
-                        {errors.travelClass?.message}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -621,7 +636,7 @@ export default function FlightSearch() {
           </div>
         </div>
 
-        <div className="w-full absolute md:top-48 lg:top-28 left-1/2 -translate-x-1/2">
+        <div className="w-full absolute md:top-44 lg:top-24 left-1/2 -translate-x-1/2">
           <div className="container">
             {/* không load thì isPending */}
             {!flightOffersSearchQuery.isFetching && (
@@ -629,24 +644,11 @@ export default function FlightSearch() {
                 {flightList?.data.length > 0 && (
                   <div className="py-8 grid grid-cols-12 gap-4">
                     <div className="col-span-3">
-                      <div className="bg-[#f2f2f2] shadow-md h-[500px] rounded">
-                        <div className="p-4">
-                          <div className="text-lg tex-textColor font-semibold">Bộ lọc tìm kiếm</div>
-                          <div className="mt-4 flex items-center gap-2">
-                            <input type="checkbox" id="nonStop" className="w-4 h-4" />
-                            <label
-                              htmlFor="nonStop"
-                              className="text-base text-textColor font-medium"
-                            >
-                              Bay trực tiếp
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <AsideFilterFlight queryConfig={queryConfig} />
                     </div>
 
                     <div className="col-span-9">
-                      <h1 className="text-3xl text-whiteColor font-semibold mb-4">
+                      <h1 className="text-3xl text-textColor font-semibold mb-4">
                         Chuyến bay từ
                         {"  "}
                         {getCountry(airportCodes, searchText)}
@@ -668,8 +670,16 @@ export default function FlightSearch() {
                 )}
 
                 {flightList?.data.length === 0 && (
-                  <div className="py-8 my-16 text-center text-2xl text-white font-semibold">
-                    Không tìm thấy chuyến bay. Quý khách vui lòng lựa chọn lại!!!
+                  <div className="py-8 my-16 text-center flex flex-col items-center">
+                    <span className="text-2xl text-textColor font-semibold">
+                      Không tìm thấy chuyến bay. Quý khách vui lòng lựa chọn lại!!!
+                    </span>
+                    <Link
+                      to={path.flight}
+                      className="mt-4 shadow flex items-center justify-center w-[120px] px-3 py-4 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80"
+                    >
+                      Thử lại
+                    </Link>
                   </div>
                 )}
               </div>

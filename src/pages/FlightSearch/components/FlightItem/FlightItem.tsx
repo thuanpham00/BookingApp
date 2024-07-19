@@ -117,7 +117,7 @@ export default function FlightItem({ item, list }: Props) {
 
                 <div className="col-span-2 relative">
                   <div className="text-center text-sm font-medium">
-                    {getDurationFromAPI(flight.duration)}
+                    {getDurationFromAPI(flight.duration) as string}
                   </div>
                   <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
                   <div className="text-sm mt-1 text-center">

@@ -5,8 +5,8 @@ import { toast } from "react-toastify"
 
 // cấu hình cơ bản của baseURL
 const authEndpoint = "https://test.api.amadeus.com/v1/security/oauth2/token"
-const APIkey = "LrkpfAKnVraTBXv6mMgkdUymcgyRYSRA"
-const APIsecret = "KYm4yBAxE0wNG7OO"
+const APIkey = "N2iA0luKGBPpN6xa8gwR07h4CNAJtnGX"
+const APIsecret = "mTu3hCC549SlbEcp"
 
 // instance: tạo các yêu cầu http (get, post, put, del), cấu hình sẵn, quản lý token
 class http {

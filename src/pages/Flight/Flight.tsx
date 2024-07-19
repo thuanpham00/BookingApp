@@ -48,7 +48,8 @@ export const schemaFormData = schema.pick([
   "destinationLocationCode",
   "departureDate",
   "returnDate",
-  "travelClass"
+  "travelClass",
+  "adults"
 ])
 
 export type InputAirport = "originLocationCode" | "destinationLocationCode"
@@ -262,7 +263,7 @@ export default function Flight() {
     // khắc phục lệch layout
     <div className="h-[1750px] bg-[#fff]">
       {loading ? (
-        <Skeleton className="absolute left-1/2 top-[20%] -translate-x-1/2 -translate-y-1/2" />
+        <Skeleton className="absolute left-1/2 top-[25%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <Fragment>
           <Helmet>
@@ -565,7 +566,9 @@ export default function Flight() {
                         </div>
 
                         {/* hành khách */}
-                        <div className="w-[30%] py-3 border-2 border-gray-300 rounded-md flex items-center justify-center">
+                        <div
+                          className={`w-[30%] py-3 border-2 rounded-md flex items-center justify-center ${errors.adults?.message ? "border-red-500 bg-red-100" : "border-gray-300"}`}
+                        >
                           <PopoverShadcn>
                             <PopoverTrigger>
                               <div className="flex items-center cursor-pointer">
@@ -640,7 +643,9 @@ export default function Flight() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between gap-2">
                         {/* hạng vé */}
-                        <div className="w-[50%] px-8 py-[10px] border-2 border-gray-300 rounded-md relative">
+                        <div
+                          className={`w-[50%] px-8 py-[10px] border-2 rounded-md relative> ${errors.travelClass?.message ? "border-red-500 bg-red-100" : "border-gray-300"}`}
+                        >
                           <PopoverShadcn open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                               <ButtonShadcn
@@ -648,12 +653,28 @@ export default function Flight() {
                                 role="combobox"
                                 aria-expanded={open}
                                 aria-label="TravelClass"
-                                className="w-full flex justify-center bg-transparent border-none shadow-none text-base text-center"
+                                className="w-full flex justify-center bg-transparent border-none shadow-none text-base text-center hover:bg-transparent"
                               >
                                 {travelClass
                                   ? travelClassList.find((item) => item.value === travelClass)
                                       ?.value
                                   : "Chọn hạng vé"}
+                                {errors.travelClass?.message && (
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="red"
+                                    className="ml-1 h-6 w-6 flex-shrink-0"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                    />
+                                  </svg>
+                                )}
                               </ButtonShadcn>
                             </PopoverTrigger>
                             <PopoverContent className="w-[200px] p-0">
@@ -685,9 +706,6 @@ export default function Flight() {
                               </Command>
                             </PopoverContent>
                           </PopoverShadcn>
-                          <span className="absolute -top-5 left-1/2 -translate-x-1/2 mb-2 text-red-500 font-medium min-h-[1.25rem] block">
-                            {errors.travelClass?.message}
-                          </span>
                         </div>
 
                         <Button
@@ -695,7 +713,7 @@ export default function Flight() {
                           classNameWrapper="w-[50%] relative"
                           type="submit"
                           nameButton="Tìm kiếm"
-                          className="px-8 py-4 bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
+                          className="px-8 py-4 border-2 border-blueColor bg-blueColor w-full text-whiteColor text-base rounded-md hover:border-2 hover:bg-blueColor/80 duration-200 font-semibold"
                         />
                       </div>
                     </div>

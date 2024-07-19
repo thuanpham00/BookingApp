@@ -2,9 +2,8 @@
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { InputAirport } from "src/pages/Flight/Flight"
-import AirportCodeList from "src/pages/FlightSearch/components/AirportCodeList"
-
 import { airportCodeItem } from "src/types/flight.type"
+import AirportCodeList from "../AirportCodeList"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   children: React.ReactNode
@@ -12,6 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   classNameBlock?: string
   classNameDesc?: string
   classNameInput?: string
+  classNameError?: string
   filterList: airportCodeItem[]
   value: string
   showList: boolean
@@ -31,9 +31,10 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   {
     children,
     classNameList,
-    classNameBlock = "py-4 px-3 border-2 border-gray-300 rounded-md flex items-center",
+    classNameError = "py-4 px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center",
+    classNameBlock = "w-full py-4 px-3 border-2 border-gray-300 rounded-md flex items-center",
     classNameDesc = "pl-2 text-textColor",
-    classNameInput = "px-2 outline-none bg-transparent md:text-xl lg:text-2xl flex-grow font-semibold",
+    classNameInput = "px-2 outline-none bg-transparent md:text-xl lg:text-2xl font-semibold flex-grow",
     filterList,
     value,
     showList,
@@ -52,22 +53,37 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   const registerResult = register && name ? { ...register(name) } : ""
   return (
     <div className="w-[50%] relative">
-      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-red-500 font-medium min-h-[1.25rem] block">
-        {error}
-      </span>
-      <div className={classNameBlock}>
+      <div className={error ? classNameError : classNameBlock}>
         {children}
-        <div className="flex flex-col">
+        <div className="w-full flex flex-col">
           <span className={classNameDesc}>{desc}</span>
-          <input
-            type="text"
-            className={classNameInput}
-            onClick={handleFocus}
-            {...rest}
-            {...registerResult}
-            value={value}
-            onChange={handleChangeValue}
-          />
+          <div className="flex justify-between items-center">
+            <input
+              type="text"
+              className={classNameInput}
+              onClick={handleFocus}
+              {...rest}
+              {...registerResult}
+              value={value}
+              onChange={handleChangeValue}
+            />
+            {error && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="red"
+                className="h-6 w-6 flex-shrink-0"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                />
+              </svg>
+            )}
+          </div>
         </div>
       </div>
       <div className={classNameList} ref={ref}>

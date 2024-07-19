@@ -41,14 +41,22 @@ export const getHourFromAPI = (hours: string) => {
 
 export const getDurationFromAPI = (duration: string) => {
   if (duration) {
-    const result = duration.split("T")[1]
+    const timePart = duration.split("T")[1] // "5H5M"
+    let hours = 0,
+      minutes = 0
 
-    const hours = result.split("H")[0]
+    if (timePart.includes("H")) {
+      hours = parseInt(timePart.split("H")[0], 10)
+      if (timePart.includes("M")) {
+        minutes = parseInt(timePart.split("H")[1].split("M")[0], 10)
+      }
+    } else if (timePart.includes("M")) {
+      minutes = parseInt(timePart.split("M")[0], 10)
+    }
 
-    const minute = result.split("H")[1].split("M")[0]
-    return `${hours} giờ ${minute} phút`
+    return `${hours} giờ ${minutes} phút`
   }
-  return null
+  return "" // Trả về chuỗi rỗng nếu duration không tồn tại
 }
 // PT2h5m
 // 2h5m || 2h11m

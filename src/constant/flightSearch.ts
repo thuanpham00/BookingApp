@@ -275,11 +275,11 @@ export const travelClassList = [
 
 export const typeFlightList = [
   {
-    text: "One Way",
+    text: "Một chiều",
     value: "oneWay"
   },
   {
-    text: "Round Trip",
+    text: "Khứ hồi",
     value: "roundTrip"
   }
 ]
