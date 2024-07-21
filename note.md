@@ -17,28 +17,35 @@
 - yarn add rollup-plugin-visualizer
 
 ## ÔN TẬP KIẾN THỨC
-* Tổng hợp hook đã xài
-- useRoutes() - array router
-- createSearchParams() - dùng để `tạo đường dẫn` cho các tham số truy vấn
-- useSearchParams() - dùng để lấy các `tham số truy vấn` trên URL xuống (page, limit, ....)
-- useParams() - dùng để lấy các `tham số định danh` trên URL xuống (id...)
-- useNavigate() - vùa điều hướng trang - vừa lưu state
-- <Outlet/> chứa các component con - thuộc react router dom
-- <Navigate> component điều hướng trang - thuộc react router dom
-- useState()
-- useEffect()
-- useMemo()
-- useCallback()
-- forwardRef() - truyền ref vào component 
-- useRef() - truyền ref vào phần tử
-- useQuery()
-- useMutation()
 
+- Tổng hợp hook đã xài
 
+* useRoutes() - array router
+* createSearchParams() - dùng để `tạo đường dẫn` cho các tham số truy vấn
+* useSearchParams() - dùng để lấy các `tham số truy vấn` trên URL xuống (page, limit, ....)
+* useParams() - dùng để lấy các `tham số định danh` trên URL xuống (id...)
+* useNavigate() - vùa điều hướng trang - vừa lưu state
+* <Outlet/> chứa các component con - thuộc react router dom
+* <Navigate> component điều hướng trang - thuộc react router dom
+* useState()
+* useEffect()
+* useMemo()
+* useCallback()
+* forwardRef() - truyền ref vào component
+* useRef() - truyền ref vào phần tử
+* useQuery()
+* useMutation()
 
-* sử dụng setInterval và setTimeout nhớ clear nó đi
+- sử dụng setInterval và setTimeout nhớ clear nó đi
 
-* dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
+- dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
+
+- slice() và splice() trong mảng: đều cắt mảng
++ slice(): cắt mảng, không thay đổi mảng gốc, tạo ra mảng mới
++ splice(): cắt mảng, thay đổi mảng gốc
+
+* join() : nối chuỗi
+* split(): tách chuỗi
 
 ## Firebase
 

@@ -28,6 +28,7 @@ import { schemaType } from "src/utils/rules"
 import { path } from "src/constant/path"
 import { omit } from "lodash"
 import AsideFilterFlight from "./components/AsideFilterFlight"
+import Pagination from "src/components/Pagination"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -54,6 +55,8 @@ export type FormData = Pick<
  *
  * Thao tác thực hiện navigate -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
  */
+
+// flow: Tìm chuyến bay ở Flight -> navigate tới FlightSearch (render list chuyến bay) -> chọn chuyến bay thích hợp (item of list chuyến bay) -> navigate tới FlightCreateOrder
 
 export default function FlightSearch() {
   // xử lý header
@@ -293,6 +296,18 @@ export default function FlightSearch() {
     }) // navigate đi -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
   })
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalItem = 5
+  const startIndex = (currentPage - 1) * totalItem
+  const endIndex = startIndex + totalItem
+  const currentList = flightList?.data.slice(startIndex, endIndex)
+
+  const handleChangePage = (numberPage: number) => {
+    setCurrentPage(numberPage)
+  }
+
+  console.log(currentPage)
+
   return (
     <div>
       <Helmet>
@@ -310,7 +325,7 @@ export default function FlightSearch() {
             <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="py-2">
               <div className="grid md:grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap">
                 {/* loại chuyến bay */}
-                <div className="md:col-span-1 lg:col-span-1 px-2 py-[24px] bg-[#fffcf2]/50 rounded-md relative">
+                <div className="md:col-span-1 lg:col-span-1 px-2 py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md relative">
                   <Popover open={open2} onOpenChange={setOpen2}>
                     <PopoverTrigger asChild>
                       <ButtonShadcn
@@ -318,7 +333,7 @@ export default function FlightSearch() {
                         role="combobox"
                         aria-expanded={open2}
                         aria-label="FlightType"
-                        className="flex justify-center bg-transparent border-none shadow-none text-base text-center truncate w-full hover:bg-transparent"
+                        className="flex justify-center bg-transparent border-none shadow-none text-lg text-center truncate w-full hover:bg-transparent"
                       >
                         {flightType
                           ? typeFlightList.find((item) => item.value === flightType)?.text
@@ -362,7 +377,8 @@ export default function FlightSearch() {
                     <InputSearch
                       placeholder="Bay từ"
                       classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameError="py-[18px] px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center"
                       classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef}
                       filterList={filterAirportCodeList_1}
@@ -384,7 +400,8 @@ export default function FlightSearch() {
                     <InputSearch
                       placeholder="Bay đến"
                       classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-4 px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
+                      classNameError="py-[18px] px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center"
                       classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef2}
                       filterList={filterAirportCodeList_2}
@@ -486,35 +503,54 @@ export default function FlightSearch() {
                   <div className="flex gap-2">
                     {/* hành khách */}
                     <div
-                      className={`flex-1 px-2 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center justify-center ${showPassenger === 0 ? "border-red-500 bg-red-100" : "border-textColor bg-[#fffcf2]/50"}`}
+                      className={`w-[50%] px-2 border-2 bg-[#fffcf2]/50 rounded-md flex items-center justify-center ${showPassenger === 0 ? "border-red-500 bg-red-100" : "border-textColor bg-[#fffcf2]/50"}`}
                     >
                       <Popover>
                         <PopoverTrigger>
-                          <div className="w-full flex items-center cursor-pointer">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="h-5 w-5"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                          <div className="w-full flex flex-col items-center">
+                            <div className="flex items-center cursor-pointer">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="h-5 w-5"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                />
+                              </svg>
+
+                              <input
+                                aria-label="Traveler"
+                                type="text"
+                                className="w-[35px] py-1 outline-none bg-transparent text-lg text-center"
+                                value={showPassenger}
+                                readOnly
                               />
-                            </svg>
 
-                            <input
-                              aria-label="Traveler"
-                              type="text"
-                              className="w-[35px] py-1 outline-none bg-transparent text-base text-center"
-                              value={showPassenger}
-                              readOnly
-                            />
+                              <span className="text-base text-textColor font-semibold">Khách</span>
+                            </div>
 
-                            <span className="text-base text-textColor font-semibold">Khách</span>
+                            {showPassenger === 0 && (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="red"
+                                className="h-6 w-6 flex-shrink-0"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                />
+                              </svg>
+                            )}
                           </div>
                         </PopoverTrigger>
                         <PopoverContent>
@@ -557,7 +593,7 @@ export default function FlightSearch() {
 
                     {/* hạng vé */}
                     <div
-                      className={`flex-1 py-[24px] rounded-md border-2 relative ${errors.travelClass?.message ? "bg-red-100 border-red-500" : "bg-[#fffcf2]/50 border-textColor"}`}
+                      className={`w-[50%] py-[24px] rounded-md border-2 relative ${errors.travelClass?.message ? "bg-red-100 border-red-500" : "bg-[#fffcf2]/50 border-textColor"}`}
                     >
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
@@ -566,7 +602,7 @@ export default function FlightSearch() {
                             role="combobox"
                             aria-expanded={open}
                             aria-label="TravelClass"
-                            className="flex justify-center bg-transparent border-none shadow-none text-sm text-center truncate w-full hover:bg-transparent"
+                            className="flex justify-center items-center bg-transparent border-none shadow-none text-sm hover:bg-transparent w-full truncate"
                           >
                             {travelClass
                               ? travelClassList.find((item) => item.value === travelClass)?.value
@@ -641,7 +677,7 @@ export default function FlightSearch() {
             {/* không load thì isPending */}
             {!flightOffersSearchQuery.isFetching && (
               <div>
-                {flightList?.data.length > 0 && (
+                {currentList.length > 0 && (
                   <div className="py-8 grid grid-cols-12 gap-4">
                     <div className="col-span-3">
                       <AsideFilterFlight queryConfig={queryConfig} />
@@ -660,16 +696,25 @@ export default function FlightSearch() {
                         {searchText2}
                       </h1>
 
-                      {flightList?.data.map((item) => (
+                      {currentList.map((item) => (
                         <div key={item.id}>
                           <FlightItem item={item} list={flightList} />
                         </div>
                       ))}
+
+                      <div className="my-4">
+                        <Pagination
+                          totalOfPage={totalItem}
+                          totalAllPage={flightList.data.length}
+                          currentPage={currentPage}
+                          onChangePage={handleChangePage}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {flightList?.data.length === 0 && (
+                {currentList.length === 0 && (
                   <div className="py-8 my-16 text-center flex flex-col items-center">
                     <span className="text-2xl text-textColor font-semibold">
                       Không tìm thấy chuyến bay. Quý khách vui lòng lựa chọn lại!!!

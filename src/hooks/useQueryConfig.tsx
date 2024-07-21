@@ -19,9 +19,11 @@ export default function useQueryConfig() {
       infants: queryParam.adults || "0", // Số lượng em bé // Ngày trở về mong muốn
       travelClass: queryParam.travelClass, // Hạng ghế mong muốn
       nonStop: queryParam.nonStop || "false", // chuyến bay trực tiếp
-      max: queryParam.max || "15",
+      max: queryParam.max || "25",
       currencyCode: queryParam.currencyCode || "VND",
-      maxPrice: queryParam.maxPrice
+
+      maxPrice: queryParam.maxPrice,
+      includedAirlineCodes: queryParam.includedAirlineCodes
     },
     isUndefined
   )

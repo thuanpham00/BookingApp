@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { omit } from "lodash"
 import { useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import Button from "src/components/Button"
@@ -19,18 +21,22 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
   const navigate = useNavigate()
 
   // xử lý nonStop
-  const [nonStop, setNonStop] = useState(false)
+  const [nonStop, setNonStop] = useState((queryConfig.nonStop === "true" ? true : false) || false)
   const handleNonStop = () => {
-    setNonStop((prev) => !prev)
-    navigate({
-      pathname: path.flightSearch,
-      search: createSearchParams({ ...queryConfig, nonStop: String(nonStop) }).toString()
+    setNonStop((prev) => {
+      const newValue = !prev
+      navigate({
+        pathname: path.flightSearch,
+        search: createSearchParams({ ...queryConfig, nonStop: String(newValue) }).toString()
+      })
+      return newValue
     })
   }
 
-  // xu ly giá tối đa
-  const [maxPrice, setMaxPrice] = useState(30000000)
+  // xử lý giá tối đa
+  const [maxPrice, setMaxPrice] = useState(Number(queryConfig.maxPrice) || 30000000)
   const [showPrice, setShowPrice] = useState(false)
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const price = Number(event.target.value)
     setMaxPrice(price)
@@ -44,22 +50,79 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
     setShowPrice(false)
   }
 
-  const handleChangePrice = () => {
+  const handleMaxPrice = () => {
     navigate({
       pathname: path.flightSearch,
       search: createSearchParams({ ...queryConfig, maxPrice: String(maxPrice) }).toString()
     })
   }
+
+  // xử lý hãng hàng không
+  const [selectAirlines, setSelectAirlines] = useState(queryConfig.includedAirlineCodes || "")
+  const handleSelectAirlines = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.id
+    setSelectAirlines((prev) => {
+      // tách chuỗi từ dấu ,
+      const currentAirlines = prev ? prev.split(",") : [] // mảng
+      let airlineList: string[]
+      // kiểm tra nếu có giá trị đó trong mảng tách
+      if (currentAirlines.includes(value)) {
+        airlineList = currentAirlines.filter((airlines) => airlines !== value)
+      } else {
+        airlineList = [...currentAirlines, value]
+      }
+      const config =
+        airlineList.length === 0
+          ? omit({ ...queryConfig }, ["includedAirlineCodes"])
+          : { ...queryConfig, includedAirlineCodes: airlineList.join(",") }
+
+      navigate({
+        pathname: path.flightSearch,
+        search: createSearchParams(config).toString()
+      })
+
+      return airlineList.join(",")
+    })
+  }
+
+  const findSelect = (idAirLines: string): boolean => {
+    const list = selectAirlines.split(",")
+    return list.includes(idAirLines)
+  }
+
+  // xử lý xóa filter
+  const handleDeleteFilter = () => {
+    navigate({
+      pathname: path.flightSearch,
+      search: createSearchParams(
+        omit({ ...queryConfig }, ["includedAirlineCodes", "maxPrice", "nonStop"])
+      ).toString()
+    })
+    setNonStop(false)
+    setMaxPrice(30000000)
+    setSelectAirlines("")
+  }
+
   return (
     <div className="bg-[#fff] shadow-md px-4 rounded">
       <div className="pt-6 pb-4">
-        <div className="text-lg text-textColor font-semibold">Bộ lọc phổ biến</div>
+        <div className="flex items-center justify-between">
+          <div className="text-lg text-textColor font-semibold">Bộ lọc phổ biến</div>
+
+          <button
+            onClick={handleDeleteFilter}
+            type="button"
+            className="text-base text-textColor hover:underline hover:text-gray-500"
+          >
+            Xóa bộ lọc
+          </button>
+        </div>
         <div className="mt-4 flex items-center gap-2">
           <input
             type="checkbox"
             id="nonStop"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
+            checked={nonStop === true}
             onChange={handleNonStop}
           />
           <label htmlFor="nonStop" className="text-base text-textColor font-medium">
@@ -73,10 +136,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="VN"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("VN")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_1} alt="logo-1" className="w-6 h-6 object-contain" />
           <label htmlFor="nonStop" className="text-base text-textColor font-normal">
@@ -87,10 +150,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="VJ"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("VJ")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_2} alt="logo-1" className="w-5 h-5 object-contain" />
           <label htmlFor="nonStop" className="ml-1 text-base text-textColor font-normal">
@@ -101,10 +164,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="NH"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("NH")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_3} alt="logo-1" className="w-5 h-5 object-contain" />
           <label htmlFor="nonStop" className="ml-1 text-base text-textColor font-normal">
@@ -115,10 +178,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="CX"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("CX")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_4} alt="logo-1" className="w-5 h-5 object-contain" />
           <label htmlFor="nonStop" className="ml-1 text-base text-textColor font-normal">
@@ -129,10 +192,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="CZ"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("CZ")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_5} alt="logo-1" className="w-5 h-5 object-contain" />
           <label htmlFor="nonStop" className="ml-1 text-base text-textColor font-normal">
@@ -143,10 +206,10 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
-            id="nonStop"
+            id="SQ"
             className="w-4 h-4"
-            checked={queryConfig.nonStop === "true" ? true : false}
-            onChange={handleNonStop}
+            checked={findSelect("SQ")}
+            onChange={handleSelectAirlines}
           />
           <img src={logoAirLine_6} alt="logo-1" className="w-5 h-5 object-contain" />
           <label htmlFor="nonStop" className="ml-1 text-base text-textColor font-normal">
@@ -163,7 +226,7 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
               className="w-full"
               id="priceRange"
               type="range"
-              min="500000"
+              min="1000000"
               max="100000000"
               step="1000000"
               value={maxPrice}
@@ -174,7 +237,11 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
             <div
               className="absolute -top-7"
               style={{
-                left: `${((maxPrice - 500000) / (100000000 - 500000)) * 100}%`
+                left: `${
+                  queryConfig.maxPrice
+                    ? ((Number(queryConfig.maxPrice) - 1000000) / (100000000 - 500000)) * 100
+                    : ((maxPrice - 1000000) / (100000000 - 1000000)) * 100
+                }%`
               }}
             >
               {showPrice && (
@@ -193,7 +260,7 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
           </div>
         </div>
 
-        <Button nameButton="Áp dụng" onClick={handleChangePrice} />
+        <Button nameButton="Áp dụng" onClick={handleMaxPrice} />
       </div>
     </div>
   )

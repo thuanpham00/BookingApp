@@ -65,7 +65,6 @@ const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 p
 
 // component chỉ re-render khi props hoặc state thay đổi
 
-// flow: tìm chuyến bay ở Flight -> navigate tới FlightSearch (render list chuyến bay) -> chọn chuyến bay thích hợp (item of list chuyến bay) -> navigate tới FlightCreateOrder
 export default function Flight() {
   // xử lý header
   const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile } = useContext(AppContext)
@@ -263,7 +262,7 @@ export default function Flight() {
     // khắc phục lệch layout
     <div className="h-[1750px] bg-[#fff]">
       {loading ? (
-        <Skeleton className="absolute left-1/2 top-[25%] -translate-x-1/2 -translate-y-1/2" />
+        <Skeleton className="absolute left-1/2 top-[15%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <Fragment>
           <Helmet>
@@ -729,9 +728,9 @@ export default function Flight() {
                 <div className="flex items-center gap-4">
                   <img src={banner3} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
-                    <h3 className="text-base lg:text-lg text-textColor font-semibold">
+                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
                       Điểm đến tốt nhất?
-                    </h3>
+                    </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
                       Khám phá những điểm đến tuyệt vời nhất với chúng tôi. Chúng tôi cung cấp những
                       gợi ý lý tưởng cho chuyến du lịch của bạn.
@@ -743,9 +742,9 @@ export default function Flight() {
                 <div className="flex items-center gap-4">
                   <img src={banner2} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
-                    <h3 className="text-base lg:text-lg text-textColor font-semibold">
+                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
                       Thanh toán an toàn và thuận tiện
-                    </h3>
+                    </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
                       Tận hưởng s nhiều cách thanh toán an toàn, bằng loại tiền thuận tiện nhất cho
                       bạn.
@@ -757,9 +756,9 @@ export default function Flight() {
                 <div className="flex items-center gap-4">
                   <img src={banner1} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
-                    <h3 className="text-base lg:text-lg text-textColor font-semibold">
+                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
                       Hướng dẫn viên du lịch?
-                    </h3>
+                    </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
                       Trải nghiệm chuyến đi hoàn hảo với sự hỗ trợ của các hướng dẫn viên chuyên
                       nghiệp. Hiểu rõ hơn về văn hóa và lịch sử mỗi điểm đến.
@@ -771,9 +770,9 @@ export default function Flight() {
 
             <div className="my-16 px-8">
               <div className="flex flex-col items-center gap-2">
-                <h2 className="text-lg lg:text-2xl font-semibold text-textColor">
+                <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
                   Đối tác hàng không
-                </h2>
+                </h3>
                 <div className="mt-4 grid grid-cols-8 items-center gap-2 flex-wrap">
                   {bannerAirLineList.map((item, index) => (
                     <div key={index}>
@@ -792,9 +791,9 @@ export default function Flight() {
 
             <div className="border-t border-t-gray-300 pt-8 my-16 px-8">
               <div className="flex flex-col items-center gap-2">
-                <h2 className="text-lg lg:text-2xl font-semibold text-textColor">
+                <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
                   Đối tác thanh toán
-                </h2>
+                </h3>
                 <div className="md:w-20 md:h-20 lg:w-32 lg:h-32">
                   <img src={paymentImg} alt="payment" className="w-full h-full object-contain" />
                 </div>

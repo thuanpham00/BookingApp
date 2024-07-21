@@ -11,7 +11,7 @@ export type FlightOfferParamsConfig = {
   currencyCode?: string // mã tiền tệ
   max?: number // số lượng chuyến bay cần lấy
   maxPrice?: number // Giới hạn giá tối đa cho các kết quả chuyến bay.
-  // includedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn bao gồm trong kết quả tìm kiếm chuyến bay.
+  includedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn bao gồm trong kết quả tìm kiếm chuyến bay.
   // excludedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn loại trừ khỏi kết quả tìm kiếm chuyến bay.
 }
 

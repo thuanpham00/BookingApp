@@ -35,7 +35,7 @@ export default function SelectDate({
         <PopoverTrigger asChild>
           <ButtonShadcn
             variant={"outline"}
-            className="bg-transparent hover:bg-transparent text-left border-none shadow-none text-base flex gap-1"
+            className="bg-transparent hover:bg-transparent text-left border-none shadow-none text-lg flex gap-1"
           >
             <CalendarIcon className="h-4 w-4" />
             {date ? format(date, "yyyy-MM-dd") : <span>{text}</span>}
