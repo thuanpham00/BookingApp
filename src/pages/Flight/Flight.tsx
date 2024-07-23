@@ -9,6 +9,9 @@ import logo from "../../img/favicon/FaviconFlight.webp"
 import paymentImg from "../../img/Home/payment/pm1.jpg"
 import hotel from "../../img/svg/hotel-1-svgrepo-com.svg"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
+import ticketBanner from "src/img/Flight/air-ticket-offer.webp"
+import ticketBanner2 from "src/img/Flight/air-ticket-offer_2.webp"
+import bannerFlight from "src/img/Flight/vja330-1685604407424.jpg"
 import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"
@@ -260,7 +263,7 @@ export default function Flight() {
 
   return (
     // khắc phục lệch layout
-    <div className="h-[1750px] bg-[#fff]">
+    <div className="h-[2400px] bg-[#fff]">
       {loading ? (
         <Skeleton className="absolute left-1/2 top-[15%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -597,6 +600,23 @@ export default function Flight() {
                                 <span className="text-base text-textColor font-semibold">
                                   Khách
                                 </span>
+
+                                {errors.adults?.message && (
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="red"
+                                    className="ml-1 h-6 w-6 flex-shrink-0"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                    />
+                                  </svg>
+                                )}
                               </div>
                             </PopoverTrigger>
                             <PopoverContent>
@@ -723,8 +743,8 @@ export default function Flight() {
           </div>
 
           <div className="container">
-            <div className="my-4 px-8 flex items-center justify-between gap-4">
-              <div className="flex-1 border border-gray-200 rounded-md shadow-lg p-4">
+            <div className="my-4 px-8 grid grid-cols-3 items-center justify-between gap-4">
+              <div className="md:h-[120px] lg:h-[100px] col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
                 <div className="flex items-center gap-4">
                   <img src={banner3} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
@@ -732,44 +752,55 @@ export default function Flight() {
                       Điểm đến tốt nhất?
                     </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Khám phá những điểm đến tuyệt vời nhất với chúng tôi. Chúng tôi cung cấp những
-                      gợi ý lý tưởng cho chuyến du lịch của bạn.
+                      Khám phá những điểm đến tuyệt vời nhất với chúng tôi.
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex-1 border border-gray-200 rounded-md shadow-lg p-4">
+              <div className="md:h-[120px] lg:h-[100px] col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
                 <div className="flex items-center gap-4">
                   <img src={banner2} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
                     <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Thanh toán an toàn và thuận tiện
+                      Đa dạng ngôn ngữ trên trang web
                     </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Tận hưởng s nhiều cách thanh toán an toàn, bằng loại tiền thuận tiện nhất cho
-                      bạn.
+                      Thay đổi ngôn ngữ
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex-1 border border-gray-200 rounded-md shadow-lg p-4">
+              <div className="md:h-[120px] lg:h-[100px] col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
                 <div className="flex items-center gap-4">
                   <img src={banner1} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
-                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Hướng dẫn viên du lịch?
-                    </h2>
+                    <h2 className="text-base lg:text-lg text-textColor font-semibold">Booking.</h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Trải nghiệm chuyến đi hoàn hảo với sự hỗ trợ của các hướng dẫn viên chuyên
-                      nghiệp. Hiểu rõ hơn về văn hóa và lịch sử mỗi điểm đến.
+                      Hoàn tất việc đăng ký trên web của bạn khi Booking. với các bước dễ dàng
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="my-16 px-8">
-              <div className="flex flex-col items-center gap-2">
+            <div className="my-8 flex items-center gap-4">
+              <div className="w-[50%] h-[450px]">
+                <img src={ticketBanner} alt="banner" className="w-full h-full object-cover" />
+              </div>
+              <div className="w-[50%] h-[450px]">
+                <img src={ticketBanner2} alt="banner" className="w-full h-full object-cover" />
+              </div>
+            </div>
+
+            <div className="my-16 relative">
+              <div className="w-full h-[400px]">
+                <img
+                  src={bannerFlight}
+                  alt="bannerFlight"
+                  className="w-full h-full object-cover brightness-50 rounded-sm"
+                />
+              </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
                 <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
                   Đối tác hàng không
                 </h3>
@@ -789,7 +820,7 @@ export default function Flight() {
               </div>
             </div>
 
-            <div className="border-t border-t-gray-300 pt-8 my-16 px-8">
+            <div className="border-t border-t-gray-300 pt-8 px-8">
               <div className="flex flex-col items-center gap-2">
                 <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
                   Đối tác thanh toán

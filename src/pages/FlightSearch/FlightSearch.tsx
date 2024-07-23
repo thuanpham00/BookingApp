@@ -29,6 +29,9 @@ import { path } from "src/constant/path"
 import { omit } from "lodash"
 import AsideFilterFlight from "./components/AsideFilterFlight"
 import Pagination from "src/components/Pagination"
+import banner from "src/img/Flight/ticker-banner-flight.webp"
+import banner2 from "src/img/Flight/air-ticket-booking.webp"
+import banner3 from "src/img/Flight/travel-design-template.webp"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -224,11 +227,11 @@ export default function FlightSearch() {
     } else if (nameQuantity === "infants") {
       setNumberInfants(value)
     }
-    setShowPassenger((numberAdults + numberChildren + numberInfants) as number)
+    setShowPassenger(numberAdults + numberChildren + numberInfants)
   }
 
   useMemo(() => {
-    setShowPassenger((numberChildren + numberInfants + numberAdults) as number)
+    setShowPassenger(numberChildren + numberInfants + numberAdults)
   }, [numberChildren, numberInfants, numberAdults])
 
   const exchangeTwoValues = () => {
@@ -297,7 +300,7 @@ export default function FlightSearch() {
   })
 
   const [currentPage, setCurrentPage] = useState(1)
-  const totalItem = 5
+  const totalItem = 10
   const startIndex = (currentPage - 1) * totalItem
   const endIndex = startIndex + totalItem
   const currentList = flightList?.data.slice(startIndex, endIndex)
@@ -305,8 +308,6 @@ export default function FlightSearch() {
   const handleChangePage = (numberPage: number) => {
     setCurrentPage(numberPage)
   }
-
-  console.log(currentPage)
 
   return (
     <div>
@@ -316,8 +317,6 @@ export default function FlightSearch() {
       </Helmet>
 
       <div className="relative z-10">
-        <div className="w-full h-[450px]"></div>
-
         <div
           className={`w-full bg-[#003566] ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -677,14 +676,24 @@ export default function FlightSearch() {
             {/* không load thì isPending */}
             {!flightOffersSearchQuery.isFetching && (
               <div>
-                {currentList.length > 0 && (
+                {currentList?.length > 0 && (
                   <div className="py-8 grid grid-cols-12 gap-4">
                     <div className="col-span-3">
                       <AsideFilterFlight queryConfig={queryConfig} />
+
+                      <div className="my-6 w-full">
+                        <img src={banner} alt="banner" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="my-6 w-full">
+                        <img src={banner2} alt="banner" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="my-6 w-full">
+                        <img src={banner3} alt="banner" className="w-full h-full object-cover" />
+                      </div>
                     </div>
 
                     <div className="col-span-9">
-                      <h1 className="text-3xl text-textColor font-semibold mb-4">
+                      <h1 className="text-2xl text-textColor font-semibold mb-2">
                         Chuyến bay từ
                         {"  "}
                         {getCountry(airportCodes, searchText)}
@@ -714,7 +723,7 @@ export default function FlightSearch() {
                   </div>
                 )}
 
-                {currentList.length === 0 && (
+                {currentList?.length === 0 && (
                   <div className="py-8 my-16 text-center flex flex-col items-center">
                     <span className="text-2xl text-textColor font-semibold">
                       Không tìm thấy chuyến bay. Quý khách vui lòng lựa chọn lại!!!

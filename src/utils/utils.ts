@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { airportCodes } from "src/constant/flightSearch"
+import { airlines, airportCodes } from "src/constant/flightSearch"
 import { airportCodeItem, countryItem } from "src/types/flight.type"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
@@ -129,4 +129,14 @@ export function changeTravelerType(type: string) {
     return "Người lớn"
   } else if (type === "CHILD") return "Trẻ em"
   else if (type === "HELD_INFANT") return "Em bé"
+}
+
+export function getAirlines(code: string) {
+  if (code) {
+    const res = airlines.find((item) => item.code === code)
+    if (res) {
+      return res.name
+    }
+  }
+  return null
 }

@@ -20,28 +20,33 @@ export default function Pagination({
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  const listPage = Array(totalPage)
+    .fill(0)
+    .map((_, index) => {
+      return (
+        <div key={index} className="flex items-center">
+          <button
+            onClick={() => handleChangePage(index)}
+            className={`py-2 px-3 text-whiteColor hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
+          >
+            {index + 1}
+          </button>
+        </div>
+      )
+    })
+
   return (
     <div className="pt-5">
       <div className="flex items-center justify-center gap-4">
-        <button className="bg-gray-500 p-2 text-whiteColor hover:opacity-50 duration-200">
+        <button
+          onClick={() => handleChangePage(currentPage - 2)}
+          className="bg-gray-500 p-2 text-whiteColor hover:opacity-50 duration-200"
+        >
           Trước
         </button>
-        {Array(totalPage)
-          .fill(0)
-          .map((_, index) => {
-            return (
-              <div key={index} className="flex items-center">
-                <button
-                  onClick={() => handleChangePage(index)}
-                  className={`py-2 px-3 text-whiteColor hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
-                >
-                  {index + 1}
-                </button>
-              </div>
-            )
-          })}
+        {listPage}
         <button
-          onClick={() => handleChangePage(currentPage + 1)}
+          onClick={() => handleChangePage(currentPage)}
           className="bg-gray-500 p-2 text-whiteColor hover:opacity-50 duration-200"
         >
           Sau

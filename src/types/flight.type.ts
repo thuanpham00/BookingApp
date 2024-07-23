@@ -235,89 +235,7 @@ export type ResponseFlightList = {
 export type ResponseFlightPrice = {
   data: {
     type: string // Loại dữ liệu, ví dụ "flight-offers-pricing"
-    flightOffers: [
-      {
-        type: string // Loại đề xuất, ví dụ "flight-offer"
-        id: string // ID của đề xuất chuyến bay
-        source: string // Nguồn dữ liệu, ví dụ "GDS"
-        instantTicketingRequired: boolean // Xác định xem vé có cần xuất ngay không
-        nonHomogeneous: boolean // Xác định xem các dịch vụ có khác nhau không
-        lastTicketingDate: string // Ngày cuối cùng để xuất vé
-        itineraries: [
-          {
-            segments: [
-              {
-                departure: {
-                  iataCode: string // Mã IATA của sân bay khởi hành
-                  at: string // Thời gian khởi hành
-                  terminal?: string // Nhà ga (tuỳ chọn)
-                }
-                arrival: {
-                  iataCode: string // Mã IATA của sân bay đến
-                  at: string // Thời gian đến
-                  terminal?: string // Nhà ga (tuỳ chọn)
-                }
-                carrierCode: string // Mã hãng hàng không
-                number: string // Số hiệu chuyến bay
-                aircraft: {
-                  code: string // Mã máy bay
-                }
-                operating: {
-                  carrierCode: string // Mã hãng hàng không vận hành
-                }
-                id: string // ID của đoạn bay
-                numberOfStops: number // Số lượng điểm dừng
-                duration: string // Thời gian bay, ví dụ "PT8H40M"
-              }
-            ]
-          }
-        ]
-        price: {
-          currency: string // Loại tiền tệ
-          total: string // Tổng giá vé
-          base: string // Giá vé cơ bản
-          fees: [
-            {
-              amount: string // Số tiền phí
-              type: string // Loại phí, ví dụ "SUPPLIER", "TICKETING", "FORM_OF_PAYMENT"
-            }
-          ]
-          grandTotal: string // Tổng giá trị cuối cùng
-          billingCurrency: string // Loại tiền tệ thanh toán
-        }
-        pricingOptions: {
-          fareType: string[] // Các loại giá vé, ví dụ ["PUBLISHED"]
-          includedCheckedBagsOnly: boolean // Xác định chỉ bao gồm hành lý ký gửi
-        }
-        validatingAirlineCodes: string[] // Danh sách mã hãng hàng không xác thực vé
-        travelerPricings: [
-          {
-            travelerId: string // ID của hành khách
-            fareOption: string // Tùy chọn giá vé, ví dụ "STANDARD"
-            travelerType: string // Loại hành khách, ví dụ "ADULT", "CHILD"
-            price: {
-              currency: string // Loại tiền tệ
-              total: string // Tổng giá vé
-              base: string // Giá vé cơ bản
-              taxes: {
-                amount: string // Số tiền thuế
-                code: string // Mã thuế
-              }[]
-            }
-            fareDetailsBySegment: {
-              segmentId: string // ID của đoạn bay
-              cabin: string // Hạng vé, ví dụ "BUSINESS", "ECONOMY"
-              fareBasis: string // Cơ sở giá vé
-              class: string // Hạng dịch vụ
-              includedCheckedBags: {
-                quantity: number // Số lượng hành lý ký gửi
-              }
-            }[]
-          }
-        ]
-        paymentCardRequired: false
-      }
-    ]
+    flightOffers: ResponseFlightPriceItem[]
   }
   dictionaries: {
     locations: {
@@ -326,5 +244,166 @@ export type ResponseFlightPrice = {
         countryCode: string
       }
     }
+  }
+}
+
+export type ResponseFlightPriceItem = {
+  type: string // Loại đề xuất, ví dụ "flight-offer"
+  id: string // ID của đề xuất chuyến bay
+  source: string // Nguồn dữ liệu, ví dụ "GDS"
+  instantTicketingRequired: boolean // Xác định xem vé có cần xuất ngay không
+  nonHomogeneous: boolean // Xác định xem các dịch vụ có khác nhau không
+  lastTicketingDate: string // Ngày cuối cùng để xuất vé
+  itineraries: [
+    {
+      segments: [
+        {
+          departure: {
+            iataCode: string // Mã IATA của sân bay khởi hành
+            at: string // Thời gian khởi hành
+            terminal?: string // Nhà ga (tuỳ chọn)
+          }
+          arrival: {
+            iataCode: string // Mã IATA của sân bay đến
+            at: string // Thời gian đến
+            terminal?: string // Nhà ga (tuỳ chọn)
+          }
+          carrierCode: string // Mã hãng hàng không
+          number: string // Số hiệu chuyến bay
+          aircraft: {
+            code: string // Mã máy bay
+          }
+          operating: {
+            carrierCode: string // Mã hãng hàng không vận hành
+          }
+          id: string // ID của đoạn bay
+          numberOfStops: number // Số lượng điểm dừng
+          duration: string // Thời gian bay, ví dụ "PT8H40M"
+        }
+      ]
+    }
+  ]
+  price: {
+    currency: string // Loại tiền tệ
+    total: string // Tổng giá vé
+    base: string // Giá vé cơ bản
+    fees: [
+      {
+        amount: string // Số tiền phí
+        type: string // Loại phí, ví dụ "SUPPLIER", "TICKETING", "FORM_OF_PAYMENT"
+      }
+    ]
+    grandTotal: string // Tổng giá trị cuối cùng
+    billingCurrency: string // Loại tiền tệ thanh toán
+  }
+  pricingOptions: {
+    fareType: string[] // Các loại giá vé, ví dụ ["PUBLISHED"]
+    includedCheckedBagsOnly: boolean // Xác định chỉ bao gồm hành lý ký gửi
+  }
+  validatingAirlineCodes: string[] // Danh sách mã hãng hàng không xác thực vé
+  travelerPricings: [
+    {
+      travelerId: string // ID của hành khách
+      fareOption: string // Tùy chọn giá vé, ví dụ "STANDARD"
+      travelerType: string // Loại hành khách, ví dụ "ADULT", "CHILD"
+      price: {
+        currency: string // Loại tiền tệ
+        total: string // Tổng giá vé
+        base: string // Giá vé cơ bản
+        taxes: {
+          amount: string // Số tiền thuế
+          code: string // Mã thuế
+        }[]
+      }
+      fareDetailsBySegment: {
+        segmentId: string // ID của đoạn bay
+        cabin: string // Hạng vé, ví dụ "BUSINESS", "ECONOMY"
+        fareBasis: string // Cơ sở giá vé
+        class: string // Hạng dịch vụ
+        includedCheckedBags: {
+          weightUnit: ReactNode
+          weight: ReactNode
+          quantity: number // Số lượng hành lý ký gửi
+        }
+      }[]
+    }
+  ]
+  paymentCardRequired: false
+}
+
+export type dataCreateOrder = {
+  data: {
+    type: "flight-order"
+    flightOffers: ResponseFlightPriceItem[]
+    travelers: [
+      //  Danh sách các hành khách:
+      {
+        id: string // ID của hành khách.
+        dateOfBirth: string // Ngày sinh của hành khách theo định dạng ngày tháng năm (YYYY-MM-DD).
+        name: {
+          firstName: string // Tên của hành khách.
+          lastName: string // Họ của hành khách.
+        }
+        gender: "MALE" | "FEMALE" // Giới tính của hành khách.
+        contact: {
+          emailAddress: string // Địa chỉ email của hành khách.
+          phones: Array<{
+            deviceType: "MOBILE" | "LANDLINE" // Loại thiết bị của số điện thoại (di động hoặc cố định).
+            countryCallingCode: string // Mã quốc gia gọi quốc tế.
+            number: string // Số điện thoại của hành khách.
+          }>
+        }
+        documents: [
+          //  Danh sách các tài liệu của hành khách
+          {
+            documentType: "PASSPORT" | "ID_CARD" // Loại giấy tờ tùy thân (hộ chiếu hoặc chứng minh thư).
+            birthPlace?: string // Nơi sinh của hành khách.
+            issuanceLocation?: string // Nơi cấp giấy tờ.
+            issuanceDate?: string // Ngày cấp giấy tờ.
+            number?: string // Số giấy tờ.
+            expiryDate?: string // Ngày hết hạn (tuỳ chọn).
+            issuanceCountry?: string // Quốc gia cấp (tuỳ chọn).
+            validityCountry?: string //  Quốc gia hiệu lực (tuỳ chọn).
+            nationality?: string // Quốc tịch (tuỳ chọn).
+            holder: boolean //  Xác định người giữ tài liệu.
+          }
+        ]
+      }
+    ]
+    remarks: {
+      general: [
+        {
+          subType: string //  Loại phụ của ghi chú.
+          text: string // Văn bản của ghi chú.
+        }
+      ]
+    }
+    ticketingAgreement: {
+      option: string // Tuỳ chọn của thoả thuận vé.
+      delay: string // Thời gian trì hoãn.
+    }
+    contacts: [
+      // Thông tin liên hệ:
+      {
+        addresseeName: {
+          firstName: string
+          lastName: string
+        }
+        companyName: string // Tên công ty.
+        purpose: string // Mục đích.
+        phones: {
+          deviceType: "LANDLINE" | "MOBILE" // : Loại thiết bị ('LANDLINE' hoặc 'MOBILE').
+          countryCallingCode: string //  Mã gọi quốc gia.
+          number: string // Số điện thoại.
+        }[]
+        emailAddress: string //  Địa chỉ email.
+        address: {
+          lines: Array<string> //  Các dòng địa chỉ.
+          postalCode: string // Mã bưu điện.
+          cityName: string //  Tên thành phố.
+          countryCode: string // Mã quốc gia.
+        }
+      }
+    ]
   }
 }

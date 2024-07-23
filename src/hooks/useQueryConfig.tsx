@@ -16,10 +16,10 @@ export default function useQueryConfig() {
       returnDate: queryParam.returnDate,
       adults: queryParam.adults || "0", // Số lượng người lớn
       children: queryParam.children || "0", // Số lượng trẻ em
-      infants: queryParam.adults || "0", // Số lượng em bé // Ngày trở về mong muốn
+      infants: queryParam.infants || "0", // Số lượng em bé
       travelClass: queryParam.travelClass, // Hạng ghế mong muốn
       nonStop: queryParam.nonStop || "false", // chuyến bay trực tiếp
-      max: queryParam.max || "25",
+      max: queryParam.max || "30",
       currencyCode: queryParam.currencyCode || "VND",
 
       maxPrice: queryParam.maxPrice,

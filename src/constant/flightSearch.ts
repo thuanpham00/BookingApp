@@ -207,6 +207,7 @@ export const airportCodes: airportCodeItem[] = [
   { code: "VTE", airport: "Sân bay Quốc tế Wattay", country: "Lào" }
 ]
 
+// mã quốc gia
 export const countries: countryItem[] = [
   { code: "VN", country: "Việt Nam" },
   { code: "KH", country: "Campuchia" },
@@ -255,6 +256,61 @@ export const countries: countryItem[] = [
   { code: "MV", country: "Maldives" },
   { code: "MM", country: "Myanmar" },
   { code: "BN", country: "Brunei" }
+]
+
+// mã hãng hàng không
+export const airlines = [
+  { code: "AA", name: "American Airlines" },
+  { code: "AC", name: "Air Canada" },
+  { code: "AF", name: "Air France" },
+  { code: "AI", name: "Air India" },
+  { code: "AY", name: "Finnair" },
+  { code: "BA", name: "British Airways" },
+  { code: "CA", name: "Air China" },
+  { code: "CX", name: "Cathay Pacific" },
+  { code: "DL", name: "Delta Air Lines" },
+  { code: "EK", name: "Emirates" },
+  { code: "EY", name: "Etihad Airways" },
+  { code: "JL", name: "Japan Airlines" },
+  { code: "KL", name: "KLM Royal Dutch Airlines" },
+  { code: "LH", name: "Lufthansa" },
+  { code: "QF", name: "Qantas" },
+  { code: "QR", name: "Qatar Airways" },
+  { code: "SQ", name: "Singapore Airlines" },
+  { code: "SU", name: "Aeroflot" },
+  { code: "TG", name: "Thai Airways" },
+  { code: "UA", name: "United Airlines" },
+  { code: "VJ", name: "Vietjet Air" },
+  { code: "VN", name: "Vietnam Airlines" },
+  { code: "TK", name: "Turkish Airlines" },
+  { code: "AZ", name: "Alitalia" },
+  { code: "BR", name: "EVA Air" },
+  { code: "NH", name: "All Nippon Airways" },
+  { code: "MU", name: "China Eastern Airlines" },
+  { code: "CA", name: "Air China" },
+  { code: "CZ", name: "China Southern Airlines" },
+  { code: "KE", name: "Korean Air" },
+  { code: "OZ", name: "Asiana Airlines" },
+  { code: "HU", name: "Hainan Airlines" },
+  { code: "CX", name: "Cathay Pacific" },
+  { code: "SQ", name: "Singapore Airlines" },
+  { code: "QF", name: "Qantas Airways" },
+  { code: "BA", name: "British Airways" },
+  { code: "LH", name: "Lufthansa" },
+  { code: "AF", name: "Air France" },
+  { code: "IB", name: "Iberia" },
+  { code: "KL", name: "KLM" },
+  { code: "AY", name: "Finnair" },
+  { code: "SK", name: "SAS - Scandinavian Airlines" },
+  { code: "LX", name: "Swiss International Air Lines" },
+  { code: "OS", name: "Austrian Airlines" },
+  { code: "SN", name: "Brussels Airlines" },
+  { code: "A3", name: "Aegean Airlines" },
+  { code: "OA", name: "Olympic Air" },
+  { code: "TP", name: "TAP Air Portugal" },
+  { code: "EI", name: "Aer Lingus" },
+  { code: "AZ", name: "Alitalia" },
+  { code: "SU", name: "Aeroflot" }
 ]
 
 // các loại vé

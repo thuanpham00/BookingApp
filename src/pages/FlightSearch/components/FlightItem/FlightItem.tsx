@@ -34,6 +34,8 @@ import {
 import icon from "../../../../img/svg/luggages.png"
 import icon2 from "../../../../img/svg/mmtconnect_orange.avif"
 import Skeleton from "src/components/Skeleton"
+import { useNavigate } from "react-router-dom"
+import { path } from "src/constant/path"
 
 interface Props {
   item: ResponseFlightItem
@@ -41,6 +43,7 @@ interface Props {
 }
 
 export default function FlightItem({ item, list }: Props) {
+  const navigate = useNavigate()
   const [showFlightDetail, setShowFlightDetail] = useState(false)
   const [showPriceDetail, setShowPriceDetail] = useState(false)
 
@@ -69,8 +72,14 @@ export default function FlightItem({ item, list }: Props) {
     })
   }
   const flightPrice = flightOffersPriceMutation.data?.data as ResponseFlightPrice
-
-  // console.log(flightPrice)
+  console.log(flightPrice)
+  const handleNavigatePage = () => {
+    navigate({
+      pathname: path.flightOrder
+    })
+    localStorage.setItem("flightPriceData", JSON.stringify(flightPrice))
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <Fragment>
@@ -263,7 +272,7 @@ export default function FlightItem({ item, list }: Props) {
                           )}
                         </div>
                       </div>
-                      <div className="px-6 mt-4 grid grid-cols-3 md:gap-4 lg:gap-8 items-center">
+                      <div className="px-6 mt-4 grid grid-cols-3 gap-4 items-center h-[400px] overflow-y-auto">
                         {flightPrice?.data.flightOffers[0].travelerPricings.map(
                           (traveler, index) => (
                             <div key={index} className="col-span-1 border-2 border-gray-300">
@@ -433,6 +442,7 @@ export default function FlightItem({ item, list }: Props) {
                         <div className="flex items-center gap-2">
                           <AlertDialogCancel className="py-5">Cancel</AlertDialogCancel>
                           <Button
+                            onClick={handleNavigatePage}
                             nameButton="BOOK NOW"
                             className="py-2 px-4 bg-blueColor w-full text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200"
                           />

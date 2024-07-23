@@ -5,6 +5,7 @@ import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
 import RegisterLayout from "src/layouts/RegisterLayout"
+import FlightOrder from "src/pages/FlightOrder"
 
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
@@ -70,6 +71,14 @@ export default function useRouterElement() {
               element: (
                 <Suspense>
                   <FlightSearch />
+                </Suspense>
+              )
+            },
+            {
+              path: path.flightOrder,
+              element: (
+                <Suspense>
+                  <FlightOrder />
                 </Suspense>
               )
             }
