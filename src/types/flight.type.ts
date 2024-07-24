@@ -321,8 +321,8 @@ export type ResponseFlightPriceItem = {
         fareBasis: string // Cơ sở giá vé
         class: string // Hạng dịch vụ
         includedCheckedBags: {
-          weightUnit: ReactNode
-          weight: ReactNode
+          weightUnit?: string
+          weight?: string
           quantity: number // Số lượng hành lý ký gửi
         }
       }[]
@@ -406,4 +406,10 @@ export type dataCreateOrder = {
       }
     ]
   }
+}
+
+export type countTravelerType = {
+  adult: number
+  child: number
+  infant: number
 }

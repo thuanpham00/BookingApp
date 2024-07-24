@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { countries } from "src/constant/flightSearch"
 import { ResponseFlightPrice } from "src/types/flight.type"
+import { produce } from "immer"
 import {
+  changeLanguageTraveller,
   getAirlines,
   getCountry,
   getDate,
@@ -50,9 +52,62 @@ export default function FlightOrder() {
 
   const dataLS = localStorage.getItem("flightPriceData") as string
   const data = JSON.parse(dataLS) as ResponseFlightPrice
-  console.log(data)
 
-  // const quantityAdults =
+  // xử lý form
+  const [currentAdult, setCurrentAdult] = useState<number>(0)
+  const [currentChild, setCurrentChild] = useState<number>(0)
+  // const [currentInfant, setCurrentInfant] = useState<number>(0)
+
+  const quantityOfTraveller = useMemo(() => {
+    const count = { adult: 0, child: 0, infant: 0 }
+    if (data) {
+      data.data.flightOffers[0].travelerPricings.map((item) => {
+        if (item.travelerType === "ADULT") {
+          count.adult++
+        } else if (item.travelerType === "CHILD") {
+          count.child++
+        } else if (item.travelerType === "HELD_INFANT") {
+          count.infant++
+        }
+      })
+    }
+    return count
+  }, [data])
+
+  // cái này hay
+  const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
+  const [countAdult, setCountAdult] = useState(0)
+  const [countChild, setCountChild] = useState(0)
+  // const [countInfant, setCountInfant] = useState(0)
+
+  const handleCheckTraveller =
+    (type: string, index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === "adult") {
+        setCheckState(
+          produce((draft) => {
+            draft[index] = event.target.checked // đại diện checked previous
+          })
+        )
+      } else if (type === "child") {
+        setCheckState(
+          produce((draft) => {
+            draft[index] = event.target.checked // đại diện checked previous
+          })
+        )
+        setCountChild((prevCount) => (event.target.checked ? prevCount + 1 : prevCount - 1))
+      }
+    }
+
+  const handleAddTraveller = (type: string) => () => {
+    if (type === "adult") {
+      if (currentAdult < quantityOfTraveller.adult) {
+        setCurrentAdult((prev) => prev + 1)
+        setCountAdult((prev) => prev + 1)
+      }
+    } else if (type === "child") {
+      setCurrentChild((prev) => prev + 1)
+    }
+  }
 
   return (
     <div>
@@ -105,7 +160,7 @@ export default function FlightOrder() {
                   href="#TravellerDetails"
                   className="text-gray-300 font-medium text-sm hover:underline duration-200"
                 >
-                  Chi tiết du khách
+                  Thông tin chi tiết hành khách
                 </a>
               </div>
             </div>
@@ -195,12 +250,18 @@ export default function FlightOrder() {
                                   const durationMinute2 = getDurationFromAPI(
                                     item.segments[item.segments.length - 1].duration
                                   )
-                                    .split(" giờ ")[0]
+                                    .split(" giờ ")[1]
                                     .split(" phút")[0]
+
+                                  let hours = Number(durationHour1) + Number(durationHour2)
+                                  let minute = Number(durationMinute1) + Number(durationMinute2)
+                                  if (minute >= 60) {
+                                    minute = minute % 60
+                                    hours = hours + 1
+                                  }
                                   return (
                                     <div>
-                                      {Number(durationHour1) + Number(durationHour2)} giờ{" "}
-                                      {Number(durationMinute1) + Number(durationMinute2)} phút
+                                      {hours} giờ {minute} phút
                                     </div>
                                   )
                                 })()}
@@ -450,7 +511,7 @@ export default function FlightOrder() {
                   </div>
                 </div>
 
-                <div id="TravellerDetails" className="mt-4 p-4 bg-[#fff] shadow-md">
+                <div id="TravellerDetails" className="my-4 p-4 bg-[#fff] shadow-md">
                   <h2 className="text-xl text-textColor font-semibold">
                     Thông tin chi tiết của khách du lịch
                   </h2>
@@ -462,15 +523,194 @@ export default function FlightOrder() {
                     </div>
                   </div>
 
-                  <div className="my-4">
+                  <div className="my-8">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <img src={avatar2} alt="avatar" />
                         <span className="text-base text-textColor font-medium">
                           Người lớn (12 tuổi trở lên)
                         </span>
+                        {currentAdult === quantityOfTraveller.adult && (
+                          <div className="text-xs text-red-500">
+                            Bạn đã chọn 2 vé cho{" "}
+                            {changeLanguageTraveller(
+                              data.data.flightOffers[0].travelerPricings[0].travelerType
+                            )}
+                            . Loại bỏ trước khi thêm một cái mới.
+                          </div>
+                        )}
                       </div>
-                      <div></div>
+                      <div>
+                        <span className="text-base text-textColor font-medium">{countAdult}</span>
+                        <span className="text-base text-textColor font-medium">
+                          /{quantityOfTraveller.adult}
+                        </span>
+                        <span className="ml-1 text-base text-gray-500">Thêm</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
+                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
+                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
+                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
+                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
+                    </div>
+
+                    <div className="mt-4">
+                      {currentAdult === 0 ? (
+                        <div className="p-4 bg-white shadow-md border border-gray-300">
+                          <span className="text-sm text-gray-500">
+                            Bạn chưa thêm bất kỳ người lớn nào vào danh sách
+                          </span>
+                        </div>
+                      ) : (
+                        Array(currentAdult)
+                          .fill(0)
+                          .map((_, index) => (
+                            <div key={index}>
+                              <div className="p-4 first:border-b-0 last:border-b last:border border border-gray-300 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    className="w-4 h-4"
+                                    id={String(index)}
+                                    checked={checkState[index]}
+                                    onChange={handleCheckTraveller("adult", index)}
+                                  />
+                                  <span>Người lớn {index + 1}</span>
+                                </div>
+                              </div>
+                              {checkState[index] === true ? (
+                                <div className="p-4 border-gray-300 border">
+                                  <form>thuan</form>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          ))
+                      )}
+                    </div>
+
+                    <div className="p-4 bg-white shadow-md border border-gray-300 border-t-0">
+                      <button
+                        onClick={handleAddTraveller("adult")}
+                        className="text-sm text-blue-500 uppercase flex items-center gap-2"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-3 h-3"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                        Thêm thông tin hành khách (người lớn) mới
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="my-8">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <img src={avatar1} alt="avatar" />
+                        <span className="text-base text-textColor font-medium">
+                          Trẻ em (Từ 2 - 12 tuổi)
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-base text-textColor font-medium">{countChild}</span>
+                        <span className="text-base text-textColor font-medium">
+                          /{quantityOfTraveller.child}
+                        </span>
+                        <span className="ml-1 text-base text-gray-500">Thêm</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
+                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
+                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
+                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
+                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
+                    </div>
+
+                    <div className="mt-4">
+                      {currentChild === 0 ? (
+                        <div className="p-4 bg-white shadow-md border border-gray-300">
+                          <span className="text-sm text-gray-500">
+                            Bạn chưa thêm bất kỳ người lớn nào vào danh sách
+                          </span>
+                        </div>
+                      ) : (
+                        Array(currentChild)
+                          .fill(0)
+                          .map((_, index) => (
+                            <div key={index}>
+                              <div className="p-4 first:border-b-0 last:border-b last:border border border-gray-300 flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4"
+                                  id={String(index)}
+                                  checked={checkState[index]}
+                                  onChange={handleCheckTraveller("child", index)}
+                                />
+                                <span>Trẻ em {index + 1}</span>
+                              </div>
+                              <div className="p-4 border-gray-300 border">thuan</div>
+                            </div>
+                          ))
+                      )}
+                    </div>
+
+                    <div className="p-4 bg-white shadow-md border border-gray-300 border-t-0">
+                      <button
+                        onClick={handleAddTraveller("child")}
+                        className="text-sm text-blue-500 uppercase flex items-center gap-2"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-3 h-3"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                        Thêm hành khách (trẻ em) mới
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="my-8">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <img src={avatar1} alt="avatar" />
+                        <span className="text-base text-textColor font-medium">
+                          Em bé (Dưới 2 tuổi)
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-base text-textColor font-medium">0</span>
+                        <span className="text-base text-textColor font-medium">
+                          /{quantityOfTraveller.infant}
+                        </span>
+                        <span className="ml-1 text-base text-gray-500">Thêm</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
+                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
+                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
+                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
+                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
                     </div>
                   </div>
                 </div>
@@ -478,8 +718,8 @@ export default function FlightOrder() {
 
               <div className="col-span-3">
                 <div className="sticky left-0 top-[68px]">
-                  <div className="h-[500px] bg-[#fff] shadow-md px-4 rounded">banner</div>
-                  <div className="w-full my-4">
+                  <div className="h-[300px] bg-[#fff] shadow-md px-4 rounded">banner</div>
+                  <div className="w-full h-[300px] my-4">
                     <img src={banner} alt="banner" className="w-full h-full" />
                   </div>
                 </div>

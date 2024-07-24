@@ -72,7 +72,7 @@ export default function FlightItem({ item, list }: Props) {
     })
   }
   const flightPrice = flightOffersPriceMutation.data?.data as ResponseFlightPrice
-  console.log(flightPrice)
+  // console.log(flightPrice)
   const handleNavigatePage = () => {
     navigate({
       pathname: path.flightOrder
@@ -440,11 +440,11 @@ export default function FlightItem({ item, list }: Props) {
 
                       <AlertDialogFooter className="mt-4 py-4 px-6 border-t border-t-gray-300">
                         <div className="flex items-center gap-2">
-                          <AlertDialogCancel className="py-5">Cancel</AlertDialogCancel>
+                          <AlertDialogCancel className="py-5">Hủy</AlertDialogCancel>
                           <Button
                             onClick={handleNavigatePage}
-                            nameButton="BOOK NOW"
-                            className="py-2 px-4 bg-blueColor w-full text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200"
+                            nameButton="Đặt vé ngay!"
+                            className="uppercase py-2 px-4 bg-blueColor w-full text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200"
                           />
                         </div>
                       </AlertDialogFooter>

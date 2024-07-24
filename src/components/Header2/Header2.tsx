@@ -65,7 +65,7 @@ export default function Header2() {
                             Tìm kiếm chuyến bay
                           </Link>
                           <Link
-                            to={path.flightManage}
+                            to={path.flightOrder}
                             className="block py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200"
                           >
                             Quản lý đặt chỗ

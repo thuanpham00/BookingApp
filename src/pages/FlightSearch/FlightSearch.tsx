@@ -248,7 +248,7 @@ export default function FlightSearch() {
       const controller = new AbortController()
       setTimeout(() => {
         controller.abort()
-      }, 10000) // hết 10s mà chưa fetch ra api nó tự động hủy // kiểu tự động
+      }, 15000) // hết 10s mà chưa fetch ra api nó tự động hủy // kiểu tự động
       return flightApi.flightOfferSearchGet(
         queryConfig as FlightOfferParamsConfig,
         controller.signal

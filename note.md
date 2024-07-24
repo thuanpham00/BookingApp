@@ -15,6 +15,7 @@
 - yarn add framer-motion
 - yarn add react-transition-group - yarn add @types/react-transition-group
 - yarn add rollup-plugin-visualizer
+- yarn add immer
 
 ## ÔN TẬP KIẾN THỨC
 
@@ -41,11 +42,12 @@
 - dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
 
 - slice() và splice() trong mảng: đều cắt mảng
-+ slice(): cắt mảng, không thay đổi mảng gốc, tạo ra mảng mới
-+ splice(): cắt mảng, thay đổi mảng gốc
 
-* join() : nối chuỗi
-* split(): tách chuỗi
+* slice(): cắt mảng, không thay đổi mảng gốc, tạo ra mảng mới
+* splice(): cắt mảng, thay đổi mảng gốc
+
+- join() : nối chuỗi
+- split(): tách chuỗi
 
 ## Firebase
 

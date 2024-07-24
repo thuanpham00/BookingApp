@@ -140,3 +140,9 @@ export function getAirlines(code: string) {
   }
   return null
 }
+
+export function changeLanguageTraveller(name: string) {
+  if (name === "ADULT") {
+    return "Người lớn"
+  }
+}

@@ -11,7 +11,8 @@ import hotel from "../../img/svg/hotel-1-svgrepo-com.svg"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import ticketBanner from "src/img/Flight/air-ticket-offer.webp"
 import ticketBanner2 from "src/img/Flight/air-ticket-offer_2.webp"
-import bannerFlight from "src/img/Flight/vja330-1685604407424.jpg"
+import bannerFlight from "src/img/Flight/vja330-1685604407424.webp"
+import bannerFlight2 from "src/img/Flight/thumb-website-Vi-VNPAY-1280x720.webp"
 import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"
@@ -263,7 +264,7 @@ export default function Flight() {
 
   return (
     // khắc phục lệch layout
-    <div className="h-[2400px] bg-[#fff]">
+    <div className="h-[2650px] bg-[#fff]">
       {loading ? (
         <Skeleton className="absolute left-1/2 top-[15%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -743,7 +744,7 @@ export default function Flight() {
           </div>
 
           <div className="container">
-            <div className="my-4 px-8 grid grid-cols-3 items-center justify-between gap-4">
+            <div className="my-8 px-8 grid grid-cols-3 items-center justify-between gap-4">
               <div className="md:h-[120px] lg:h-[100px] col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
                 <div className="flex items-center gap-4">
                   <img src={banner3} alt="" className="flex-shrink-0 w-14 h-14" />
@@ -792,7 +793,7 @@ export default function Flight() {
               </div>
             </div>
 
-            <div className="my-16 relative">
+            <div className="mt-16 pb-8 relative">
               <div className="w-full h-[400px]">
                 <img
                   src={bannerFlight}
@@ -820,13 +821,22 @@ export default function Flight() {
               </div>
             </div>
 
-            <div className="border-t border-t-gray-300 pt-8 px-8">
-              <div className="flex flex-col items-center gap-2">
-                <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
-                  Đối tác thanh toán
-                </h3>
-                <div className="md:w-20 md:h-20 lg:w-32 lg:h-32">
-                  <img src={paymentImg} alt="payment" className="w-full h-full object-contain" />
+            <div className="border-t border-t-gray-300 pt-8 relative">
+              <div className="w-full h-[400px]">
+                <img
+                  src={bannerFlight2}
+                  alt="bannerFlight"
+                  className="w-full h-full object-cover brightness-50 rounded-sm"
+                />
+              </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
+                <div className="flex flex-col items-center gap-2">
+                  <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
+                    Đối tác thanh toán
+                  </h3>
+                  <div className="md:w-20 md:h-20 lg:w-32 lg:h-32">
+                    <img src={paymentImg} alt="payment" className="w-full h-full object-contain" />
+                  </div>
                 </div>
               </div>
             </div>
