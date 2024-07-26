@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { airportCodes, travelClassList, typeFlightList } from "src/constant/flightSearch"
 import {
   ResponseFlightList,
-  airportCodeList,
+  AirportCodeList,
   FlightOfferParamsConfig
 } from "src/types/flight.type.ts"
 import { Controller, useForm } from "react-hook-form"
@@ -91,7 +91,7 @@ export default function FlightSearch() {
   const queryConfig = useQueryConfig()
   const [open, setOpen] = useState(false)
   const [open2, setOpen2] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<airportCodeList>([])
+  const [airportCodeList, setAirportCodeList] = useState<AirportCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)

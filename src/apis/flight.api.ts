@@ -1,4 +1,5 @@
 import {
+  FlightCreateOrder,
   FlightOfferParamsConfig,
   FlightPricingParams,
   ResponseFlightList
@@ -14,5 +15,10 @@ export const flightApi = {
   // giá chi tiết của 1 chuyến bay
   flightOffersPrice: (body: FlightPricingParams) => {
     return HttpV1.post("shopping/flight-offers/pricing", body)
+  },
+
+  // đặt vé máy bay
+  flightCreateOrder: (body: FlightCreateOrder) => {
+    return HttpV1.post("/booking/flight-orders", body)
   }
 }

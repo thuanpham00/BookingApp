@@ -2,17 +2,17 @@
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
 import { InputAirport } from "src/pages/Flight/Flight"
-import { airportCodeItem } from "src/types/flight.type"
+import { AirportCodeItem } from "src/types/flight.type"
 import AirportCodeList from "../AirportCodeList"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  children: React.ReactNode
+  children?: React.ReactNode
   classNameList: string
   classNameBlock?: string
   classNameDesc?: string
   classNameInput?: string
   classNameError?: string
-  filterList: airportCodeItem[]
+  filterList: AirportCodeItem[]
   value: string
   showList: boolean
   handleItemClick: (inputName: InputAirport, value: string) => void

@@ -119,11 +119,11 @@ export default function Login() {
         />
         <Input
           className="mt-1 relative"
-          nameInput="Password"
+          nameInput="Mật khẩu"
           type="password"
           name="password"
           autoComplete="on"
-          placeholder="Nhập password"
+          placeholder="Nhập mật khẩu"
           messageError={errors.password?.message}
           register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
         />

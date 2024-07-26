@@ -7,9 +7,9 @@ export type FlightOfferParamsConfig = {
   children?: number // trẻ em // 2 - 12 tuổi
   infants?: number // em bé // dưới 2 tuổi
   travelClass?: "ECONOMY" | "PREMIUM_ECONOMY" | "BUSINESS" | "FIRST" // hạng ghế
-  nonStop?: boolean // chuyến bay trực tiếp
   currencyCode?: string // mã tiền tệ
   max?: number // số lượng chuyến bay cần lấy
+  nonStop?: boolean // chuyến bay trực tiếp
   maxPrice?: number // Giới hạn giá tối đa cho các kết quả chuyến bay.
   includedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn bao gồm trong kết quả tìm kiếm chuyến bay.
   // excludedAirlineCodes?: string // các mã hãng hàng không mà bạn muốn loại trừ khỏi kết quả tìm kiếm chuyến bay.
@@ -93,18 +93,97 @@ export type FlightPricingParams = {
   }
 }
 
+export type TravellerType = {
+  id: string // ID của hành khách.
+  dateOfBirth: string // Ngày sinh của hành khách theo định dạng ngày tháng năm (YYYY-MM-DD).
+  name: {
+    firstName: string // Tên của hành khách.
+    lastName: string // Họ của hành khách.
+  }
+  gender: "MALE" | "FEMALE" // Giới tính của hành khách.
+  contact: {
+    emailAddress: string // Địa chỉ email của hành khách.
+    phones: Array<{
+      deviceType: "MOBILE" | "LANDLINE" // Loại thiết bị của số điện thoại (di động hoặc cố định).
+      countryCallingCode: string // Mã quốc gia gọi quốc tế.
+      number: string // Số điện thoại của hành khách.
+    }>
+  }
+  documents: [
+    //  Danh sách các tài liệu của hành khách
+    {
+      documentType: "PASSPORT" | "ID_CARD" // Loại giấy tờ tùy thân (hộ chiếu hoặc chứng minh thư).
+      birthPlace?: string // Nơi sinh của hành khách.
+      issuanceLocation?: string // Nơi cấp giấy tờ.
+      issuanceDate?: string // Ngày cấp giấy tờ.
+      number?: string // Số giấy tờ.
+      expiryDate?: string // Ngày hết hạn (tuỳ chọn).
+      issuanceCountry?: string // Quốc gia cấp (tuỳ chọn).
+      validityCountry?: string //  Quốc gia hiệu lực (tuỳ chọn).
+      nationality?: string // Quốc tịch (tuỳ chọn).
+      holder: boolean //  Xác định người giữ tài liệu.
+    }
+  ]
+}
+
+export type FlightCreateOrder = {
+  data: {
+    type: "flight-order"
+    flightOffers: ResponseFlightPriceItem[]
+    travelers: //  Danh sách các hành khách:
+    TravellerType[]
+
+    remarks: {
+      general: [
+        {
+          subType: string //  Loại phụ của ghi chú.
+          text: string // Văn bản của ghi chú.
+        }
+      ]
+    }
+    ticketingAgreement: {
+      option: string // Tuỳ chọn của thoả thuận vé.
+      delay: string // Thời gian trì hoãn.
+    }
+    contacts: [
+      // Thông tin liên hệ:
+      {
+        addresseeName: {
+          firstName: string
+          lastName: string
+        }
+        companyName: string // Tên công ty.
+        purpose: string // Mục đích.
+        phones: {
+          deviceType: "LANDLINE" | "MOBILE" // : Loại thiết bị ('LANDLINE' hoặc 'MOBILE').
+          countryCallingCode: string //  Mã gọi quốc gia.
+          number: string // Số điện thoại.
+        }[]
+        emailAddress: string //  Địa chỉ email.
+        address: {
+          lines: Array<string> //  Các dòng địa chỉ.
+          postalCode: string // Mã bưu điện.
+          cityName: string //  Tên thành phố.
+          countryCode: string // Mã quốc gia.
+        }
+      }
+    ]
+  }
+}
+
 export type countryItem = {
   code: string
   country: string
 }
 
-export type airportCodeItem = {
+export type AirportCodeItem = {
   code: string
   airport: string
   country: string
 }
-export type airportCodeList = airportCodeItem[]
+export type AirportCodeList = AirportCodeItem[]
 
+// response của flight offer search
 export type ResponseFlightItem = {
   // Thông tin chung về chuyến bay
   type: string // Loại đối tượng (e.g., "flight-offer")
@@ -197,7 +276,6 @@ export type ResponseFlightItem = {
     }
   ]
 }
-// Định nghĩa kiểu dữ liệu cho phản hồi của API Flight Offer Search
 export type ResponseFlightList = {
   // Metadata của phản hồi
   meta: {
@@ -232,6 +310,7 @@ export type ResponseFlightList = {
   }
 }
 
+// response của flight offer price
 export type ResponseFlightPrice = {
   data: {
     type: string // Loại dữ liệu, ví dụ "flight-offers-pricing"
@@ -246,7 +325,6 @@ export type ResponseFlightPrice = {
     }
   }
 }
-
 export type ResponseFlightPriceItem = {
   type: string // Loại đề xuất, ví dụ "flight-offer"
   id: string // ID của đề xuất chuyến bay
@@ -331,85 +409,15 @@ export type ResponseFlightPriceItem = {
   paymentCardRequired: false
 }
 
-export type dataCreateOrder = {
-  data: {
-    type: "flight-order"
-    flightOffers: ResponseFlightPriceItem[]
-    travelers: [
-      //  Danh sách các hành khách:
-      {
-        id: string // ID của hành khách.
-        dateOfBirth: string // Ngày sinh của hành khách theo định dạng ngày tháng năm (YYYY-MM-DD).
-        name: {
-          firstName: string // Tên của hành khách.
-          lastName: string // Họ của hành khách.
-        }
-        gender: "MALE" | "FEMALE" // Giới tính của hành khách.
-        contact: {
-          emailAddress: string // Địa chỉ email của hành khách.
-          phones: Array<{
-            deviceType: "MOBILE" | "LANDLINE" // Loại thiết bị của số điện thoại (di động hoặc cố định).
-            countryCallingCode: string // Mã quốc gia gọi quốc tế.
-            number: string // Số điện thoại của hành khách.
-          }>
-        }
-        documents: [
-          //  Danh sách các tài liệu của hành khách
-          {
-            documentType: "PASSPORT" | "ID_CARD" // Loại giấy tờ tùy thân (hộ chiếu hoặc chứng minh thư).
-            birthPlace?: string // Nơi sinh của hành khách.
-            issuanceLocation?: string // Nơi cấp giấy tờ.
-            issuanceDate?: string // Ngày cấp giấy tờ.
-            number?: string // Số giấy tờ.
-            expiryDate?: string // Ngày hết hạn (tuỳ chọn).
-            issuanceCountry?: string // Quốc gia cấp (tuỳ chọn).
-            validityCountry?: string //  Quốc gia hiệu lực (tuỳ chọn).
-            nationality?: string // Quốc tịch (tuỳ chọn).
-            holder: boolean //  Xác định người giữ tài liệu.
-          }
-        ]
-      }
-    ]
-    remarks: {
-      general: [
-        {
-          subType: string //  Loại phụ của ghi chú.
-          text: string // Văn bản của ghi chú.
-        }
-      ]
-    }
-    ticketingAgreement: {
-      option: string // Tuỳ chọn của thoả thuận vé.
-      delay: string // Thời gian trì hoãn.
-    }
-    contacts: [
-      // Thông tin liên hệ:
-      {
-        addresseeName: {
-          firstName: string
-          lastName: string
-        }
-        companyName: string // Tên công ty.
-        purpose: string // Mục đích.
-        phones: {
-          deviceType: "LANDLINE" | "MOBILE" // : Loại thiết bị ('LANDLINE' hoặc 'MOBILE').
-          countryCallingCode: string //  Mã gọi quốc gia.
-          number: string // Số điện thoại.
-        }[]
-        emailAddress: string //  Địa chỉ email.
-        address: {
-          lines: Array<string> //  Các dòng địa chỉ.
-          postalCode: string // Mã bưu điện.
-          cityName: string //  Tên thành phố.
-          countryCode: string // Mã quốc gia.
-        }
-      }
-    ]
-  }
-}
-
 export type countTravelerType = {
   adult: number
   child: number
   infant: number
 }
+
+export type CountryItemCodeNumber = {
+  code: string
+  name: string
+}
+
+export type CountryListCodeNumber = CountryItemCodeNumber[]

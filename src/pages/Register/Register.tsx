@@ -70,11 +70,11 @@ export default function Register() {
       <form onSubmit={onSubmit} className="mt-5" noValidate>
         <Input
           className="mt-2"
-          nameInput="User name"
+          nameInput="Tên đăng nhập"
           type="text"
           name="userName" // name phải khớp trong schema
           autoComplete="on"
-          placeholder="Nhập user-name"
+          placeholder="Nhập tên"
           messageError={errors.userName?.message}
           register={register}
         />
@@ -90,21 +90,21 @@ export default function Register() {
         />
         <Input
           className="mt-1 relative"
-          nameInput="Password"
+          nameInput="Mật khẩu"
           type="password"
           name="password"
           autoComplete="on"
-          placeholder="Nhập password"
+          placeholder="Nhập mật khẩu"
           messageError={errors.password?.message}
           register={register}
         />
         <Input
           className="mt-1 relative"
-          nameInput="Confirm password"
+          nameInput="Xác nhận mật khẩu"
           type="password"
           name="confirmPassword"
           autoComplete="on"
-          placeholder="Nhập confirm-password"
+          placeholder="Nhập mật khẩu lần 2"
           messageError={errors.confirmPassword?.message}
           register={register}
         />

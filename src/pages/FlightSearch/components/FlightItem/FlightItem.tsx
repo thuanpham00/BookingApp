@@ -272,7 +272,7 @@ export default function FlightItem({ item, list }: Props) {
                           )}
                         </div>
                       </div>
-                      <div className="px-6 mt-4 grid grid-cols-3 gap-4 items-center h-[400px] overflow-y-auto">
+                      <div className="px-6 grid grid-cols-3 gap-4 items-center h-[400px] overflow-y-auto">
                         {flightPrice?.data.flightOffers[0].travelerPricings.map(
                           (traveler, index) => (
                             <div key={index} className="col-span-1 border-2 border-gray-300">
@@ -438,7 +438,7 @@ export default function FlightItem({ item, list }: Props) {
                         )}
                       </div>
 
-                      <AlertDialogFooter className="mt-4 py-4 px-6 border-t border-t-gray-300">
+                      <AlertDialogFooter className="py-4 px-6 border-t border-t-gray-300">
                         <div className="flex items-center gap-2">
                           <AlertDialogCancel className="py-5">Hủy</AlertDialogCancel>
                           <Button

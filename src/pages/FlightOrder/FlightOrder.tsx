@@ -18,6 +18,7 @@ import avatar2 from "src/img/FlightOrder/avatar2.webp"
 import icon2 from "src/img/FlightOrder/imp-info.webp"
 import banner from "src/img/FlightOrder/air-ticket.webp"
 import { useNavigate } from "react-router-dom"
+import FormProfile from "./Components/FormProfile"
 
 export default function FlightOrder() {
   // xử lý header
@@ -108,6 +109,13 @@ export default function FlightOrder() {
       setCurrentChild((prev) => prev + 1)
     }
   }
+
+  // xử lý form
+  // const [travellers, setTravellers] = useState<TravellerType[]>([])
+
+  // const addTraveller = (newTravellers: TravellerType) => {
+  //   setTravellers([...travellers, newTravellers])
+  // }
 
   return (
     <div>
@@ -580,8 +588,8 @@ export default function FlightOrder() {
                                 </div>
                               </div>
                               {checkState[index] === true ? (
-                                <div className="p-4 border-gray-300 border">
-                                  <form>thuan</form>
+                                <div className="p-4 pt-0 border-gray-300 border">
+                                  <FormProfile />
                                 </div>
                               ) : (
                                 ""

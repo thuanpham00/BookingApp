@@ -19,7 +19,7 @@ import schema, { schemaType } from "src/utils/rules"
 import { airportCodes, bannerAirLineList, travelClassList } from "src/constant/flightSearch"
 import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { convertToYYYYMMDD, getCodeAirport, getNameToEmail } from "src/utils/utils"
-import { airportCodeList } from "src/types/flight.type"
+import { AirportCodeList } from "src/types/flight.type"
 import InputSearch from "src/components/InputSearch"
 import SelectDate from "src/components/SelectDate"
 import { Popover as PopoverShadcn, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
@@ -93,7 +93,7 @@ export default function Flight() {
   })
 
   const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<airportCodeList>([])
+  const [airportCodeList, setAirportCodeList] = useState<AirportCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)

@@ -5,7 +5,7 @@ const schema = yup
   .object({
     userName: yup
       .string()
-      .required("UserName bắt buộc")
+      .required("Tên bắt buộc")
       .min(6, "Độ dài từ 6-20 kí tự")
       .max(20, "Độ dài từ 6-20 kí tự"),
     email: yup
@@ -16,12 +16,12 @@ const schema = yup
       .max(160, "Độ dài 6-160 kí tự"),
     password: yup
       .string()
-      .required("Password bắt buộc")
+      .required("Mật khẩu bắt buộc")
       .min(6, "Độ dài từ 6-20 kí tự")
       .max(20, "Độ dài từ 6-20 kí tự"),
     confirmPassword: yup
       .string()
-      .required("ConfirmPassword bắt buộc")
+      .required("Xác nhận mật khẩu bắt buộc")
       .min(6, "Độ dài từ 6-20 kí tự")
       .max(20, "Độ dài từ 6-20 kí tự")
       .oneOf([yup.ref("password")], "Password không khớp"),
@@ -33,7 +33,10 @@ const schema = yup
     adults: yup.number().required(),
     children: yup.number(),
     infants: yup.number(),
-    flightType: yup.string()
+    flightType: yup.string(),
+
+    lastName: yup.string().required("Họ bắt buộc"),
+    codeNumber: yup.string().required()
   })
   .required()
 

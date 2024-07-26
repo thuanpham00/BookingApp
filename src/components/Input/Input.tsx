@@ -3,7 +3,7 @@ import { UseFormRegister } from "react-hook-form"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className: string
-  nameInput: string
+  nameInput?: string
   classNameInput?: string
   messageError?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,7 +14,7 @@ export default function Input({
   className,
   nameInput,
   messageError,
-  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border font-semibold focus:border-gray-600",
+  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border font-medium focus:border-gray-600",
   register,
   name,
   ...rest
@@ -79,7 +79,7 @@ export default function Input({
           </svg>
         </div>
       )}
-      <div className="min-h-[1.25rem] text-red-500 text-sm">{messageError}</div>
+      <div className="min-h-[1.25rem] text-red-500 text-xs">{messageError}</div>
     </div>
   )
 }

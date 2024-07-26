@@ -27,7 +27,7 @@ import bannerAl26 from "../img/Home/airline/al26.webp"
 import bannerAl27 from "../img/Home/airline/al27.webp"
 import bannerAl28 from "../img/Home/airline/al28.webp"
 
-import { airportCodeItem, countryItem } from "src/types/flight.type"
+import { AirportCodeItem, countryItem } from "src/types/flight.type"
 
 export const bannerAirLineList = [
   bannerAl1,
@@ -61,7 +61,7 @@ export const bannerAirLineList = [
 ]
 
 // mã sân bay
-export const airportCodes: airportCodeItem[] = [
+export const airportCodes: AirportCodeItem[] = [
   { code: "SGN", airport: "Sân bay Quốc tế Tân Sơn Nhất", country: "Việt Nam" },
   { code: "HAN", airport: "Sân bay Quốc tế Nội Bài", country: "Việt Nam" },
   { code: "DAD", airport: "Sân bay Quốc tế Đà Nẵng", country: "Việt Nam" },
@@ -205,6 +205,53 @@ export const airportCodes: airportCodeItem[] = [
 
   { code: "LPQ", airport: "Sân bay Quốc tế Luang Prabang", country: "Lào" },
   { code: "VTE", airport: "Sân bay Quốc tế Wattay", country: "Lào" }
+]
+
+// mã điện thoại quốc gia
+export const countryCodePhone = [
+  { code: "20", name: "Egypt" },
+  { code: "30", name: "Greece" },
+  { code: "31", name: "Netherlands" },
+  { code: "32", name: "Belgium" },
+  { code: "33", name: "France" },
+  { code: "34", name: "Spain" },
+  { code: "36", name: "Hungary" },
+  { code: "39", name: "Italy" },
+  { code: "40", name: "Romania" },
+  { code: "41", name: "Switzerland" },
+  { code: "43", name: "Austria" },
+  { code: "44", name: "United Kingdom" },
+  { code: "45", name: "Denmark" },
+  { code: "46", name: "Sweden" },
+  { code: "47", name: "Norway" },
+  { code: "48", name: "Poland" },
+  { code: "49", name: "Germany" },
+  { code: "51", name: "Peru" },
+  { code: "52", name: "Mexico" },
+  { code: "53", name: "Cuba" },
+  { code: "54", name: "Argentina" },
+  { code: "55", name: "Brazil" },
+  { code: "56", name: "Chile" },
+  { code: "57", name: "Colombia" },
+  { code: "58", name: "Venezuela" },
+  { code: "60", name: "Malaysia" },
+  { code: "61", name: "Australia" },
+  { code: "62", name: "Indonesia" },
+  { code: "63", name: "Philippines" },
+  { code: "64", name: "New Zealand" },
+  { code: "65", name: "Singapore" },
+  { code: "66", name: "Thailand" },
+  { code: "81", name: "Japan" },
+  { code: "82", name: "South Korea" },
+  { code: "84", name: "Vietnam" },
+  { code: "86", name: "China" },
+  { code: "90", name: "Turkey" },
+  { code: "91", name: "India" },
+  { code: "92", name: "Pakistan" },
+  { code: "93", name: "Afghanistan" },
+  { code: "94", name: "Sri Lanka" },
+  { code: "95", name: "Myanmar" },
+  { code: "98", name: "Iran" }
 ]
 
 // mã quốc gia
