@@ -7,9 +7,9 @@ interface Props {
   handleItemClick: (inputName: TypeProfile, value: string) => void
 }
 
-export default function CodeNumberList({ listAirport, handleItemClick, inputName }: Props) {
-  const handleChangeInput = (code: string, name: string) => {
-    handleItemClick(inputName, `${name} - ${code}`)
+export default function Nationality({ listAirport, handleItemClick, inputName }: Props) {
+  const handleChangeInput = (name: string) => {
+    handleItemClick(inputName, `${name}`)
   }
 
   return listAirport.map((item) => {
@@ -17,13 +17,10 @@ export default function CodeNumberList({ listAirport, handleItemClick, inputName
     row.push(
       <div key={item.code}>
         <button
-          onClick={() => handleChangeInput(item.code, item.name)}
+          onClick={() => handleChangeInput(item.name)}
           className="w-full border-b border-b-gray-300 py-3 px-2 flex items-center justify-between gap-2 cursor-pointer bg-whiteColor hover:bg-gray-300 duration-200"
         >
-          <div className="text-sm flex items-center gap-2">
-            <span className="block truncate">{item.name}</span>
-            <span className="block text-textColor truncate">- {item.code}</span>
-          </div>
+          <span className="block truncate text-xs">{item.name}</span>
         </button>
       </div>
     )

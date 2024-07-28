@@ -32,6 +32,7 @@ import Pagination from "src/components/Pagination"
 import banner from "src/img/Flight/ticker-banner-flight.webp"
 import banner2 from "src/img/Flight/air-ticket-booking.webp"
 import banner3 from "src/img/Flight/travel-design-template.webp"
+import backGround from "src/img/FlightOrder/banner.webp"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -248,7 +249,7 @@ export default function FlightSearch() {
       const controller = new AbortController()
       setTimeout(() => {
         controller.abort()
-      }, 15000) // hết 10s mà chưa fetch ra api nó tự động hủy // kiểu tự động
+      }, 30000) // hết 10s mà chưa fetch ra api nó tự động hủy // kiểu tự động
       return flightApi.flightOfferSearchGet(
         queryConfig as FlightOfferParamsConfig,
         controller.signal
@@ -316,15 +317,23 @@ export default function FlightSearch() {
         <meta name="description" content="Tìm kiếm chuyến bay - Booking." />
       </Helmet>
 
-      <div className="relative z-10">
+      <div
+        className="relative z-10 h-[500px]"
+        style={{
+          backgroundImage: `url(${backGround})`,
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover"
+        }}
+      >
         <div
-          className={`w-full bg-[#003566] ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
+          className={`w-full ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
           <div className="container">
-            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate className="py-2">
-              <div className="grid md:grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap">
+            <form autoComplete="off" onSubmit={handleSubmitSearch} noValidate>
+              <div className="grid md:grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap bg-gray-300 p-2">
                 {/* loại chuyến bay */}
-                <div className="md:col-span-1 lg:col-span-1 px-2 py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md relative">
+                <div className="md:col-span-1 lg:col-span-1 px-2 py-6 bg-[#fffcf2] rounded-md relative">
                   <Popover open={open2} onOpenChange={setOpen2}>
                     <PopoverTrigger asChild>
                       <ButtonShadcn
@@ -376,8 +385,8 @@ export default function FlightSearch() {
                     <InputSearch
                       placeholder="Bay từ"
                       classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
-                      classNameError="py-[18px] px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center"
+                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2] text-textColor"
+                      classNameError="py-[18px] px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
                       classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef}
                       filterList={filterAirportCodeList_1}
@@ -399,8 +408,8 @@ export default function FlightSearch() {
                     <InputSearch
                       placeholder="Bay đến"
                       classNameList="z-20 absolute top-20 left-0 h-[300px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
-                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2]/50 border-2 border-textColor text-textColor"
-                      classNameError="py-[18px] px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center"
+                      classNameBlock="py-[18px] px-2 rounded-md flex items-center bg-[#fffcf2] text-textColor"
+                      classNameError="py-[18px] px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
                       classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                       ref={inputRef2}
                       filterList={filterAirportCodeList_2}
@@ -469,15 +478,15 @@ export default function FlightSearch() {
                       {/* date ngày đi*/}
                       <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
                         <SelectDate
-                          text="Ngày khởi hành"
+                          text="Ngày đi"
                           control={control}
                           setDate={setDate}
                           date={date}
                           name="departureDate"
                           errors={errors.departureDate?.message as string}
                           convertToYYYYMMDD={convertToYYYYMMDD}
-                          className="py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
-                          classNameError="py-6 border-2 border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
+                          className="py-6 bg-[#fffcf2] rounded-md flex items-center w-full justify-center"
+                          classNameError="py-6 border border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
                         />
                       </div>
 
@@ -491,7 +500,7 @@ export default function FlightSearch() {
                           name="returnDate"
                           errors={errors.returnDate?.message as string}
                           convertToYYYYMMDD={convertToYYYYMMDD}
-                          className="py-6 border-2 border-textColor bg-[#fffcf2]/50 rounded-md flex items-center w-full justify-center"
+                          className="py-6 bg-[#fffcf2] rounded-md flex items-center w-full justify-center"
                         />
                       </div>
                     </div>
@@ -502,7 +511,7 @@ export default function FlightSearch() {
                   <div className="flex gap-2">
                     {/* hành khách */}
                     <div
-                      className={`w-[50%] px-2 border-2 bg-[#fffcf2]/50 rounded-md flex items-center justify-center ${showPassenger === 0 ? "border-red-500 bg-red-100" : "border-textColor bg-[#fffcf2]/50"}`}
+                      className={`w-[50%] px-2 bg-[#fffcf2] rounded-md flex items-center justify-center ${showPassenger === 0 ? "border-red-500 bg-red-100 border" : "bg-[#fffcf2]"}`}
                     >
                       <Popover>
                         <PopoverTrigger>
@@ -526,12 +535,12 @@ export default function FlightSearch() {
                               <input
                                 aria-label="Traveler"
                                 type="text"
-                                className="w-[35px] py-1 outline-none bg-transparent text-lg text-center"
+                                className="w-[30px] py-1 outline-none bg-transparent text-lg text-center"
                                 value={showPassenger}
                                 readOnly
                               />
 
-                              <span className="text-base text-textColor font-semibold">Khách</span>
+                              <span className="text-lg text-textColor font-semibold">Khách</span>
                             </div>
 
                             {showPassenger === 0 && (
@@ -553,6 +562,10 @@ export default function FlightSearch() {
                           </div>
                         </PopoverTrigger>
                         <PopoverContent>
+                          <div className="p-1 text-textColor text-sm mb-2 bg-[#fedda7]">
+                            <strong className="text-red-500">Lưu ý: </strong>Số lượng vé em bé sơ
+                            sinh không được vượt quá số lượng vé người lớn.
+                          </div>
                           <div>
                             <QuantityController
                               nameQuantity="Người lớn (12 tuổi trở lên)"
@@ -592,7 +605,7 @@ export default function FlightSearch() {
 
                     {/* hạng vé */}
                     <div
-                      className={`w-[50%] py-[24px] rounded-md border-2 relative ${errors.travelClass?.message ? "bg-red-100 border-red-500" : "bg-[#fffcf2]/50 border-textColor"}`}
+                      className={`w-[50%] py-[24px] rounded-md relative ${errors.travelClass?.message ? "bg-red-100 border-red-500 border" : "bg-[#fffcf2]"}`}
                     >
                       <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
@@ -671,7 +684,7 @@ export default function FlightSearch() {
           </div>
         </div>
 
-        <div className="w-full absolute md:top-44 lg:top-24 left-1/2 -translate-x-1/2">
+        <div className="z-30 w-full absolute md:top-44 lg:top-24 left-1/2 -translate-x-1/2">
           <div className="container">
             {/* không load thì isPending */}
             {!flightOffersSearchQuery.isFetching && (
@@ -747,7 +760,7 @@ export default function FlightSearch() {
                 <button
                   disabled
                   type="button"
-                  className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-[#e5eef4] rounded-lg border border-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 inline-flex items-center"
+                  className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 rounded-lg hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 inline-flex items-center"
                 >
                   <svg
                     aria-hidden="true"

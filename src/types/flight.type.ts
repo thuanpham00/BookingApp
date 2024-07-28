@@ -100,14 +100,16 @@ export type TravellerType = {
     firstName: string // Tên của hành khách.
     lastName: string // Họ của hành khách.
   }
-  gender: "MALE" | "FEMALE" // Giới tính của hành khách.
+  gender: string // Giới tính của hành khách. // "MALE" | "FEMALE"
   contact: {
     emailAddress: string // Địa chỉ email của hành khách.
-    phones: Array<{
-      deviceType: "MOBILE" | "LANDLINE" // Loại thiết bị của số điện thoại (di động hoặc cố định).
-      countryCallingCode: string // Mã quốc gia gọi quốc tế.
-      number: string // Số điện thoại của hành khách.
-    }>
+    phones: [
+      {
+        deviceType: "MOBILE" | "LANDLINE" // Loại thiết bị của số điện thoại (di động hoặc cố định).
+        countryCallingCode: string // Mã quốc gia gọi quốc tế.
+        number: string // Số điện thoại của hành khách.
+      }
+    ]
   }
   documents: [
     //  Danh sách các tài liệu của hành khách

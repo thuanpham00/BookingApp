@@ -392,7 +392,7 @@ export default function Flight() {
                 </h1>
               </div>
 
-              <div className="w-[55%] absolute left-1/2 md:top-32 lg:top-40 -translate-x-1/2 z-20">
+              <div className="w-[55%] absolute left-1/2 md:top-[23%] lg:top-[25%] -translate-x-1/2 z-20">
                 <div className="py-4 px-8 bg-whiteColor rounded-lg shadow-lg">
                   <nav className="flex items-center gap-4">
                     <Link to={path.flight} className="flex flex-col items-center">
@@ -621,6 +621,10 @@ export default function Flight() {
                               </div>
                             </PopoverTrigger>
                             <PopoverContent>
+                              <div className="p-1 text-textColor text-sm mb-2 bg-[#fedda7]">
+                                <strong className="text-red-500">Lưu ý: </strong>Số lượng vé em bé
+                                sơ sinh không được vượt quá số lượng vé người lớn.
+                              </div>
                               <div>
                                 <QuantityController
                                   nameQuantity="Người lớn (12 tuổi trở lên)"

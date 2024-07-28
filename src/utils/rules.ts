@@ -36,7 +36,30 @@ const schema = yup
     flightType: yup.string(),
 
     lastName: yup.string().required("Họ bắt buộc"),
-    codeNumber: yup.string().required()
+    codeNumber: yup.string().required("Bắt buộc"),
+    national: yup.string().required("Bắt buộc"),
+    gender: yup.string().required(),
+    numberPhone: yup
+      .string()
+      .required("Bắt buộc")
+      .min(10, "Độ dài từ 10-11 kí tự")
+      .max(11, "Độ dài từ 10-11 kí tự"),
+    dateBirth: yup.string(),
+    dayBirth: yup
+      .number()
+      .required("Bắt buộc")
+      .min(1, "Ngày tối thiểu là 1")
+      .max(31, "Ngày tối đa là 31"),
+    monthBirth: yup
+      .number()
+      .required("Bắt buộc")
+      .min(1, "Tháng tối thiểu là 1")
+      .max(12, "Tháng tối đa là 12"),
+    yearBirth: yup
+      .string()
+      .required("Bắt buộc")
+      .min(4, "Năm tối thiểu là 4 kí tự")
+      .max(4, "Năm tối đa là 4 kí tự")
   })
   .required()
 

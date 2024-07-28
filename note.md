@@ -49,6 +49,22 @@
 - join() : nối chuỗi
 - split(): tách chuỗi
 
+---
+
+1. Cái input file là uncontrolled component, nó không thể chuyển thành control component được.
+
+2. Sự khác nhau giữa Uncontrol và Control là
+
+Với uncontrol, em không thể truyền value vào cho nó theo kiểu value={this.fileInputValue}, vậy nên em không thể set giá trị khởi tạo cho cái input file ở trên được.
+
+Với input text ở trên em có thể tạo cái state name = 'duoc', em f5 lại thì cái input có value là 'duoc' luôn. nhưng với input file thì không thể
+
+Uncontrolled component thì không khởi tạo giá trị được như controlled component
+-> nên dùng component Controller truyền control vào -> theo dõi value input dựa theo field.onChange
+ví dụ là component selectDate và component Hạng vé khong cần value khởi tạo
+
+---
+
 ## Firebase
 
 - createUserWithEmailAndPassword() - hàm tạo tài khoản user email & password

@@ -199,7 +199,7 @@ export default function FlightItem({ item, list }: Props) {
                   />
                 </AlertDialogTrigger>
                 <AlertDialogContent className="block">
-                  <AlertDialogTitle className="flex gap-2 shadow-md p-6">
+                  <AlertDialogTitle className="flex gap-2 shadow-md px-6 py-4">
                     CÓ NHIỀU LỰA CHỌN GIÁ CẢ HƠN cho chuyến đi của bạn.
                     <img src={icon2} alt="icon2" className="w-32 h-7" />
                   </AlertDialogTitle>
@@ -438,7 +438,7 @@ export default function FlightItem({ item, list }: Props) {
                         )}
                       </div>
 
-                      <AlertDialogFooter className="py-4 px-6 border-t border-t-gray-300">
+                      <AlertDialogFooter className="mt-4 py-2 px-6 border-t border-t-gray-300">
                         <div className="flex items-center gap-2">
                           <AlertDialogCancel className="py-5">Hủy</AlertDialogCancel>
                           <Button

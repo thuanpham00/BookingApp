@@ -133,7 +133,7 @@ export default function Header() {
             <Popover
               className="sticky top-0 left-0 z-30"
               renderPopover={
-                <div className="shadow-lg rounded flex flex-col border border-gray-300">
+                <div className="shadow-lg rounded flex flex-col">
                   <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
                     <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
                     Vietnamese

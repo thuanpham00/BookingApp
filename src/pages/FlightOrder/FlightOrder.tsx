@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { countries } from "src/constant/flightSearch"
-import { ResponseFlightPrice } from "src/types/flight.type"
+import { ResponseFlightPrice, TravellerType } from "src/types/flight.type"
 import { produce } from "immer"
 import {
   changeLanguageTraveller,
@@ -111,11 +111,24 @@ export default function FlightOrder() {
   }
 
   // xử lý form
-  // const [travellers, setTravellers] = useState<TravellerType[]>([])
+  const [travellers, setTravellers] = useState<TravellerType[]>([])
 
-  // const addTraveller = (newTravellers: TravellerType) => {
-  //   setTravellers([...travellers, newTravellers])
-  // }
+  const addTraveller = (newTravellers: TravellerType) => {
+    setTravellers((prev) => [...prev, newTravellers])
+  }
+
+  useEffect(() => {
+    if (travellers) {
+      console.log(travellers)
+      localStorage.setItem("travellerList", JSON.stringify(travellers))
+    }
+  }, [travellers])
+
+  // const { handleSubmit } = useForm()
+
+  // const onSubmit = handleSubmit((data) => {
+  //   console.log(data)
+  // })
 
   return (
     <div>
@@ -178,12 +191,12 @@ export default function FlightOrder() {
         <div className="w-full absolute md:top-46 lg:top-20 left-1/2 -translate-x-1/2">
           <div className="container">
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-9">
-                <div id="FlightSummary" className="p-4 bg-[#fff] shadow-md">
+              <div className="col-span-8">
+                <div id="FlightSummary" className="p-4 bg-[#fff] shadow-md rounded-xl">
                   {data.data.flightOffers[0].itineraries.map((item, index) => (
                     <div
                       key={index}
-                      className="relative p-3 mb-4 rounded-sm border border-gray-300 shadow"
+                      className="relative p-4 mb-4 last:mb-0 rounded-sm border border-gray-300 shadow"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
@@ -364,7 +377,7 @@ export default function FlightOrder() {
                   ))}
                 </div>
 
-                <div id="InfoImportant" className="mt-4 p-4 bg-[#fff] shadow-md">
+                <div id="InfoImportant" className="mt-4 p-4 bg-[#fff] shadow-md rounded-xl">
                   <h2 className="text-xl text-textColor font-semibold">Thông tin quan trọng</h2>
                   <div className="mt-6">
                     <div className="mt-2 flex items-center gap-2">
@@ -427,12 +440,10 @@ export default function FlightOrder() {
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Trong trường hợp người dùng không bắt đầu hành trình tiếp theo, toàn bộ PNR
-                        liên quan đến việc đặt chỗ đó sẽ bị hãng hàng không tự động hủy bỏ. Trong
-                        trường hợp như vậy, MMT không có quyền kiểm soát quy trình nói trên và cũng
-                        sẽ không có nghĩa vụ cung cấp các đặt chỗ thay thế cho người dùng. Hình phạt
-                        hủy chuyến trong trường hợp đó sẽ được áp dụng theo quy định hiện hành của
-                        hãng hàng không.
+                        Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ (PNR)
+                        sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm soát hoặc
+                        cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy chuyến sẽ áp
+                        dụng theo quy định của hãng hàng không.
                       </span>
                     </div>
                   </div>
@@ -445,27 +456,22 @@ export default function FlightOrder() {
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Hành khách sử dụng thị thực du lịch hoặc thị thực thăm thân không được phép
-                        đi bằng vé một chiều. Họ phải xuất trình vé khứ hồi đã được xác nhận nếu
-                        không họ có thể không được phép lên chuyến bay.
+                        Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Hành khách cũng phải mang theo bằng chứng về việc đặt chỗ ở/khách sạn và đủ
-                        tiền để trang trải các chi phí tại quốc gia đến.
+                        Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Hành khách phải tuân thủ các nguyên tắc về kích thước hành lý (chiều dài,
-                        chiều rộng, chiều rộng, v.v.) của hãng hàng không, nếu không họ có thể phải
-                        trả thêm phí hoặc thậm chí bị từ chối Nội trú. Vui lòng tham khảo trang web
-                        của hãng hàng không để biết thêm chi tiết.
+                        Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ phải
+                        trả thêm phí hoặc bị từ chối lên máy bay.
                       </span>
                     </div>
                   </div>
@@ -478,24 +484,22 @@ export default function FlightOrder() {
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Hộ chiếu phải còn hiệu lực tối thiểu 6 tháng kể từ ngày khởi hành.
+                        Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Tất cả du khách phải xuất trình bản cứng thị thực nước ngoài của mình (bản
-                        mềm sẽ không được chấp nhận) tại quầy nhập cảnh khi khởi hành.
+                        Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Booking. không chịu trách nhiệm pháp lý đối với thông tin thị thực. Để biết
-                        thêm thông tin chi tiết về các yêu cầu về thị thực và hộ chiếu, trước khi
-                        đặt chuyến đi.
+                        Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết trước
+                        khi đặt vé.
                       </span>
                     </div>
                   </div>
@@ -510,17 +514,15 @@ export default function FlightOrder() {
                     <div className="flex items-center gap-2 mt-2 ml-2">
                       <div className="h-1 w-1 rounded-full bg-textColor"></div>
                       <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                        Xin lưu ý rằng khách du lịch hoàn toàn chịu trách nhiệm đảm bảo đủ điều kiện
-                        nhập cảnh vào điểm đến hoặc quốc gia quá cảnh. Chúng tôi không chấp nhận
-                        trách nhiệm pháp lý về vấn đề này. Vui lòng kiểm tra các quy định du lịch
-                        trên tất cả các trang web quản lý trước khi đặt chỗ và bắt đầu chuyến đi.
+                        Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh. Kiểm
+                        tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div id="TravellerDetails" className="my-4 p-4 bg-[#fff] shadow-md">
-                  <h2 className="text-xl text-textColor font-semibold">
+                <div id="TravellerDetails" className="my-4">
+                  <h2 className="text-xl ml-1 text-textColor font-semibold">
                     Thông tin chi tiết của khách du lịch
                   </h2>
                   <div className="mt-2 px-2 py-4 text-sm text-textColor bg-[#e3fff9] flex items-center gap-2">
@@ -530,8 +532,13 @@ export default function FlightOrder() {
                       NEW
                     </div>
                   </div>
+                  <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
+                    <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với hộ
+                    chiếu hoặc giấy tờ tùy thân có ảnh của quý khách
+                  </div>
 
-                  <div className="my-8">
+                  {/* <form> */}
+                  <div className="my-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <img src={avatar2} alt="avatar" />
@@ -556,16 +563,10 @@ export default function FlightOrder() {
                         <span className="ml-1 text-base text-gray-500">Thêm</span>
                       </div>
                     </div>
-                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
-                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
-                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
-                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
-                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
-                    </div>
 
                     <div className="mt-4">
                       {currentAdult === 0 ? (
-                        <div className="p-4 bg-white shadow-md border border-gray-300">
+                        <div className="p-4 bg-white shadow-md border-b border-b-gray-300">
                           <span className="text-sm text-gray-500">
                             Bạn chưa thêm bất kỳ người lớn nào vào danh sách
                           </span>
@@ -574,33 +575,31 @@ export default function FlightOrder() {
                         Array(currentAdult)
                           .fill(0)
                           .map((_, index) => (
-                            <div key={index}>
-                              <div className="p-4 first:border-b-0 last:border-b last:border border border-gray-300 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    className="w-4 h-4"
-                                    id={String(index)}
-                                    checked={checkState[index]}
-                                    onChange={handleCheckTraveller("adult", index)}
-                                  />
-                                  <span>Người lớn {index + 1}</span>
-                                </div>
+                            <div
+                              key={index}
+                              className="mb-4 w-full gap-2 relative bg-white border-gray-300 border shadow-lg rounded-lg px-6 py-3"
+                            >
+                              <input
+                                type="checkbox"
+                                className="w-4 h-4"
+                                id={String(index)}
+                                checked={checkState[index]}
+                                onChange={handleCheckTraveller("adult", index)}
+                              />
+                              <label htmlFor={String(index)} className="absolute left-12">
+                                Người lớn {index + 1}
+                              </label>
+                              <div className="FormProfile">
+                                <FormProfile addOnTraveller={addTraveller} index={index} />
                               </div>
-                              {checkState[index] === true ? (
-                                <div className="p-4 pt-0 border-gray-300 border">
-                                  <FormProfile />
-                                </div>
-                              ) : (
-                                ""
-                              )}
                             </div>
                           ))
                       )}
                     </div>
 
-                    <div className="p-4 bg-white shadow-md border border-gray-300 border-t-0">
+                    <div className="mt-2 p-4 bg-white">
                       <button
+                        type="button"
                         onClick={handleAddTraveller("adult")}
                         className="text-sm text-blue-500 uppercase flex items-center gap-2"
                       >
@@ -623,7 +622,7 @@ export default function FlightOrder() {
                     </div>
                   </div>
 
-                  <div className="my-8">
+                  <div className="my-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <img src={avatar1} alt="avatar" />
@@ -638,12 +637,6 @@ export default function FlightOrder() {
                         </span>
                         <span className="ml-1 text-base text-gray-500">Thêm</span>
                       </div>
-                    </div>
-                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
-                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
-                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
-                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
-                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
                     </div>
 
                     <div className="mt-4">
@@ -698,7 +691,7 @@ export default function FlightOrder() {
                     </div>
                   </div>
 
-                  <div className="my-8">
+                  <div className="my-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <img src={avatar1} alt="avatar" />
@@ -714,20 +707,22 @@ export default function FlightOrder() {
                         <span className="ml-1 text-base text-gray-500">Thêm</span>
                       </div>
                     </div>
-                    <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
-                      <strong>Quan trọng:</strong> Nhập tên của bạn như được đề cập trên hộ chiếu
-                      của bạn. Hộ chiếu phải có giá trị tối thiểu 6 tháng kể từ ngày đi du lịch. Vui
-                      lòng đảm bảo rằng Số khách hàng thường xuyên được nhập ở đây trùng với cùng
-                      một tên hành khách, nếu không điểm sẽ không được hãng hàng không cập nhật.
-                    </div>
                   </div>
+
+                  {/* <Button
+                      type="submit"
+                      classNameWrapper="flex justify-end"
+                      nameButton="Tiếp tục"
+                      className="py-3 bg-blueColor w-[200px] text-whiteColor text-lg rounded-sm hover:bg-blueColor/80 duration-200 "
+                    /> */}
+                  {/* </form> */}
                 </div>
               </div>
 
-              <div className="col-span-3">
+              <div className="col-span-4">
                 <div className="sticky left-0 top-[68px]">
                   <div className="h-[300px] bg-[#fff] shadow-md px-4 rounded">banner</div>
-                  <div className="w-full h-[300px] my-4">
+                  <div className="w-full h-[380px] my-4">
                     <img src={banner} alt="banner" className="w-full h-full" />
                   </div>
                 </div>
