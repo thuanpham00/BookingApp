@@ -94,14 +94,14 @@ export type FlightPricingParams = {
 }
 
 export type TravellerType = {
-  id: string // ID của hành khách.
+  // id: string // ID của hành khách.
   dateOfBirth: string // Ngày sinh của hành khách theo định dạng ngày tháng năm (YYYY-MM-DD).
   name: {
     firstName: string // Tên của hành khách.
     lastName: string // Họ của hành khách.
   }
   gender: string // Giới tính của hành khách. // "MALE" | "FEMALE"
-  contact: {
+  contact?: {
     emailAddress: string // Địa chỉ email của hành khách.
     phones: [
       {

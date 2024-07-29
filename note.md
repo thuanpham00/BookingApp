@@ -46,6 +46,7 @@
 * slice(): cắt mảng, không thay đổi mảng gốc, tạo ra mảng mới
 * splice(): cắt mảng, thay đổi mảng gốc
 
+* Yc: là 1 chuỗi
 - join() : nối chuỗi
 - split(): tách chuỗi
 

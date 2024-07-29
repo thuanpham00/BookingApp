@@ -46,15 +46,15 @@ const schema = yup
       .max(11, "Độ dài từ 10-11 kí tự"),
     dateBirth: yup.string(),
     dayBirth: yup
-      .number()
+      .string()
       .required("Bắt buộc")
-      .min(1, "Ngày tối thiểu là 1")
-      .max(31, "Ngày tối đa là 31"),
+      .min(2, "Ngày tối thiểu là 1")
+      .max(2, "Ngày tối đa là 31"),
     monthBirth: yup
-      .number()
+      .string()
       .required("Bắt buộc")
-      .min(1, "Tháng tối thiểu là 1")
-      .max(12, "Tháng tối đa là 12"),
+      .min(2, "Tháng tối thiểu là 1")
+      .max(2, "Tháng tối đa là 12"),
     yearBirth: yup
       .string()
       .required("Bắt buộc")

@@ -1,15 +1,14 @@
 import { CountryListCodeNumber } from "src/types/flight.type"
-import { TypeProfile } from "../FormProfile/FormProfile"
 
 interface Props {
   listAirport: CountryListCodeNumber
-  inputName: TypeProfile
-  handleItemClick: (inputName: TypeProfile, value: string) => void
+  inputName: string
+  handleItemClick: (inputName: string, value: string) => void
 }
 
-export default function CodeNumberList({ listAirport, handleItemClick, inputName }: Props) {
-  const handleChangeInput = (code: string, name: string) => {
-    handleItemClick(inputName, `${name} - ${code}`)
+export default function CodeNumberList({ inputName, listAirport, handleItemClick }: Props) {
+  const handleChangeInput = (code: string) => {
+    handleItemClick(inputName, code)
   }
 
   return listAirport.map((item) => {
@@ -17,7 +16,7 @@ export default function CodeNumberList({ listAirport, handleItemClick, inputName
     row.push(
       <div key={item.code}>
         <button
-          onClick={() => handleChangeInput(item.code, item.name)}
+          onClick={() => handleChangeInput(item.code)}
           className="w-full border-b border-b-gray-300 py-3 px-2 flex items-center justify-between gap-2 cursor-pointer bg-whiteColor hover:bg-gray-300 duration-200"
         >
           <div className="text-sm flex items-center gap-2">

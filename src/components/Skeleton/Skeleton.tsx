@@ -25,7 +25,7 @@ export default function Skeleton({
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className="text-center mt-2">Vui lòng chờ trong giây lát</span>
     </div>
   )
 }

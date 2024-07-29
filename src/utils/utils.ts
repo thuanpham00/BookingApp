@@ -147,10 +147,6 @@ export function changeLanguageTraveller(name: string) {
   }
 }
 
-export function getCodeNumber(code: string) {
-  if (code) {
-    const res = code.split(" - ")[1]
-    return res
-  }
-  return null
+export function formatCurrency(current: number) {
+  return new Intl.NumberFormat("de-DE").format(current)
 }
