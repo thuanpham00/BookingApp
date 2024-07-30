@@ -1,7 +1,12 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { countries } from "src/constant/flightSearch"
-import { FlightCreateOrder, ResponseFlightPrice, TravellerType } from "src/types/flight.type"
+import { countries, countryCodePhone } from "src/constant/flightSearch"
+import {
+  CountryListCodeNumber,
+  FlightCreateOrder,
+  ResponseFlightPrice,
+  TravellerType
+} from "src/types/flight.type"
 import { produce } from "immer"
 import {
   changeLanguageTraveller,
@@ -23,32 +28,47 @@ import Button from "src/components/Button"
 import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import { toast } from "react-toastify"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import schema, { schemaType } from "src/utils/rules"
+import Input from "src/components/Input"
+import InputSearchV2 from "./Components/InputSearchV2"
+import CodeNumberList from "./Components/CodeNumberList"
+import useScrollHeader from "src/hooks/useScrollHeader"
+
+export type FormData = Pick<
+  schemaType,
+  "codeNumber" | "numberPhone" | "email" | "userName2" | "lastName2"
+>
+export type InputName = "codeNumber"
+const schemaFormData = schema.pick(["codeNumber", "numberPhone", "email", "userName2", "lastName2"])
+const FetchDataListNational = () => Promise.resolve(countryCodePhone)
 
 export default function FlightOrder() {
-  // xử lý header
   const navigate = useNavigate()
-  const [showHeader, setShowHeader] = useState(false)
-  const [scrollWindow, setScrollWindow] = useState(0)
-
-  const handleScrollWindow = () => {
-    const currentScrollY = window.scrollY
-    setScrollWindow(currentScrollY)
-  }
+  // xử lý header
+  const { showHeader } = useScrollHeader(200)
+  // xử lý form
+  const [currentAdult, setCurrentAdult] = useState<number>(0)
+  const [currentChild, setCurrentChild] = useState<number>(0)
+  const [currentInfant, setCurrentInfant] = useState<number>(0)
+  const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [codeNumberList, setCodeNumberList] = useState<CountryListCodeNumber>([])
+  const [codeNumber, setCodeNumber] = useState("")
+  const [showListCodeNumber, setShowListCodeNumber] = useState<boolean>(false)
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScrollWindow)
-
-    return () => window.removeEventListener("scroll", handleScrollWindow)
+    FetchDataListNational().then((res) => {
+      setCodeNumberList(res)
+    })
   }, [])
 
-  // nếu scrollWindow có thay đổi thì nó tham chiếu tới chạy lại hàm này
-  useEffect(() => {
-    if (scrollWindow > 200) {
-      setShowHeader(true)
-    } else {
-      setShowHeader(false)
-    }
-  }, [scrollWindow])
+  const filterCodeNumber = useMemo(
+    () =>
+      codeNumberList.filter((item) => item.name.toLowerCase().includes(codeNumber.toLowerCase())),
+    [codeNumberList, codeNumber]
+  )
 
   // xử lý back page
   const handleBackPage = () => {
@@ -58,10 +78,6 @@ export default function FlightOrder() {
   const dataLS = localStorage.getItem("flightPriceData") as string
   const data = JSON.parse(dataLS) as ResponseFlightPrice
 
-  // xử lý form
-  const [currentAdult, setCurrentAdult] = useState<number>(0)
-  const [currentChild, setCurrentChild] = useState<number>(0)
-  const [currentInfant, setCurrentInfant] = useState<number>(0)
   // const [currentInfant, setCurrentInfant] = useState<number>(0)
 
   const quantityOfTraveller = useMemo(() => {
@@ -139,10 +155,6 @@ export default function FlightOrder() {
   }, [data])
 
   // cái này hay
-  const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
-  const [countAdult, setCountAdult] = useState(0)
-  const [countChild, setCountChild] = useState(0)
-  const [countInfant, setCountInfant] = useState(0)
 
   const handleCheckTraveller =
     (type: string, index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,17 +183,14 @@ export default function FlightOrder() {
     if (type === "adult") {
       if (currentAdult < quantityOfTraveller.adult) {
         setCurrentAdult((prev) => prev + 1)
-        setCountAdult((prev) => prev + 1)
       }
     } else if (type === "child") {
       if (currentChild < quantityOfTraveller.child) {
         setCurrentChild((prev) => prev + 1)
-        setCountChild((prev) => prev + 1)
       }
     } else if (type === "infant") {
       if (currentInfant < quantityOfTraveller.infant) {
         setCurrentInfant((prev) => prev + 1)
-        setCountInfant((prev) => prev + 1)
       }
     }
   }
@@ -193,12 +202,11 @@ export default function FlightOrder() {
     setTravellers((prev) => [...prev, newTravellers])
   }
 
-  useEffect(() => {
-    if (travellers) {
-      console.log(travellers)
-      localStorage.setItem("travellerList", JSON.stringify(travellers))
-    }
-  }, [travellers])
+  const handleItemClick = (inputName: InputName, value: string) => {
+    setValue(inputName, value as string)
+    setCodeNumber(value as string)
+    setShowListCodeNumber(false)
+  }
 
   const flightCreateOrderMutation = useMutation({
     mutationFn: (body: FlightCreateOrder) => {
@@ -206,7 +214,16 @@ export default function FlightOrder() {
     }
   })
 
-  const onSubmit = () => {
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schemaFormData)
+  })
+
+  const onSubmit = handleSubmit((dataForm) => {
     const loadingToastId = toast.loading("Vui lòng chờ trong giây lát")
     const createOrder: FlightCreateOrder = {
       data: {
@@ -227,29 +244,23 @@ export default function FlightOrder() {
           option: "DELAY_TO_CANCEL",
           delay: "6D"
         },
-
         // Thông tin liên hệ:
         contacts: [
           {
             addresseeName: {
-              firstName: "MINH THUAN",
-              lastName: "PHAM"
+              firstName: dataForm.userName2,
+              lastName: dataForm.lastName2
             },
             companyName: "INCREIBLE VIAJES",
             purpose: "STANDARD",
             phones: [
               {
-                deviceType: "LANDLINE",
-                countryCallingCode: "84",
-                number: "480080071"
-              },
-              {
                 deviceType: "MOBILE",
-                countryCallingCode: "84",
-                number: "480080072"
+                countryCallingCode: dataForm.codeNumber,
+                number: dataForm.numberPhone
               }
             ],
-            emailAddress: "phamminhthuan912@gmail.com",
+            emailAddress: dataForm.email,
             address: {
               lines: ["Calle Prado, 16"],
               postalCode: "28014",
@@ -266,7 +277,7 @@ export default function FlightOrder() {
         toast.success("Lưu thông tin thành công")
       }
     })
-  }
+  })
 
   return (
     <div>
@@ -280,47 +291,70 @@ export default function FlightOrder() {
           className={`w-full bg-[#003566] ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
           <div className="container">
-            <div className="py-4 px-1 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <button aria-label="iconBack" onClick={handleBackPage}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="white"
-                    className="w-8 h-8"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                    />
-                  </svg>
-                </button>
-                <h1 className="text-2xl text-whiteColor font-semibold">Hoàn tất đặt chỗ của bạn</h1>
+            <div className="py-4 px-1 grid grid-cols-12 items-center">
+              <div className="col-span-4">
+                <div className="flex items-center gap-2">
+                  <button aria-label="iconBack" onClick={handleBackPage}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="white"
+                      className="w-8 h-8"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                      />
+                    </svg>
+                  </button>
+                  <h1 className="text-2xl text-whiteColor font-semibold">
+                    Hoàn tất đặt chỗ của bạn
+                  </h1>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <a
-                  href="#FlightSummary"
-                  className="text-gray-300 font-medium text-sm hover:underline duration-200"
-                >
-                  Tóm tắt chuyến bay
-                </a>
-                <div className="h-1 w-1 bg-whiteColor rounded-full"></div>
-                <a
-                  href="#InfoImportant"
-                  className="text-gray-300 font-medium text-sm hover:underline duration-200"
-                >
-                  Thông tin quan trọng
-                </a>
-                <div className="h-1 w-1 bg-whiteColor rounded-full"></div>
-                <a
-                  href="#TravellerDetails"
-                  className="text-gray-300 font-medium text-sm hover:underline duration-200"
-                >
-                  Thông tin hành khách
-                </a>
+              <div className="col-span-5 col-start-8">
+                <div className="flex items-center justify-between gap-2 relative">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
+                      1
+                    </div>
+                    <div className="text-sm text-whiteColor">Thông tin hành khách</div>
+                  </div>
+
+                  <div className="absolute left-[15%] top-2 w-52 h-1 bg-gray-400"></div>
+
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs">
+                      2
+                    </div>
+                    <div className="text-sm text-whiteColor">Chi tiết thanh toán</div>
+                  </div>
+
+                  <div className="absolute left-[57%] top-2 w-44 h-1 bg-gray-400"></div>
+
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-sm text-whiteColor">Đã hoàn tất!</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -451,7 +485,7 @@ export default function FlightOrder() {
                             </div>
                           </div>
 
-                          <div className="mt-2 p-4 bg-[#f4f4f4]">
+                          <div className="relative mt-2 p-4 bg-[#f4f4f4]">
                             <div className="flex items-center gap-4">
                               <span className="text-base font-medium">
                                 {getHourFromAPI(detail.departure.at)}
@@ -468,14 +502,14 @@ export default function FlightOrder() {
                               </div>
                             </div>
 
-                            <div className="ml-[6.5%] flex items-center">
+                            <div className="absolute left-[10%] flex items-center">
                               <div className="w-[2px] h-8 bg-gray-500"></div>
                               <span className="ml-6 w-[100px] text-sm">
                                 {getDurationFromAPI(detail.duration)}
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-4 mb-4">
+                            <div className="mt-8 flex items-center gap-4 mb-4">
                               <span className="text-base font-medium">
                                 {getHourFromAPI(detail.arrival.at)}
                               </span>
@@ -516,20 +550,9 @@ export default function FlightOrder() {
                 </div>
 
                 <div id="TravellerDetails" className="my-4">
-                  <h2 className="text-xl ml-1 text-textColor font-semibold">
-                    Thông tin chi tiết của khách du lịch
+                  <h2 className="text-lg text-textColor font-semibold my-2">
+                    Thông tin hành khách
                   </h2>
-                  <div className="mt-2 px-2 py-4 text-sm text-textColor bg-[#e3fff9] flex items-center gap-2">
-                    Giờ đây, nhiều khách du lịch có thể nhận được thông tin đặt phòng và các thông
-                    báo khác chỉ bằng cách thêm thông tin liên hệ của họ!
-                    <div className="text-sm text-whiteColor bg-green-500 px-3 py-1 rounded-full">
-                      NEW
-                    </div>
-                  </div>
-                  <div className="mt-4 p-2 bg-[#ffedd1] text-sm">
-                    <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với hộ
-                    chiếu hoặc giấy tờ tùy thân có ảnh của quý khách
-                  </div>
 
                   {data.data.flightOffers[0].travelerPricings.find(
                     (item) => item.travelerType === "ADULT"
@@ -543,7 +566,7 @@ export default function FlightOrder() {
                           </span>
                           {currentAdult === quantityOfTraveller.adult && (
                             <div className="text-xs text-red-500">
-                              Bạn đã chọn {countAdult} vé cho{" "}
+                              Bạn đã chọn {currentAdult} vé cho{" "}
                               {changeLanguageTraveller(
                                 data.data.flightOffers[0].travelerPricings[0].travelerType
                               )}
@@ -552,7 +575,9 @@ export default function FlightOrder() {
                           )}
                         </div>
                         <div>
-                          <span className="text-base text-textColor font-medium">{countAdult}</span>
+                          <span className="text-base text-textColor font-medium">
+                            {currentAdult}
+                          </span>
                           <span className="text-base text-textColor font-medium">
                             /{quantityOfTraveller.adult}
                           </span>
@@ -573,7 +598,7 @@ export default function FlightOrder() {
                             .map((_, index) => (
                               <div
                                 key={index}
-                                className="w-full gap-2 relative bg-white border-b border-b-gray-300 px-6 py-3"
+                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
                               >
                                 <input
                                   type="checkbox"
@@ -631,7 +656,7 @@ export default function FlightOrder() {
                           </span>
                           {currentChild === quantityOfTraveller.child && (
                             <div className="text-xs text-red-500">
-                              Bạn đã chọn {countChild} vé cho{" "}
+                              Bạn đã chọn {currentChild} vé cho{" "}
                               {changeLanguageTraveller(
                                 data.data.flightOffers[0].travelerPricings[0].travelerType
                               )}
@@ -640,7 +665,9 @@ export default function FlightOrder() {
                           )}
                         </div>
                         <div>
-                          <span className="text-base text-textColor font-medium">{countChild}</span>
+                          <span className="text-base text-textColor font-medium">
+                            {currentChild}
+                          </span>
                           <span className="text-base text-textColor font-medium">
                             /{quantityOfTraveller.child}
                           </span>
@@ -661,7 +688,7 @@ export default function FlightOrder() {
                             .map((_, index) => (
                               <div
                                 key={index}
-                                className="w-full gap-2 relative bg-white border-b border-b-gray-300 px-6 py-3"
+                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
                               >
                                 <input
                                   type="checkbox"
@@ -719,7 +746,7 @@ export default function FlightOrder() {
                           </span>
                           {currentInfant === quantityOfTraveller.infant && (
                             <div className="text-xs text-red-500">
-                              Bạn đã chọn {countInfant} vé cho{" "}
+                              Bạn đã chọn {currentInfant} vé cho{" "}
                               {changeLanguageTraveller(
                                 data.data.flightOffers[0].travelerPricings[0].travelerType
                               )}
@@ -729,7 +756,7 @@ export default function FlightOrder() {
                         </div>
                         <div>
                           <span className="text-base text-textColor font-medium">
-                            {countInfant}
+                            {currentInfant}
                           </span>
                           <span className="text-base text-textColor font-medium">
                             /{quantityOfTraveller.infant}
@@ -751,7 +778,7 @@ export default function FlightOrder() {
                             .map((_, index) => (
                               <div
                                 key={index}
-                                className="w-full gap-2 relative bg-white border-b border-b-gray-300 px-6 py-3"
+                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
                               >
                                 <input
                                   type="checkbox"
@@ -797,14 +824,114 @@ export default function FlightOrder() {
                     </div>
                   )}
 
-                  <Button
-                    loading={flightCreateOrderMutation.isPending}
-                    disable={flightCreateOrderMutation.isPending}
-                    onClick={onSubmit}
-                    classNameWrapper="flex justify-end"
-                    nameButton="Tiếp tục"
-                    className="py-3 bg-blueColor px-6 text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200 "
-                  />
+                  <div>
+                    <h2 className="text-lg text-textColor font-semibold my-2">Thông tin liên hệ</h2>
+                    <form onSubmit={onSubmit} className="bg-white shadow-xl">
+                      <div className="py-3 border-b border-b-gray-300">
+                        <span className="px-4 text-base font-medium block">
+                          Thông tin liên hệ (nhận vé/phiếu thanh toán)
+                        </span>
+                        <span className="px-4 text-sm block text-gray-500">
+                          Vé Điện tử của quý khách sẽ được gửi đến đây
+                        </span>
+                      </div>
+                      <div className="p-4 grid grid-cols-6 items-center gap-2 flex-wrap">
+                        <div className="col-span-3">
+                          <span className="mb-[2px] text-sm block">
+                            Họ (vd: Pham) <span className="text-red-500">*</span>
+                          </span>
+                          <Input
+                            className="flex flex-col items-start"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="Họ"
+                            name="lastName2"
+                            register={register}
+                            messageError={errors.lastName2?.message}
+                          />
+                        </div>
+                        <div className="col-span-3">
+                          <span className="mb-[2px] text-sm block">
+                            Tên Đệm & Tên (vd: Minh Thuan) <span className="text-red-500">*</span>
+                          </span>
+                          <Input
+                            className="flex flex-col items-start"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="Tên"
+                            name="userName2"
+                            register={register}
+                            messageError={errors.userName2?.message}
+                          />
+                        </div>
+                        <div className="col-span-3 flex">
+                          <div className="w-[30%]">
+                            <span className="mb-[2px] text-sm block">Mã quốc gia</span>
+                            <InputSearchV2
+                              autoComplete="off"
+                              placeholder="Mã quốc gia"
+                              classNameList="z-20 absolute top-10 left-0 h-[200px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
+                              classNameBlock="relative flex items-center"
+                              classNameInput="w-full p-2 outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded-tl rounded-bl border border-gray-400"
+                              ref={inputRef}
+                              value={codeNumber}
+                              showList={showListCodeNumber}
+                              handleChangeValue={(event) => setCodeNumber(event.target.value)}
+                              handleFocus={() => setShowListCodeNumber(true)}
+                              register={register}
+                              name="codeNumber"
+                              error={errors.codeNumber?.message}
+                            >
+                              <CodeNumberList
+                                listAirport={filterCodeNumber}
+                                handleItemClick={handleItemClick}
+                                inputName="codeNumber"
+                              />
+                            </InputSearchV2>
+                          </div>
+                          <div className="w-[70%]">
+                            <span className="mb-[2px] text-sm block">Số điện thoại</span>
+                            <Input
+                              className="flex flex-col items-start"
+                              classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded-tr rounded-br border text-base border-gray-400 border-l-0"
+                              type="text"
+                              autoComplete="off"
+                              placeholder="Số điện thoại"
+                              name="numberPhone"
+                              register={register}
+                              messageError={errors.numberPhone?.message}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-span-3">
+                          <span className="mb-[2px] text-sm block">Email</span>
+                          <Input
+                            className="flex flex-col items-start"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="Email"
+                            name="email"
+                            register={register}
+                            messageError={errors.email?.message}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-4 pt-0">
+                        <Button
+                          type="submit"
+                          loading={flightCreateOrderMutation.isPending}
+                          disable={flightCreateOrderMutation.isPending}
+                          classNameWrapper="flex justify-end"
+                          nameButton="Tiếp tục"
+                          className="py-2 bg-blueColor px-16 text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200 "
+                        />
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
 

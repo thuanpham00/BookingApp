@@ -1,52 +1,42 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Input from "src/components/Input"
 import { listNationality } from "src/constant/flightSearch"
 import { CountryListCodeNumber, TravellerType } from "src/types/flight.type"
-import schema, { schemaType } from "src/utils/rules"
-import { yupResolver } from "@hookform/resolvers/yup"
+import Nationality from "../Nationality"
+import InputSearchV2 from "../InputSearchV2/InputSearchV2"
 import Button from "src/components/Button"
 import { toast } from "react-toastify"
-import Nationality from "../Nationality"
+import { yupResolver } from "@hookform/resolvers/yup"
+import schema, { schemaType } from "src/utils/rules"
 
-import InputSearchV2 from "../InputSearchV2/InputSearchV2"
+const FetchDataListNational = () => Promise.resolve(listNationality)
 
 interface Props {
   addOnTraveller: (newTravellers: TravellerType) => void
 }
 
-export type TypeProfile = "codeNumber" | "national"
-
 type FormData = Pick<
   schemaType,
-  "userName" | "lastName" | "gender" | "dayBirth" | "monthBirth" | "yearBirth" | "national"
+  "userName" | "lastName" | "dayBirth" | "monthBirth" | "yearBirth" | "gender" | "national"
 >
 
 const schemaFormData = schema.pick([
   "userName",
   "lastName",
-  "gender",
   "dayBirth",
   "monthBirth",
   "yearBirth",
+  "gender",
   "national"
 ])
 
-const FetchDataListNational = () => Promise.resolve(listNationality)
-
 export default function FormProfile({ addOnTraveller }: Props) {
   const [nationalList, setNationalList] = useState<CountryListCodeNumber>([])
-
   const [showListNationality, setShowListNationality] = useState<boolean>(false)
-
+  const [nationalProfile, setNationalProfile] = useState("")
   const inputRef2 = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    FetchDataListNational().then((res) => {
-      setNationalList(res)
-    })
-  }, [])
-
+  // form phức tạp thì dùng useForm kết hợp useFormContext - tách nhỏ ra rồi 1 thằng component cha (useForm) quản lý truyền xuống
   const {
     handleSubmit,
     setValue,
@@ -65,22 +55,11 @@ export default function FormProfile({ addOnTraveller }: Props) {
   })
 
   // quản lý form state - nếu nhiều form thì đừng dùng chung state
-
-  const [nationalProfile, setNationalProfile] = useState("")
-
-  const filterNationality = useMemo(
-    () =>
-      nationalList.filter((item) =>
-        item.name.toLowerCase().includes(nationalProfile.toLowerCase())
-      ),
-    [nationalList, nationalProfile]
-  )
-
-  const handleFocusAirportList = (type: TypeProfile) => () => {
-    if (type === "national") {
-      setShowListNationality(true)
-    }
-  }
+  useEffect(() => {
+    FetchDataListNational().then((res) => {
+      setNationalList(res)
+    })
+  }, [])
 
   useEffect(() => {
     const clickOutHideListAirport = (event: MouseEvent) => {
@@ -94,13 +73,12 @@ export default function FormProfile({ addOnTraveller }: Props) {
     return () => document.removeEventListener("mousedown", clickOutHideListAirport)
   }, [])
 
-  const handleChangeValue = useCallback(
-    (type: TypeProfile) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (type === "national") {
-        setNationalProfile(event.target.value)
-      }
-    },
-    []
+  const filterNationality = useMemo(
+    () =>
+      nationalList.filter((item) =>
+        item.name.toLowerCase().includes(nationalProfile.toLowerCase())
+      ),
+    [nationalList, nationalProfile]
   )
 
   const handleItemClick = (inputName: string, value: string) => {
@@ -111,11 +89,8 @@ export default function FormProfile({ addOnTraveller }: Props) {
     }
   }
 
-  const handleChangeChecked = (value: string) => {
-    setValue("gender", value)
-  }
-
   const handleSubmitForm = handleSubmit((data) => {
+    console.log(data)
     const infoTraveller: TravellerType = {
       dateOfBirth: `${data.yearBirth}-${data.monthBirth}-${data.dayBirth}`,
       name: {
@@ -139,13 +114,11 @@ export default function FormProfile({ addOnTraveller }: Props) {
         }
       ]
     }
-    if (addOnTraveller) {
-      addOnTraveller(infoTraveller)
-    }
+    addOnTraveller && addOnTraveller(infoTraveller)
     toast.success("Lưu thông tin hành khách thành công")
   })
 
-  const handleRefreshForm = () => {
+  const handleResetForm = () => {
     reset()
     setNationalProfile("")
   }
@@ -156,29 +129,33 @@ export default function FormProfile({ addOnTraveller }: Props) {
       if (nameInput === "userName" || nameInput === "lastName") {
         setValue(nameInput, valueInput)
       } else if (
-        nameInput === "dayBirth" ||
         nameInput === "monthBirth" ||
-        nameInput === "yearBirth"
+        nameInput === "yearBirth" ||
+        nameInput === "monthBirth"
       ) {
         // Sử dụng regex để chỉ cho phép nhập số
         // thay thế các kí tự không phải kí tự số bằng ""
         const valueInput2 = valueInput.replace(/[^0-9]/g, "")
+        console.log(valueInput2)
         setValue(nameInput, valueInput2)
       }
     }
 
   return (
     <form onSubmit={handleSubmitForm} className="w-full">
-      <span className="text-lg font-medium text-center block">Thông tin hành khách:</span>
-      <div className="grid grid-cols-6 items-center gap-x-8 gap-y-4 flex-wrap">
-        <div className="mb-2 col-span-6">
+      <span className="mt-2 block">
+        <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với hộ chiếu hoặc
+        giấy tờ tùy thân có ảnh của quý khách
+      </span>
+      <div className="mt-2 grid grid-cols-6 items-center gap-x-8 gap-y-4 flex-wrap">
+        <div className="col-span-6">
           <span className="mb-[2px] text-sm block">Giới tính</span>
           <div className="flex items-start">
             <div
               className={`border border-gray-400 py-2 px-6 rounded-tl rounded-bl ${watch("gender") === "MALE" ? "bg-blue-100 text-blue-600" : "bg-white"}`}
             >
               <input type="checkbox" {...register("gender")} hidden value="MALE" />
-              <button className="cursor-pointer" onClick={() => handleChangeChecked("MALE")}>
+              <button className="cursor-pointer" onClick={() => setValue("gender", "MALE")}>
                 Nam
               </button>
             </div>
@@ -186,14 +163,14 @@ export default function FormProfile({ addOnTraveller }: Props) {
               className={`border border-gray-400 py-2 px-6 rounded-tr rounded-br ${watch("gender") === "FEMALE" ? "bg-blue-100 text-blue-600" : "bg-white"}`}
             >
               <input type="checkbox" {...register("gender")} hidden value="FEMALE" />
-              <button className="cursor-pointer" onClick={() => handleChangeChecked("FEMALE")}>
+              <button className="cursor-pointer" onClick={() => setValue("gender", "FEMALE")}>
                 Nữ
               </button>
             </div>
           </div>
         </div>
         <div className="col-span-3">
-          <span className="mb-[2px] text-sm block">Tên đệm và Tên (vd: MINH THUẬN)</span>
+          <span className="mb-[2px] text-sm block">Tên đệm và Tên (vd: MINH THUAN)</span>
           <Input
             className="flex flex-col items-start"
             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
@@ -207,12 +184,12 @@ export default function FormProfile({ addOnTraveller }: Props) {
           />
         </div>
         <div className="col-span-3">
-          <span className="mb-[2px] text-sm block">Họ (vd: PHẠM)</span>
+          <span className="mb-[2px] text-sm block">Họ (vd: PHAM)</span>
           <Input
             className="flex flex-col items-start"
             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
             type="text"
-            autoComplete="on"
+            autoComplete="off"
             placeholder="Họ"
             name="lastName"
             register={register}
@@ -221,11 +198,11 @@ export default function FormProfile({ addOnTraveller }: Props) {
           />
         </div>
         <div className="col-span-3">
-          <span className="mb-[2px] text-sm block">Ngày sinh (ví dụ 2004/12/09)</span>
-          <div className="flex items-center gap-4">
+          <span className="mb-[2px] text-sm block">Ngày sinh (YYYY/MM/dd)</span>
+          <div className="flex items-center flex-wrap">
             <Input
-              className="flex flex-col items-start"
-              classNameInput="rounded w-[100px] p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              className="flex-1 flex flex-col items-start"
+              classNameInput="rounded-tl rounded-bl w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
               type="text"
               autoComplete="off"
               placeholder="1990"
@@ -235,8 +212,8 @@ export default function FormProfile({ addOnTraveller }: Props) {
               onChange={handleChangeValueForm("yearBirth")}
             />
             <Input
-              className="flex flex-col items-start"
-              classNameInput="rounded w-[100px] p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              className="flex-1 flex flex-col items-start"
+              classNameInput="w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
               type="text"
               autoComplete="off"
               placeholder="01"
@@ -246,8 +223,8 @@ export default function FormProfile({ addOnTraveller }: Props) {
               onChange={handleChangeValueForm("monthBirth")}
             />
             <Input
-              className="flex flex-col items-start"
-              classNameInput="rounded w-[100px] p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              className="flex-1 flex flex-col items-start"
+              classNameInput="rounded-tr rounded-br w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
               type="text"
               autoComplete="off"
               placeholder="01"
@@ -269,8 +246,8 @@ export default function FormProfile({ addOnTraveller }: Props) {
             ref={inputRef2}
             value={nationalProfile}
             showList={showListNationality}
-            handleChangeValue={handleChangeValue("national")}
-            handleFocus={handleFocusAirportList("national")}
+            handleChangeValue={(event) => setNationalProfile(event.target.value)}
+            handleFocus={() => setShowListNationality(true)}
             register={register}
             name="national"
             error={errors.national?.message}
@@ -287,7 +264,7 @@ export default function FormProfile({ addOnTraveller }: Props) {
       <div className="flex items-center justify-end gap-2">
         <button
           className="text-sm text-gray-500 py-2 px-3 bg-transparent font-medium border border-gray-300 hover:underline rounded-sm hover:opacity-75"
-          onClick={handleRefreshForm}
+          onClick={handleResetForm}
           type="button"
         >
           Xóa

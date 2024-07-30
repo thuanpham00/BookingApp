@@ -71,8 +71,9 @@ export default function FlightItem({ item, list }: Props) {
       }
     })
   }
+
   const flightPrice = flightOffersPriceMutation.data?.data as ResponseFlightPrice
-  // console.log(flightPrice)
+
   const handleNavigatePage = () => {
     navigate({
       pathname: path.flightOrder
@@ -215,7 +216,7 @@ export default function FlightItem({ item, list }: Props) {
 
                   {showPriceDetail && (
                     <Fragment>
-                      <div className="px-6 flex items-start gap-2">
+                      <div className="px-6 py-2 flex items-start gap-2">
                         <div className="mt-[2px] text-base font-medium">
                           {flightPrice?.data.flightOffers[0].itineraries.length === 1
                             ? "One way"
@@ -272,7 +273,7 @@ export default function FlightItem({ item, list }: Props) {
                           )}
                         </div>
                       </div>
-                      <div className="px-6 grid grid-cols-3 gap-4 items-center h-[400px] overflow-y-auto">
+                      <div className="px-6 grid grid-cols-3 gap-4 items-center overflow-y-auto">
                         {flightPrice?.data.flightOffers[0].travelerPricings.map(
                           (traveler, index) => (
                             <div key={index} className="col-span-1 border-2 border-gray-300">
@@ -454,7 +455,7 @@ export default function FlightItem({ item, list }: Props) {
                   {!showPriceDetail && (
                     <div className="h-[100px]">
                       <Skeleton
-                        className="absolute left-1/2 top-[75%] -translate-x-1/2 -translate-y-1/2"
+                        className="flex flex-col items-center justify-center  absolute left-1/2 top-[75%] -translate-x-1/2 -translate-y-1/2"
                         classNameLoader="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                       />
                     </div>
