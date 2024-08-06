@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
-import { InputAirport } from "src/pages/Flight/Flight"
 import { AirportCodeItem } from "src/types/flight.type"
 import AirportCodeList from "../AirportCodeList"
+import { InputAirport } from "src/hooks/useFormHandler"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   children?: React.ReactNode

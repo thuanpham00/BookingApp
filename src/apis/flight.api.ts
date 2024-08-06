@@ -20,5 +20,10 @@ export const flightApi = {
   // đặt vé máy bay
   flightCreateOrder: (body: FlightCreateOrder) => {
     return HttpV1.post("booking/flight-orders", body)
+  },
+
+  // quản lý chuyến bay
+  flightManagement: (id: string) => {
+    return HttpV1.get(`booking/flight-orders/${id}`)
   }
 }

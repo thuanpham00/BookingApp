@@ -7,6 +7,10 @@ export const path = {
   flightSearch: "/flight/search",
   flightOrder: "/flight/order",
   flightPayment: "/flight/payment",
+  flightManagement: "/flight/management",
 
-  paymentComplete: "/complete"
+  paymentComplete: "/complete",
+
+  cart: "/cart",
+  notFound: "/*"
 } as const

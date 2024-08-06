@@ -30,8 +30,8 @@
 * <Navigate> component điều hướng trang - thuộc react router dom
 * useState()
 * useEffect()
-* useMemo()
-* useCallback()
+* useMemo(): khi chúng ta muốn một biến không bị làm mới lại mỗi lần component re-render. - nếu có thay đổi nó mới chạy lại - re-render
+* useCallback(): khi chúng ta không muốn function của cta được khởi tạo lại mỗi lần component chúng ta re-render - nếu có thay đổi nó mới chạy lại - re-render
 * forwardRef() - truyền ref vào component
 * useRef() - truyền ref vào phần tử
 * useQuery()
@@ -47,9 +47,10 @@
 * splice(): cắt mảng, thay đổi mảng gốc
 
 * Yc: là 1 chuỗi
+
 - join() : nối chuỗi
 - split(): tách chuỗi
-
+- find(): tìm phần tử đầu tiên (thoa điều kiện)
 ---
 
 1. Cái input file là uncontrolled component, nó không thể chuyển thành control component được.
@@ -75,12 +76,6 @@ ví dụ là component selectDate và component Hạng vé khong cần value kh�
 ## API
 
 ### Flight booking
-
-1. Flight Offers Search API: Bước đầu tiên là tìm kiếm các ưu đãi chuyến bay dựa trên các thông tin như điểm đi, điểm đến, ngày đi, ngày về và số lượng hành khách. API này sẽ trả về danh sách các ưu đãi chuyến bay phù hợp với yêu cầu tìm kiếm của bạn.
-
-2. Flight Offers Price API: Sau khi có danh sách các ưu đãi chuyến bay từ bước trên, bạn sử dụng API này để lấy thông tin chi tiết về giá cả của từng ưu đãi, bao gồm giá cuối cùng, thuế, phí và các chi tiết khác liên quan đến việc đặt vé.
-
-3. Flight Create Orders API: Khi bạn đã chọn được ưu đãi chuyến bay và biết giá cả cụ thể, bạn có thể sử dụng API này để tạo đơn đặt hàng mới. Bạn cần cung cấp thông tin chi tiết về hành khách, yêu cầu đặc biệt và thông tin thanh toán để hoàn thành quá trình đặt vé.
 
 4. Flight Order Management API: Sau khi đã tạo thành công đơn đặt hàng, bạn có thể sử dụng API này để quản lý các đơn đặt hàng đã được tạo. Các chức năng bao gồm lấy thông tin chi tiết đơn hàng, cập nhật thông tin và hủy đơn hàng khi cần thiết.
 

@@ -6,20 +6,14 @@ import coMy from "../../img/lauguage/coMy.webp"
 import { useContext } from "react"
 import { AppContext } from "src/context/useContext"
 import Popover from "../Popover"
-import { getNameToEmail } from "src/utils/utils"
+import { getNameFromEmail } from "src/utils/utils"
 import { clearLS } from "src/utils/auth"
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "../ui/navigation-menu"
+import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 
 export default function Header2() {
-  const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile } = useContext(AppContext)
+  const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, listCart } =
+    useContext(AppContext)
 
   const handleLogOut = () => {
     clearLS()
@@ -28,92 +22,62 @@ export default function Header2() {
   }
 
   return (
-    <header className="bg-whiteColor py-2">
+    <header className="bg-whiteColor py-3 shadow-md">
       <div className="container">
         <div className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center">
             <Link to={path.home} className="flex items-center">
-              <div className="hidden md:block w-14 h-14">
+              <div className="hidden md:block w-10 h-10">
                 <img src={logo} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="text-xl text-textColor font-semibold">Booking.</div>
             </Link>
 
-            <nav className="ml-8 hidden md:flex items-center">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>
-                      <Link
-                        to={path.flight}
-                        className="flex items-center text-textColor duration-200 hover:text-gray-500"
-                      >
-                        <span className="text-base font-semibold hover:underline block">
-                          Chuyến bay
-                        </span>
-                      </Link>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <NavigationMenuLink>
-                        <div className="bg-whiteColor rounded-sm shadow-lg border border-gray-300">
-                          <Link
-                            to={path.flightSearch}
-                            className="block py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200"
-                          >
-                            Tìm kiếm chuyến bay
-                          </Link>
-                          <Link
-                            to={path.flightOrder}
-                            className="block py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200"
-                          >
-                            Quản lý đặt chỗ
-                          </Link>
-                          <div className="py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200">
-                            Lựa chọn chỗ ngồi
-                          </div>
-                          <div className="py-3 px-2 min-w-[170px] bg-whiteColor hover:bg-gray-300 duration-200">
-                            Giá vé có thương hiệu
-                          </div>
-                        </div>
-                      </NavigationMenuLink>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+            <nav className="ml-8 hidden md:flex items-center gap-4">
+              <Link
+                to={path.flight}
+                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+              >
+                <div className="w-6 h-6">
+                  <img src={iconFlight} alt="icon" className="w-full h-full" />
+                </div>
+                <span className="text-base font-medium hover:underline block">Chuyến bay</span>
+              </Link>
 
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>
-                      <Link
-                        to={path.flightSearch}
-                        className="flex items-center text-textColor duration-200 hover:text-gray-500"
-                      >
-                        <span className="text-base font-semibold hover:underline block">
-                          Khánh sạn
-                        </span>
-                      </Link>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <NavigationMenuLink>thuan</NavigationMenuLink>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+              <Link
+                to={path.flightManagement}
+                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+                  />
+                </svg>
+                <span className="text-base font-medium hover:underline block">Quản lý vé</span>
+              </Link>
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Popover
               className="sticky top-0 left-0"
               renderPopover={
-                <div className="shadow-lg rounded flex flex-col border border-gray-300">
+                <div className="shadow-lg flex flex-col">
                   <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
                     <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
                     Vietnamese
                   </button>
 
-                  <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200">
+                  <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300 border-t-0">
                     <img src={coMy} alt="Cờ Mỹ" className="h-6 w-6 object-contain" />
                     English
                   </button>
@@ -126,7 +90,14 @@ export default function Header2() {
               </div>
             </Popover>
 
-            <Link to="">
+            <Link to={path.cart} className="relative">
+              {isAuthenticated ? (
+                <span className="absolute left-4 -top-2 flex items-center justify-center w-4 h-4 rounded-full bg-red-500 text-white text-[10px]">
+                  {listCart.length}
+                </span>
+              ) : (
+                ""
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -166,7 +137,7 @@ export default function Header2() {
                     <SheetTitle className="mt-10">
                       {isAuthenticated && (
                         <div className="py-[2px] px-3 rounded-sm duration-200 hover:bg-[#ddd]/20 flex items-center gap-1 text-textColor font-medium text-base">
-                          Xin chào, {getNameToEmail(isProfile as string)}
+                          Xin chào, {getNameFromEmail(isProfile as string)}
                         </div>
                       )}
                       {!isAuthenticated && (
@@ -196,14 +167,14 @@ export default function Header2() {
               <Popover
                 className="sticky top-0 left-0 z-30"
                 renderPopover={
-                  <div className="shadow-lg rounded flex flex-col border border-gray-300">
-                    <button className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border-b border-gray-300">
+                  <div className="shadow-lg flex flex-col">
+                    <button className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
                       Tài khoản của tôi
                     </button>
 
                     <button
                       onClick={handleLogOut}
-                      className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2"
+                      className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2 border border-gray-300 border-t-0"
                     >
                       Đăng xuất
                       <svg
@@ -240,22 +211,22 @@ export default function Header2() {
                     />
                   </svg>
 
-                  {getNameToEmail(isProfile as string)}
+                  {getNameFromEmail(isProfile as string)}
                 </div>
               </Popover>
             )}
 
             {!isAuthenticated && (
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-4">
                 <Link
                   to={path.register}
-                  className="py-2 px-3 border-2 border-blueColor duration-200 hover:bg-[#ddd]/80 rounded-sm text-sm"
+                  className="duration-200 hover:underline rounded-sm text-sm text-textColor font-medium hover:text-textColor/80"
                 >
                   Đăng ký
                 </Link>
                 <Link
                   to={path.login}
-                  className="py-2 px-3 border-2 border-blueColor bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 hover:border-blueColor/80 rounded-sm text-sm"
+                  className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 rounded-sm text-sm font-medium hover:text-whiteColor/80"
                 >
                   Đăng nhập
                 </Link>

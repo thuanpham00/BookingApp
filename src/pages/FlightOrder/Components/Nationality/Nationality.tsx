@@ -1,9 +1,10 @@
+import { InputAirport } from "src/hooks/useFormHandler"
 import { CountryListCodeNumber } from "src/types/flight.type"
 
 interface Props {
   listAirport: CountryListCodeNumber
-  inputName: string
-  handleItemClick: (inputName: string, value: string) => void
+  inputName: InputAirport
+  handleItemClick: (inputName: InputAirport, value: string) => void
 }
 
 export default function Nationality({ inputName, listAirport, handleItemClick }: Props) {
