@@ -21,7 +21,7 @@ import Button from "src/components/Button"
 import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import { Fragment, useContext, useEffect, useState } from "react"
-import { airportCodes, countries } from "src/constant/flightSearch"
+import { airportCodes } from "src/constant/flightSearch"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -524,108 +524,98 @@ export default function FlightItem({ item, list }: Props) {
           </div>
         </div>
 
-        {showFlightDetail && (
-          <div className="w-full transition-all ease-linear duration-1000">
-            {/* các hành trình bay render ra luôn */}
-            {item.itineraries.map((detail, index) => (
-              <div className="w-full p-4 flex flex-col md:flex-row" key={index}>
-                {detail.segments.map((seg, indexSeg) => (
-                  <div key={indexSeg} className="flex-1">
-                    <div className="flex items-center gap-2 border border-gray-300 px-4 py-2">
-                      <div className="w-6 h-6">
-                        <img src={iconFlightRed} alt="icon" className="w-full h-full" />
+        <div
+          className={`${showFlightDetail ? "h-auto opacity-100" : "h-0 opacity-0"} w-full transition-opacity ease-linear duration-200`}
+        >
+          {/* các hành trình bay render ra luôn */}
+          {item.itineraries.map((detail, index) => (
+            <div className="w-full p-4 flex flex-col md:flex-row" key={index}>
+              {detail.segments.map((seg, indexSeg) => (
+                <div key={indexSeg} className="flex-1">
+                  <div className="flex items-center gap-2 border border-gray-300 px-4 py-2">
+                    <div className="w-6 h-6">
+                      <img src={iconFlightRed} alt="icon" className="w-full h-full" />
+                    </div>
+                    <span className="block text-textColor text-xs font-semibold truncate">
+                      {list.dictionaries.carriers[seg.carrierCode]}
+                    </span>
+                    <span className="block text-textColor text-xs truncate">
+                      {seg.carrierCode} {seg.number}
+                    </span>
+                    <div className="py-1 px-2 text-xs border border-gray-300 rounded-full bg-transparent truncate">
+                      {list.dictionaries.aircraft[seg.aircraft.code]}
+                    </div>
+                  </div>
+                  <div className="border border-gray-300 border-t-0 p-4 flex items-center justify-between">
+                    <div>
+                      <div className="text-base lg:text-xl font-semibold text-textColor">
+                        {getHourFromAPI(seg.departure.at)}
                       </div>
-                      <span className="block text-textColor text-xs font-semibold truncate">
-                        {list.dictionaries.carriers[seg.carrierCode]}
-                      </span>
-                      <span className="block text-textColor text-xs truncate">
-                        {seg.carrierCode} {seg.number}
-                      </span>
-                      <div className="py-1 px-2 text-xs border border-gray-300 rounded-full bg-transparent truncate">
-                        {list.dictionaries.aircraft[seg.aircraft.code]}
+                      <div className="text-xs lg:text-sm text-textColor font-medium">
+                        {getDateFromAPI(seg.departure.at)}
+                      </div>
+                      <div className="text-xs lg:text-sm text-textColor font-normal">
+                        Nhà ga khởi hành {seg.departure.terminal}
+                      </div>
+                      <div className="text-xs lg:text-sm text-textColor font-normal">
+                        {getCountryAirport(seg.departure.iataCode)}
                       </div>
                     </div>
-                    <div className="border border-gray-300 border-t-0 p-4 flex items-center justify-between">
-                      <div>
-                        <div className="text-base lg:text-xl font-semibold text-textColor">
-                          {getHourFromAPI(seg.departure.at)}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-medium">
-                          {getDateFromAPI(seg.departure.at)}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-normal">
-                          Nhà ga khởi hành {seg.departure.terminal}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-normal">
-                          {seg.departure.iataCode},{" "}
-                          {getCountry(
-                            countries,
-                            list.dictionaries.locations[seg.departure.iataCode].countryCode
-                          )}
-                        </div>
+                    <div className="relative">
+                      <div className="text-center text-xs lg:text-sm font-medium">
+                        {getDurationFromAPI(seg.duration)}
                       </div>
-                      <div className="relative">
-                        <div className="text-center text-xs lg:text-sm font-medium">
-                          {getDurationFromAPI(seg.duration)}
-                        </div>
-                        <div className="md:w-10 lg:w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
+                      <div className="md:w-10 lg:w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
+                    </div>
+                    <div>
+                      <div className="text-base lg:text-xl font-semibold text-textColor">
+                        {getHourFromAPI(seg.arrival.at)}
                       </div>
-                      <div>
-                        <div className="text-base lg:text-xl font-semibold text-textColor">
-                          {getHourFromAPI(seg.arrival.at)}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-medium">
-                          {getDateFromAPI(seg.arrival.at)}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-normal">
-                          Nhà ga khởi hành {seg.arrival.terminal}
-                        </div>
-                        <div className="text-xs lg:text-sm text-textColor font-normal">
-                          {seg.arrival.iataCode},{" "}
-                          {getCountry(
-                            countries,
-                            list.dictionaries.locations[seg.arrival.iataCode].countryCode
-                          )}
-                        </div>
+                      <div className="text-xs lg:text-sm text-textColor font-medium">
+                        {getDateFromAPI(seg.arrival.at)}
+                      </div>
+                      <div className="text-xs lg:text-sm text-textColor font-normal">
+                        Nhà ga khởi hành {seg.arrival.terminal}
+                      </div>
+                      <div className="text-xs lg:text-sm text-textColor font-normal">
+                        {getCountryAirport(seg.arrival.iataCode)}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            ))}
-            <div className="px-5 pb-2 flex items-center flex-wrap gap-2">
-              <span className="flex gap-1">
-                <span className="text-sm">Hành lý:</span>
-                <span className="text-sm font-semibold">
-                  {item.travelerPricings[0].travelerType}
-                </span>
-              </span>
-              <span className="flex gap-1">
-                <span className="text-sm">Số lượng:</span>
-                <span className="text-sm font-semibold">
-                  {item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity ||
-                    `${item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.weight}kg`}
-                </span>
-              </span>
-              <span className="flex gap-1">
-                <span className="text-sm">Cabin:</span>
-                <span className="text-sm font-semibold">
-                  {item.travelerPricings[0].fareDetailsBySegment[0].cabin}
-                </span>
-              </span>
-              <span className="flex gap-1">
-                <span className="text-sm">Class:</span>
-                <span className="text-sm font-semibold">
-                  {item.travelerPricings[0].fareDetailsBySegment[0].class}
-                </span>
-              </span>
+                </div>
+              ))}
             </div>
-            <div className="px-5 pb-2 flex items-center gap-2">
-              <span className="text-sm">Ngày cuối cùng có thể đặt vé:</span>
-              <span className="text-sm font-semibold">{item.lastTicketingDate}</span>
-            </div>
+          ))}
+          <div className="px-5 pb-2 flex items-center flex-wrap gap-2">
+            <span className="flex gap-1">
+              <span className="text-sm">Hành lý:</span>
+              <span className="text-sm font-semibold">{item.travelerPricings[0].travelerType}</span>
+            </span>
+            <span className="flex gap-1">
+              <span className="text-sm">Số lượng:</span>
+              <span className="text-sm font-semibold">
+                {item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity ||
+                  `${item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.weight}kg`}
+              </span>
+            </span>
+            <span className="flex gap-1">
+              <span className="text-sm">Cabin:</span>
+              <span className="text-sm font-semibold">
+                {item.travelerPricings[0].fareDetailsBySegment[0].cabin}
+              </span>
+            </span>
+            <span className="flex gap-1">
+              <span className="text-sm">Class:</span>
+              <span className="text-sm font-semibold">
+                {item.travelerPricings[0].fareDetailsBySegment[0].class}
+              </span>
+            </span>
           </div>
-        )}
+          <div className="px-5 pb-2 flex items-center gap-2">
+            <span className="text-sm">Ngày cuối cùng có thể đặt vé:</span>
+            <span className="text-sm font-semibold">{item.lastTicketingDate}</span>
+          </div>
+        </div>
       </div>
     </Fragment>
   )

@@ -1,19 +1,69 @@
-import { useEffect } from "react"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { useContext, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { Link } from "react-router-dom"
-import { toast } from "react-toastify"
+import { flightApi } from "src/apis/flight.api"
 import { path } from "src/constant/path"
+import { AppContext } from "src/context/useContext"
 import useQueryParam from "src/hooks/useQueryParam"
 import useScrollHeader from "src/hooks/useScrollHeader"
+import { ResponseFlightManage, ResponseFlightOrder } from "src/types/flight.type"
+import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 
 export default function Payment() {
+  const { setListCart, listCart, setListPurchased, listPurchased } = useContext(AppContext)
   const { showHeader } = useScrollHeader(200)
   const paramsUrl = useQueryParam()
 
+  const dataLS = localStorage.getItem("detailPaymentData") as string
+  const data = JSON.parse(dataLS) as ResponseFlightOrder
+  const idFlight = data?.data.id
+
+  localStorage.removeItem("flightPriceData")
+
+  const getFlightOrderManageQuery = useQuery({
+    queryKey: ["flightOrderManage", idFlight],
+    queryFn: () => {
+      const response = flightApi.flightManagement(idFlight).then((res) => {
+        setListCart(
+          listCart.filter(
+            (item) =>
+              item.data.flightOffers[0].itineraries[0].segments[0].departure.at !==
+              data.data.flightOffers[0].itineraries[0].segments[0].departure.at
+          )
+        )
+        return res
+      })
+      return response
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000
+  })
+  const data2 = getFlightOrderManageQuery.data?.data as ResponseFlightManage
+
+  // React nó phải render toàn bộ rồi mới cập nhật UI
+  // vì sao tách ra 2 useEffect vì react nó sẽ ko cập nhật UI liền mà nó sẽ chạy hết quá trình render component rồi mới cập nhật UI -> dẫn đến phải cập nhật listPurchase mới nhất -> thêm 1 useEffect để set localStorage (vì lúc này đã có giá trị mới nhất)
+
+  // ví dụ để chung 1 hàm useEffect thì nếu không tách ra, setPurchaseListToLS có thể chạy trước khi listPurchased có giá trị mới nhất.
+  // thì lúc này
+  // useEffect(() => {
+  //   if (data2) {
+  //     setListPurchased((prev) => [...prev, data2])
+  //     setPurchaseListToLS(listPurchased)
+  //   }
+  // }, [data2, setListPurchased])
+
   useEffect(() => {
-    toast.success("Đặt vé thành công!")
-  }, [])
+    if (data2) {
+      setListPurchased((prev) => [...prev, data2])
+    }
+  }, [data2, setListPurchased])
+
+  useEffect(() => {
+    setPurchaseListToLS(listPurchased)
+    setCartToLS(listCart)
+  }, [listCart, listPurchased])
 
   return (
     <div>

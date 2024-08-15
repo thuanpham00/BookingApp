@@ -26,6 +26,7 @@
 * useSearchParams() - dùng để lấy các `tham số truy vấn` trên URL xuống (page, limit, ....)
 * useParams() - dùng để lấy các `tham số định danh` trên URL xuống (id...)
 * useNavigate() - vùa điều hướng trang - vừa lưu state
+* useLocation() - xác định route hiện tại
 * <Outlet/> chứa các component con - thuộc react router dom
 * <Navigate> component điều hướng trang - thuộc react router dom
 * useState()
@@ -78,8 +79,6 @@ ví dụ là component selectDate và component Hạng vé khong cần value kh�
 ### Flight booking
 
 4. Flight Order Management API: Sau khi đã tạo thành công đơn đặt hàng, bạn có thể sử dụng API này để quản lý các đơn đặt hàng đã được tạo. Các chức năng bao gồm lấy thông tin chi tiết đơn hàng, cập nhật thông tin và hủy đơn hàng khi cần thiết.
-
-5. Seatmap Display API: Nếu cần thiết, bạn có thể sử dụng API này để hiển thị bản đồ ghế của các chuyến bay đã đặt, giúp người dùng lựa chọn vị trí ngồi phù hợp.
 
 6. Branded Fares Upsell API: Nếu bạn muốn cung cấp cho khách hàng các lựa chọn hạng vé khác nhau hoặc nâng cao giá trị bán hàng, bạn có thể sử dụng API này để bán các hạng vé thương hiệu (branded fares).
 

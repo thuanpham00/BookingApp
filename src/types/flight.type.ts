@@ -582,3 +582,159 @@ export type ResponseFlightOrder = {
     }
   }
 }
+
+// response của flight order management
+export type ResponseFlightManage = {
+  data: {
+    type: string // "flight-order"
+    id: string // Ví dụ: "MlpZVkFMfFdBVFNPTnwyMDE1LTExLTAy"
+    queuingOfficeId: string // Ví dụ: "NCE1A0950"
+    associatedRecords: Array<{
+      reference: string // Ví dụ: "2ZYVAL"
+      creationDateTime: string // Ví dụ: "2018-07-13T20:17:00"
+      originSystemCode: string // Ví dụ: "1A"
+      flightOfferId: string // Ví dụ: "1"
+    }>
+    travelers: Array<{
+      id: string // Ví dụ: "1"
+      dateOfBirth: string // Ví dụ: "1982-01-16"
+      name: {
+        firstName: string // Ví dụ: "STEPHANE"
+        lastName: string // Ví dụ: "MARTIN"
+      }
+      contact?: {
+        phones?: Array<{
+          countryCallingCode: string // Ví dụ: "33"
+          number: string // Ví dụ: "487692704"
+        }>
+      }
+      documents: Array<{
+        documentType: string // Ví dụ: "PASSPORT"
+        number: string // Ví dụ: "012345678"
+        expiryDate: string // Ví dụ: "2009-04-14"
+        issuanceCountry: string // Ví dụ: "GB"
+        nationality: string // Ví dụ: "GB"
+        holder: boolean // Ví dụ: true
+      }>
+      gender: string
+    }>
+    flightOffers: Array<{
+      id: string // Ví dụ: "1"
+      type: string // Ví dụ: "flight-offer"
+      source: string // Ví dụ: "GDS"
+      itineraries: Array<{
+        duration: string // Ví dụ: "PT2H"
+        segments: Array<{
+          id: string // Ví dụ: "1"
+          duration: string // Ví dụ: "PT2H"
+          aircraft: {
+            code: string // Ví dụ: "320"
+          }
+          numberOfStops: number // Ví dụ: 0
+          blacklistedInEU: boolean // Ví dụ: false
+          carrierCode: string // Ví dụ: "IB"
+          operating: {
+            carrierCode: string // Ví dụ: "IB"
+          }
+          number: string // Ví dụ: "3403"
+          departure: {
+            at: string // Ví dụ: "2018-09-22T10:15:00"
+            terminal: string // Ví dụ: "W"
+            iataCode: string // Ví dụ: "ORY"
+          }
+          arrival: {
+            at: string // Ví dụ: "2018-09-22T12:15:00"
+            terminal: string // Ví dụ: "4"
+            iataCode: string // Ví dụ: "MAD"
+          }
+          co2Emissions: Array<{
+            weight: string // Ví dụ: "100"
+            weightUnit: string // Ví dụ: "KG"
+            cabin: string // Ví dụ: "ECONOMY"
+          }>
+        }>
+      }>
+      price: {
+        grandTotal: string // Ví dụ: "689.21"
+        total: string // Ví dụ: "423.21"
+        base: string // Ví dụ: "242.00"
+        currency: string // Ví dụ: "EUR"
+        billingCurrency: string // Ví dụ: "EUR"
+        fees: Array<{
+          type: string // Ví dụ: "SUPPLIER"
+          amount: string // Ví dụ: "0"
+        }>
+        additionalServices: Array<{
+          type: string // Ví dụ: "CHECKED_BAGS"
+          amount: string // Ví dụ: "100"
+        }>
+      }
+      pricingOptions: {
+        fareType: Array<string> // Ví dụ: ["PUBLISHED"]
+        includedCheckedBags: boolean // Ví dụ: false
+      }
+      validatingAirlineCodes: Array<string> // Ví dụ: ["IB"]
+      travelerPricings: Array<{
+        travelerId: string // Ví dụ: "1"
+        fareOption: string // Ví dụ: "STANDARD"
+        travelerType: string // Ví dụ: "ADULT"
+        price: {
+          currency: string // Ví dụ: "EUR"
+          total: string // Ví dụ: "200.94"
+          base: string // Ví dụ: "126"
+          taxes: Array<{
+            code: string // Ví dụ: "YQ"
+            amount: string // Ví dụ: "0.94"
+          }>
+        }
+        fareDetailsBySegment: Array<{
+          segmentId: string // Ví dụ: "1"
+          cabin: string // Ví dụ: "ECONOMY"
+          fareBasis: string // Ví dụ: "ANNNNF4K"
+          brandedFare: string // Ví dụ: "LIGHTONE"
+          class: string // Ví dụ: "A"
+          isAllotment: boolean // Ví dụ: true
+          allotmentDetails: {
+            tourName: string // Ví dụ: "tour"
+            tourReference: string // Ví dụ: "ref"
+          }
+          sliceDiceIndicator: string // Ví dụ: "ABCDEF"
+          includedCheckedBags: {
+            quantity: number // Ví dụ: 0
+          }
+        }>
+      }>
+    }>
+    ticketingAggreement: {
+      option: string // Ví dụ: "DELAY_TO_CANCEL"
+      dateTime: string // Ví dụ: "2018-08-21T10:15:00.000"
+    }
+    contacts: Array<{
+      companyName: string // Ví dụ: "AMADEUS"
+      purpose: string // Ví dụ: "STANDARD"
+      phones: Array<{
+        deviceType: string // Ví dụ: "FAX"
+        countryCallingCode: string // Ví dụ: "33"
+        number: string // Ví dụ: "480080070"
+      }>
+      emailAddress: string // Ví dụ: "support@mail.com"
+      address: {
+        lines: Array<string> // Ví dụ: ["485 route du Pin Montard"]
+        postalCode: string // Ví dụ: "06902"
+        cityName: string // Ví dụ: "Sophia Antipolis Cedex"
+        countryCode: string // Ví dụ: "FR"
+      }
+      addresseeName: {
+        firstName: string
+      }
+    }>
+  }
+  dictionaries: {
+    locations: {
+      [key: string]: {
+        cityCode: string // Ví dụ: "PAR"
+        countryCode: string // Ví dụ: "FR"
+      }
+    }
+  }
+}

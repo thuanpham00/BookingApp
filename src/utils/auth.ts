@@ -1,4 +1,4 @@
-import { ResponseFlightPrice } from "src/types/flight.type"
+import { ResponseFlightManage, ResponseFlightPrice } from "src/types/flight.type"
 
 export const setAccessTokenToLS = (accessToken: string) => {
   return localStorage.setItem("accessToken", accessToken)
@@ -28,5 +28,25 @@ export const setCartToLS = (cartItem: ResponseFlightPrice[]) => {
 
 export const getCartToLS = () => {
   const res = localStorage.getItem("listCart") as string
+  return res ? JSON.parse(res) : []
+}
+
+// purchase
+export const setPurchaseListToLS = (cartItem: ResponseFlightManage[]) => {
+  return localStorage.setItem("listPurchased", JSON.stringify(cartItem))
+}
+
+export const getPurchaseListToLS = () => {
+  const res = localStorage.getItem("listPurchased") as string
+  return res ? JSON.parse(res) : []
+}
+
+// deleted purchase
+export const setCancelListToLS = (cartItem: ResponseFlightManage[]) => {
+  return localStorage.setItem("listCancel", JSON.stringify(cartItem))
+}
+
+export const getCancelListToLS = () => {
+  const res = localStorage.getItem("listCancel") as string
   return res ? JSON.parse(res) : []
 }

@@ -32,7 +32,7 @@ export default function Header() {
         <div className="flex items-center justify-between cursor-pointer">
           <div className="flex items-center">
             <Link to={path.home} className="flex items-center">
-              <div className="hidden md:block w-10 h-10">
+              <div className="hidden lg:block w-10 h-10">
                 <img src={logo} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="text-xl text-textColor font-semibold">Booking.</div>
@@ -50,7 +50,7 @@ export default function Header() {
               </Link>
 
               <Link
-                to={path.flightManagement}
+                to={path.ManageTicket}
                 className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
               >
                 <svg
@@ -59,15 +59,15 @@ export default function Header() {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="h-6 w-6"
+                  className="h-5 w-5"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
                   />
                 </svg>
-                <span className="text-base font-medium hover:underline block">Quản lý vé</span>
+                <span className="text-base font-medium hover:underline block">Đơn đặt chỗ</span>
               </Link>
             </nav>
           </div>
@@ -173,9 +173,12 @@ export default function Header() {
                 className="sticky top-0 left-0 z-30"
                 renderPopover={
                   <div className="shadow-lg flex flex-col">
-                    <button className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
+                    <Link
+                      to={path.ManageUser}
+                      className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300"
+                    >
                       Tài khoản của tôi
-                    </button>
+                    </Link>
 
                     <button
                       onClick={handleLogOut}

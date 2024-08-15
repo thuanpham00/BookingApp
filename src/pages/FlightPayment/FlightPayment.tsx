@@ -56,8 +56,6 @@ export default function FlightPayment() {
       })
 
       window.location.href = response.data.url
-      localStorage.removeItem("detailPaymentData")
-      localStorage.removeItem("flightPriceData")
     } catch (error) {
       console.error("Error creating payment URL:", error)
     }
@@ -78,13 +76,17 @@ export default function FlightPayment() {
             <div className="py-4 px-1 grid grid-cols-12 items-center">
               <div className="col-span-12 md:col-span-5">
                 <div className="flex items-center gap-2">
-                  <button aria-label="iconBack" onClick={handleBackPage}>
+                  <button
+                    aria-label="iconBack"
+                    onClick={handleBackPage}
+                    className="text-white hover:text-gray-300 duration-200"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
-                      stroke="white"
+                      stroke="currentColor"
                       className="w-8 h-8"
                     >
                       <path
@@ -274,273 +276,264 @@ export default function FlightPayment() {
               </div>
 
               <div className="col-span-12 order-1 md:col-span-4 md:order-2">
-                <div className="sticky left-0 top-20 ">
-                  <div className="bg-[#fff] p-4 shadow-md rounded-lg">
-                    <span className="text-base mb-4 block font-medium">Phân tích giá</span>
+                <div className="bg-[#fff] p-4 shadow-md rounded-lg">
+                  <span className="text-base mb-4 block font-medium">Phân tích giá</span>
 
-                    {data?.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "ADULT"
-                    ) && (
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Người lớn</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceAdult?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceAdult?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "ADULT"
+                  ) && (
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Người lớn</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceAdult?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceAdult?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceAdult?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceAdult?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    {data?.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "CHILD"
-                    ) && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Trẻ em</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceChild?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceChild?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "CHILD"
+                  ) && (
+                    <div className="mt-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Trẻ em</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceChild?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceChild?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceChild?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceChild?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    {data?.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "HELD_INFANT"
-                    ) && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Em bé</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceInfant?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceInfant?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "HELD_INFANT"
+                  ) && (
+                    <div className="mt-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Em bé</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceInfant?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceInfant?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceInfant?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceInfant?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
-                      <span className="text-sm font-medium">Giảm giá</span>
-                      <span className="text-sm font-medium">0đ</span>
-                    </div>
-                    <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
-                      <span className="text-sm font-medium">Phí xử lý</span>
-                      <span className="text-sm font-medium text-[#32a923] capitalize">
-                        miễn phí
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-base block font-medium">Tổng cộng</span>
-                      <span className="text-xl font-medium text-red-600">
-                        {formatCurrency(priceTotal)}
-                        {" đ"}
-                      </span>
-                    </div>
+                  <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
+                    <span className="text-sm font-medium">Giảm giá</span>
+                    <span className="text-sm font-medium">0đ</span>
                   </div>
+                  <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
+                    <span className="text-sm font-medium">Phí xử lý</span>
+                    <span className="text-sm font-medium text-[#32a923] capitalize">miễn phí</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-base block font-medium">Tổng cộng</span>
+                    <span className="text-xl font-medium text-red-600">
+                      {formatCurrency(priceTotal)}
+                      {" đ"}
+                    </span>
+                  </div>
+                </div>
 
-                  <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
-                    <div className="overflow-y-auto h-[200px]">
-                      <h2 className="text-base text-textColor font-semibold">Điều kiện đặt chỗ</h2>
-                      <div>
-                        <div className="mt-3 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-sm text-textColor font-semibold">
-                            {
-                              data?.data.flightOffers[0].itineraries[0].segments[0].departure
-                                .iataCode
-                            }
-                            {"-"}
-                            {
-                              data?.data.flightOffers[0].itineraries[0].segments[
-                                data?.data.flightOffers[0].itineraries[0].segments.length - 1
-                              ].arrival.iataCode
-                            }
-                            : Yêu cầu Visa quá cảnh
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 max-w-[350px]">
-                            Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế
-                            hoạch cho chuyến đi của mình.
-                          </span>
-                        </div>
+                <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
+                  <div className="overflow-y-auto h-[200px]">
+                    <h2 className="text-base text-textColor font-semibold">Điều kiện đặt chỗ</h2>
+                    <div>
+                      <div className="mt-3 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-sm text-textColor font-semibold">
+                          {data?.data.flightOffers[0].itineraries[0].segments[0].departure.iataCode}
+                          {"-"}
+                          {
+                            data?.data.flightOffers[0].itineraries[0].segments[
+                              data?.data.flightOffers[0].itineraries[0].segments.length - 1
+                            ].arrival.iataCode
+                          }
+                          : Yêu cầu Visa quá cảnh
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 max-w-[350px]">
+                          Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế hoạch
+                          cho chuyến đi của mình.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-sm text-textColor font-semibold">
+                          {
+                            data?.data.flightOffers[0].itineraries[
+                              data?.data.flightOffers[0].itineraries.length - 1
+                            ].segments[0].departure.iataCode
+                          }
+                          {"-"}
+                          {
+                            data?.data.flightOffers[0].itineraries[
+                              data?.data.flightOffers[0].itineraries.length - 1
+                            ].segments[
+                              data?.data.flightOffers[0].itineraries[0].segments.length - 1
+                            ].arrival.iataCode
+                          }
+                          : Yêu cầu Visa quá cảnh
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 max-w-[350px]">
+                          Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế hoạch
+                          cho chuyến đi của mình.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          Chính sách vắng mặt
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ
+                          (PNR) sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm soát
+                          hoặc cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy chuyến
+                          sẽ áp dụng theo quy định của hãng hàng không.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">Vui lòng ghi chú</h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-sm text-textColor font-semibold">
-                            {
-                              data?.data.flightOffers[0].itineraries[
-                                data?.data.flightOffers[0].itineraries.length - 1
-                              ].segments[0].departure.iataCode
-                            }
-                            {"-"}
-                            {
-                              data?.data.flightOffers[0].itineraries[
-                                data?.data.flightOffers[0].itineraries.length - 1
-                              ].segments[
-                                data?.data.flightOffers[0].itineraries[0].segments.length - 1
-                              ].arrival.iataCode
-                            }
-                            : Yêu cầu Visa quá cảnh
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 max-w-[350px]">
-                            Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế
-                            hoạch cho chuyến đi của mình.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Chính sách vắng mặt
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ
-                            (PNR) sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm
-                            soát hoặc cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy
-                            chuyến sẽ áp dụng theo quy định của hãng hàng không.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ
+                          phải trả thêm phí hoặc bị từ chối lên máy bay.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">Yêu cầu Visa</h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Vui lòng ghi chú
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ
-                            phải trả thêm phí hoặc bị từ chối lên máy bay.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">Yêu cầu Visa</h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết
-                            trước khi đặt vé.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết trước
+                          khi đặt vé.
+                        </span>
                       </div>
+                    </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Lưu ý về nguyên tắc
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh.
-                            Kiểm tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
-                          </span>
-                        </div>
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          Lưu ý về nguyên tắc
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh. Kiểm
+                          tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
+                        </span>
                       </div>
                     </div>
                   </div>

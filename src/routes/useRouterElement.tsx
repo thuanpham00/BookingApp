@@ -1,10 +1,12 @@
 import { Suspense, lazy, useContext } from "react"
-import { Navigate, Outlet, useRoutes } from "react-router-dom"
+import { Navigate, Outlet, useLocation, useRoutes, useSearchParams } from "react-router-dom"
 import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
 import RegisterLayout from "src/layouts/RegisterLayout"
+import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
+import User from "src/pages/Manage/Pages/User"
 
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
@@ -23,15 +25,24 @@ const FlightPayment = lazy(() => import("src/pages/FlightPayment"))
 const PaymentComplete = lazy(() => import("src/pages/Payment"))
 const Cart = lazy(() => import("src/pages/Cart"))
 const NotFound = lazy(() => import("src/pages/NotFound"))
+const ManageOrderCancel = lazy(() => import("src/pages/Manage/Pages/ManageOrderCancel"))
+const ManageOrderSuccess = lazy(() => import("src/pages/Manage/Pages/ManageOrderSuccess"))
 
 function ProtectedRouter() {
+  const { pathname } = useLocation()
   const { isAuthenticated } = useContext(AppContext)
-  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
+  return isAuthenticated ? (
+    <Outlet />
+  ) : (
+    <Navigate to={`${path.login}?callbackURL=${encodeURIComponent(pathname)}`} />
+  )
 }
 
 function RejectedRouter() {
+  const [searchParamsURL] = useSearchParams()
+  const currentRoute = searchParamsURL.get("callbackURL") || path.home // lấy giá trị của tham số `callbackURL` -- trường hợp ko có tham số callbackURL thì back về route home
   const { isAuthenticated } = useContext(AppContext)
-  return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
+  return !isAuthenticated ? <Outlet /> : <Navigate to={currentRoute} />
 }
 
 export default function useRouterElement() {
@@ -123,6 +134,36 @@ export default function useRouterElement() {
                   <Cart />
                 </Suspense>
               )
+            },
+            {
+              path: "",
+              element: <ManageLayout />,
+              children: [
+                {
+                  path: path.ManageTicket, // quản lý chuyến bay đã đặt
+                  element: (
+                    <Suspense>
+                      <ManageOrderSuccess />
+                    </Suspense>
+                  )
+                },
+                {
+                  path: path.CancelTicket, // quản lý chuyến bay đã hủy
+                  element: (
+                    <Suspense>
+                      <ManageOrderCancel />
+                    </Suspense>
+                  )
+                },
+                {
+                  path: path.ManageUser, // quản lý chuyến bay đã hủy
+                  element: (
+                    <Suspense>
+                      <User />
+                    </Suspense>
+                  )
+                }
+              ]
             }
           ]
         }

@@ -7,7 +7,6 @@ import {
   ResponseFlightPrice,
   TravellerType
 } from "src/types/flight.type"
-import { produce } from "immer"
 import {
   formatCurrency,
   getAirlines,
@@ -18,8 +17,6 @@ import {
 } from "src/utils/utils"
 import iconFlight from "src/img/Flight/iconFlightRed.webp"
 import checkInBaggage from "src/img/FlightOrder/checkin_baggage_icon.webp"
-import avatar1 from "src/img/FlightOrder/avatar1.webp"
-import avatar2 from "src/img/FlightOrder/avatar2.webp"
 import icon2 from "src/img/FlightOrder/imp-info.webp"
 import { useNavigate } from "react-router-dom"
 import FormProfile from "./Components/FormProfile"
@@ -37,7 +34,6 @@ import useScrollHeader from "src/hooks/useScrollHeader"
 import { path } from "src/constant/path"
 import usePriceTraveller from "src/hooks/usePriceTraveller"
 import useFormHandler from "src/hooks/useFormHandler"
-import useValidateInput from "src/hooks/useValidateInput"
 
 export type FormData = Pick<
   schemaType,
@@ -52,10 +48,7 @@ export default function FlightOrder() {
   // xử lý header
   const { showHeader } = useScrollHeader(200)
   // xử lý form
-  const [currentAdult, setCurrentAdult] = useState<number>(0)
-  const [currentChild, setCurrentChild] = useState<number>(0)
-  const [currentInfant, setCurrentInfant] = useState<number>(0)
-  const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
+  // const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
   const inputRef = useRef<HTMLInputElement>(null)
   const [codeNumberList, setCodeNumberList] = useState<CountryListCodeNumber>([])
   const [codeNumber, setCodeNumber] = useState("")
@@ -95,51 +88,51 @@ export default function FlightOrder() {
   const priceChild = usePriceTraveller(data, "CHILD")
   const priceInfant = usePriceTraveller(data, "HELD_INFANT")
   const priceTotal = useMemo(() => {
-    return data.data.flightOffers[0].travelerPricings.reduce(
+    return data?.data.flightOffers[0].travelerPricings.reduce(
       (result, current) => result + Number(current.price.total),
       0
     )
   }, [data])
 
   // cái này hay
-  const handleCheckTraveller =
-    (type: string, index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (type === "adult") {
-        setCheckState(
-          produce((draft) => {
-            draft[index] = event.target.checked // đại diện checked previous
-          })
-        )
-      } else if (type === "child") {
-        setCheckState(
-          produce((draft) => {
-            draft[index] = event.target.checked // đại diện checked previous
-          })
-        )
-      } else if (type === "infant") {
-        setCheckState(
-          produce((draft) => {
-            draft[index] = event.target.checked // đại diện checked previous
-          })
-        )
-      }
-    }
+  // const handleCheckTraveller =
+  //   (type: string, index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     if (type === "adult") {
+  //       setCheckState(
+  //         produce((draft) => {
+  //           draft[index] = event.target.checked // đại diện checked previous
+  //         })
+  //       )
+  //     } else if (type === "child") {
+  //       setCheckState(
+  //         produce((draft) => {
+  //           draft[index] = event.target.checked // đại diện checked previous
+  //         })
+  //       )
+  //     } else if (type === "infant") {
+  //       setCheckState(
+  //         produce((draft) => {
+  //           draft[index] = event.target.checked // đại diện checked previous
+  //         })
+  //       )
+  //     }
+  //   }
 
-  const handleAddTraveller = (type: string) => () => {
-    if (type === "adult") {
-      if (currentAdult < quantityOfTraveller.adult) {
-        setCurrentAdult((prev) => prev + 1)
-      }
-    } else if (type === "child") {
-      if (currentChild < quantityOfTraveller.child) {
-        setCurrentChild((prev) => prev + 1)
-      }
-    } else if (type === "infant") {
-      if (currentInfant < quantityOfTraveller.infant) {
-        setCurrentInfant((prev) => prev + 1)
-      }
-    }
-  }
+  // const handleAddTraveller = (type: string) => () => {
+  //   if (type === "adult") {
+  //     if (currentAdult < quantityOfTraveller.adult) {
+  //       setCurrentAdult((prev) => prev + 1)
+  //     }
+  //   } else if (type === "child") {
+  //     if (currentChild < quantityOfTraveller.child) {
+  //       setCurrentChild((prev) => prev + 1)
+  //     }
+  //   } else if (type === "infant") {
+  //     if (currentInfant < quantityOfTraveller.infant) {
+  //       setCurrentInfant((prev) => prev + 1)
+  //     }
+  //   }
+  // }
 
   // xử lý form
   const [travellers, setTravellers] = useState<TravellerType[]>([])
@@ -157,8 +150,7 @@ export default function FlightOrder() {
     resolver: yupResolver(schemaFormData)
   })
 
-  const { handleChangeValueForm } = useValidateInput(setValue)
-  const { filterList, handleItemClick } = useFormHandler(
+  const { filterList, handleItemClick, handleChangeValueForm } = useFormHandler(
     codeNumberList,
     codeNumber,
     setValue,
@@ -226,7 +218,7 @@ export default function FlightOrder() {
       flightCreateOrderMutation.mutate(createOrder, {
         onSuccess: () => {
           toast.dismiss(loadingToastId)
-          toast.success("Lưu thông tin thành công!")
+          toast.success("Tạo đơn thành công!")
           navigate(path.flightPayment)
         }
       })
@@ -254,13 +246,17 @@ export default function FlightOrder() {
             <div className="py-4 px-1 grid grid-cols-12 items-center">
               <div className="col-span-12 md:col-span-5">
                 <div className="flex items-center gap-2">
-                  <button aria-label="iconBack" onClick={handleBackPage}>
+                  <button
+                    aria-label="iconBack"
+                    onClick={handleBackPage}
+                    className="text-white hover:text-gray-300 duration-200"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
-                      stroke="white"
+                      stroke="currentColor"
                       className="w-8 h-8"
                     >
                       <path
@@ -324,10 +320,10 @@ export default function FlightOrder() {
           <div className="container">
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-12 order-2 md:col-span-8 md:order-1">
-                {data.data.flightOffers[0].itineraries.map((item, index) => (
+                {data?.data.flightOffers[0].itineraries.map((item, index) => (
                   <div
                     key={index}
-                    className="relative p-4 mb-4 bg-white last:mb-0 shadow-md rounded-lg border border-gray-300"
+                    className="relative p-6 mb-4 bg-white last:mb-0 shadow-md rounded-lg border border-gray-300"
                   >
                     <div className="flex items-center justify-between flex-wrap">
                       <div className="flex items-center gap-1">
@@ -509,282 +505,98 @@ export default function FlightOrder() {
                 ))}
 
                 <div className="my-4">
-                  <h2 className="text-lg text-textColor font-semibold my-2">
+                  <h2 className="text-lg text-textColor font-semibold my-2 ml-1">
                     Thông tin hành khách
                   </h2>
 
-                  {data.data.flightOffers[0].travelerPricings.find(
+                  {data?.data.flightOffers[0].travelerPricings.find(
                     (item) => item.travelerType === "ADULT"
                   ) && (
-                    <div className="my-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <img src={avatar2} alt="avatar" />
-                          <span className="text-base text-textColor font-medium">
-                            Người lớn (12 tuổi trở lên)
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-base text-textColor font-medium">
-                            {currentAdult}
-                          </span>
-                          <span className="text-base text-textColor font-medium">
-                            /{quantityOfTraveller.adult}
-                          </span>
-                          <span className="ml-1 text-base text-gray-500">Thêm</span>
-                        </div>
+                    <div>
+                      <div className="mt-2 bg-white p-4 shadow-md rounded-lg my-2">
+                        <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với
+                        hộ chiếu hoặc giấy tờ tùy thân có ảnh của quý khách
                       </div>
-
-                      {currentAdult === quantityOfTraveller.adult && (
-                        <div className="text-xs text-red-500 p-2 pb-0">
-                          Bạn đã chọn tối đa vé cho Người lớn
-                        </div>
-                      )}
 
                       <div className="mt-2">
-                        {currentAdult === 0 ? (
-                          <div className="p-4 bg-white shadow-md border-b border-b-gray-300">
-                            <span className="text-sm text-gray-500">
-                              Bạn chưa thêm bất kỳ người lớn nào vào danh sách
-                            </span>
-                          </div>
-                        ) : (
-                          Array(currentAdult)
-                            .fill(0)
-                            .map((_, index) => (
-                              <div
-                                key={index}
-                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="w-4 h-4"
-                                  checked={checkState[index] || false}
-                                  onChange={handleCheckTraveller("adult", index)}
-                                />
-                                <label htmlFor={String(index)} className="absolute left-12">
-                                  Người lớn {index + 1}
-                                </label>
-                                <div className="FormProfile">
-                                  <FormProfile addOnTraveller={addTraveller} />
-                                </div>
-                              </div>
-                            ))
-                        )}
-                      </div>
-
-                      <div className="mt-2 p-4 bg-white">
-                        <button
-                          type="button"
-                          onClick={handleAddTraveller("adult")}
-                          className="text-sm text-blue-500 uppercase flex items-center gap-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-3 h-3"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 4.5v15m7.5-7.5h-15"
-                            />
-                          </svg>
-                          Thêm thông tin hành khách (người lớn) mới
-                        </button>
+                        {Array(quantityOfTraveller.adult)
+                          .fill(0)
+                          .map((_, index) => (
+                            <div
+                              key={index}
+                              className="w-full gap-2 relative shadow-md bg-white border-b border-b-gray-300 px-6 py-6 rounded-lg mb-4"
+                            >
+                              <FormProfile
+                                addOnTraveller={addTraveller}
+                                index={index}
+                                typeTraveler="Người lớn"
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}
 
-                  {data.data.flightOffers[0].travelerPricings.find(
+                  {data?.data.flightOffers[0].travelerPricings.find(
                     (item) => item.travelerType === "CHILD"
                   ) && (
-                    <div className="my-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <img src={avatar1} alt="avatar" />
-                          <span className="text-base text-textColor font-medium">
-                            Trẻ em (dưới 12 tuổi)
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-base text-textColor font-medium">
-                            {currentChild}
-                          </span>
-                          <span className="text-base text-textColor font-medium">
-                            /{quantityOfTraveller.child}
-                          </span>
-                          <span className="ml-1 text-base text-gray-500">Thêm</span>
-                        </div>
-                      </div>
-
-                      {currentChild === quantityOfTraveller.child && (
-                        <div className="text-xs text-red-500 p-2 pb-0">
-                          Bạn đã chọn tối đa vé cho Trẻ em
-                        </div>
-                      )}
-
+                    <div>
                       <div className="mt-2">
-                        {currentChild === 0 ? (
-                          <div className="p-4 bg-white shadow-md border-b border-b-gray-300">
-                            <span className="text-sm text-gray-500">
-                              Bạn chưa thêm bất kỳ trẻ em nào vào danh sách
-                            </span>
-                          </div>
-                        ) : (
-                          Array(currentChild)
-                            .fill(0)
-                            .map((_, index) => (
-                              <div
-                                key={index}
-                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="w-4 h-4"
-                                  id={String(index)}
-                                  checked={checkState[index]}
-                                  onChange={handleCheckTraveller("child", index)}
-                                />
-                                <label htmlFor={String(index)} className="absolute left-12">
-                                  Trẻ em {index + 1}
-                                </label>
-                                <div className="FormProfile">
-                                  <FormProfile addOnTraveller={addTraveller} />
-                                </div>
-                              </div>
-                            ))
-                        )}
-                      </div>
-
-                      <div className="mt-2 p-4 bg-white">
-                        <button
-                          type="button"
-                          onClick={handleAddTraveller("child")}
-                          className="text-sm text-blue-500 uppercase flex items-center gap-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-3 h-3"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 4.5v15m7.5-7.5h-15"
-                            />
-                          </svg>
-                          Thêm thông tin hành khách (trẻ em) mới
-                        </button>
+                        {Array(quantityOfTraveller.child)
+                          .fill(0)
+                          .map((_, index) => (
+                            <div
+                              key={index}
+                              className="w-full gap-2 relative shadow-md bg-white border-b border-b-gray-300 px-6 py-6 rounded-lg mb-4"
+                            >
+                              <FormProfile
+                                addOnTraveller={addTraveller}
+                                index={index + quantityOfTraveller.adult}
+                                typeTraveler="Trẻ em"
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}
 
-                  {data.data.flightOffers[0].travelerPricings.find(
+                  {data?.data.flightOffers[0].travelerPricings.find(
                     (item) => item.travelerType === "HELD_INFANT"
                   ) && (
-                    <div className="my-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <img src={avatar2} alt="avatar" />
-                          <span className="text-base text-textColor font-medium">
-                            Em bé (dưới 2 tuổi)
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-base text-textColor font-medium">
-                            {currentInfant}
-                          </span>
-                          <span className="text-base text-textColor font-medium">
-                            /{quantityOfTraveller.infant}
-                          </span>
-                          <span className="ml-1 text-base text-gray-500">Thêm</span>
-                        </div>
-                      </div>
-
-                      {currentInfant === quantityOfTraveller.infant && (
-                        <div className="text-xs text-red-500 p-2 pb-0">
-                          Bạn đã chọn tối đa vé cho Em bé
-                        </div>
-                      )}
-
+                    <div>
                       <div className="mt-2">
-                        {currentInfant === 0 ? (
-                          <div className="p-4 bg-white shadow-md border-b border-b-gray-300">
-                            <span className="text-sm text-gray-500">
-                              Bạn chưa thêm bất kỳ người lớn nào vào danh sách
-                            </span>
-                          </div>
-                        ) : (
-                          Array(currentInfant)
-                            .fill(0)
-                            .map((_, index) => (
-                              <div
-                                key={index}
-                                className="w-full gap-2 relative shadow bg-white border-b border-b-gray-300 p-6 rounded mb-2"
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="w-4 h-4"
-                                  id={String(index)}
-                                  checked={checkState[index]}
-                                  onChange={handleCheckTraveller("infant", index)}
-                                />
-                                <label htmlFor={String(index)} className="absolute left-12">
-                                  Em bé {index + 1}
-                                </label>
-                                <div className="FormProfile">
-                                  <FormProfile addOnTraveller={addTraveller} />
-                                </div>
-                              </div>
-                            ))
-                        )}
-                      </div>
-
-                      <div className="mt-2 p-4 bg-white">
-                        <button
-                          type="button"
-                          onClick={handleAddTraveller("infant")}
-                          className="text-sm text-blue-500 uppercase flex items-center gap-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-3 h-3"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M12 4.5v15m7.5-7.5h-15"
-                            />
-                          </svg>
-                          Thêm thông tin hành khách (em bé) mới
-                        </button>
+                        {Array(quantityOfTraveller.infant)
+                          .fill(0)
+                          .map((_, index) => (
+                            <div
+                              key={index}
+                              className="w-full gap-2 relative shadow-md bg-white border-b border-b-gray-300 px-6 py-6 rounded-lg mb-4"
+                            >
+                              <FormProfile
+                                addOnTraveller={addTraveller}
+                                index={
+                                  index + quantityOfTraveller.child + quantityOfTraveller.adult
+                                }
+                                typeTraveler="Em bé"
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}
 
                   <div>
                     <h2 className="text-lg text-textColor font-semibold my-2">Thông tin liên hệ</h2>
-                    <form onSubmit={onSubmit} className="bg-white shadow-xl">
-                      <div className="py-3 border-b border-b-gray-300">
-                        <span className="px-4 text-base font-medium block">
+                    <form onSubmit={onSubmit} className="bg-white shadow-md rounded-lg">
+                      <div className="py-4 border-b border-b-gray-300">
+                        <span className="px-6 text-base font-medium block">
                           Thông tin liên hệ (nhận vé/phiếu thanh toán)
                         </span>
-                        <span className="px-4 text-sm block text-gray-500">
+                        <span className="px-6 text-sm block text-gray-500">
                           Vé Điện tử của quý khách sẽ được gửi đến đây
                         </span>
                       </div>
-                      <div className="p-4 grid grid-cols-6 items-center gap-2 flex-wrap">
+                      <div className="p-6 grid grid-cols-6 items-center gap-2 flex-wrap pb-0">
                         <div className="col-span-6 md:col-span-3">
                           <span className="mb-[2px] text-sm block">
                             Tên Đệm & Tên (vd: Minh Thuan) <span className="text-red-500">*</span>
@@ -888,138 +700,164 @@ export default function FlightOrder() {
               </div>
 
               <div className="col-span-12 order-1 md:col-span-4 md:order-2">
-                <div className="sticky left-0 top-20 ">
-                  <div className="bg-[#fff] p-4 shadow-md rounded-lg">
-                    <span className="text-base mb-4 block font-medium">Phân tích giá</span>
-                    {/* nó phải có type này trong data mới hiện giá
+                <div className="bg-[#fff] p-4 shadow-md rounded-lg">
+                  <span className="text-base mb-4 block font-medium">Phân tích giá</span>
+                  {/* nó phải có type này trong data mới hiện giá
                   hàm find nó trả về phần tử đầu tiên tìm thấy */}
-                    {data.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "ADULT"
-                    ) && (
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Người lớn</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceAdult?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceAdult?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "ADULT"
+                  ) && (
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Người lớn</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceAdult?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceAdult?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceAdult?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceAdult?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    {data.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "CHILD"
-                    ) && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Trẻ em</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceChild?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceChild?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "CHILD"
+                  ) && (
+                    <div className="mt-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Trẻ em</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceChild?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceChild?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceChild?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceChild?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    {data.data.flightOffers[0].travelerPricings.find(
-                      (item) => item.travelerType === "HELD_INFANT"
-                    ) && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Em bé</span>
-                          <div className="flex gap-1 text-sm font-medium">
-                            <span>
-                              {priceInfant?.total}
-                              {" đ"}
-                            </span>
-                            <span>x</span>
-                            <span>{quantityOfTraveller.adult}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Giá gốc</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceInfant?.base}
+                  {data?.data.flightOffers[0].travelerPricings.find(
+                    (item) => item.travelerType === "HELD_INFANT"
+                  ) && (
+                    <div className="mt-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">Em bé</span>
+                        <div className="flex gap-1 text-sm font-medium">
+                          <span>
+                            {priceInfant?.total}
                             {" đ"}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-500">
-                          <span className="text-sm font-normal">Thuế và phí</span>
-                          <span className="font-normal text-sm mb-1 block">
-                            {priceInfant?.fee}
-                            {" đ"}
-                          </span>
+                          <span>x</span>
+                          <span>{quantityOfTraveller.adult}</span>
                         </div>
                       </div>
-                    )}
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Giá gốc</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceInfant?.base}
+                          {" đ"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-gray-500">
+                        <span className="text-sm font-normal">Thuế và phí</span>
+                        <span className="font-normal text-sm mb-1 block">
+                          {priceInfant?.fee}
+                          {" đ"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-                    <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
-                      <span className="text-sm font-medium">Giảm giá</span>
-                      <span className="text-sm font-medium">0đ</span>
-                    </div>
-                    <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
-                      <span className="text-sm font-medium">Phí xử lý</span>
-                      <span className="text-sm font-medium text-[#32a923] uppercase">miễn phí</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-base block font-medium">Tổng cộng</span>
-                      <span className="text-xl font-medium text-red-600">
-                        {formatCurrency(priceTotal)}
-                        {" đ"}
-                      </span>
-                    </div>
+                  <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
+                    <span className="text-sm font-medium">Giảm giá</span>
+                    <span className="text-sm font-medium">0đ</span>
                   </div>
+                  <div className="mt-2 border-t border-t-gray-300 py-2 flex items-center justify-between">
+                    <span className="text-sm font-medium">Phí xử lý</span>
+                    <span className="text-sm font-medium text-[#32a923] uppercase">miễn phí</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-base block font-medium">Tổng cộng</span>
+                    <span className="text-xl font-medium text-red-600">
+                      {formatCurrency(priceTotal)}
+                      {" đ"}
+                    </span>
+                  </div>
+                </div>
 
-                  <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
-                    <div className="overflow-y-auto h-[200px]">
-                      <h2 className="text-base text-textColor font-semibold">Điều kiện đặt chỗ</h2>
-                      <div>
-                        <div className="mt-3 flex items-center gap-2">
+                <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
+                  <div className="overflow-y-auto h-[200px]">
+                    <h2 className="text-base text-textColor font-semibold">Điều kiện đặt chỗ</h2>
+                    <div>
+                      <div className="mt-3 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-sm text-textColor font-semibold">
+                          {data?.data.flightOffers[0].itineraries[0].segments[0].departure.iataCode}
+                          {"-"}
+                          {
+                            data?.data.flightOffers[0].itineraries[0].segments[
+                              data?.data.flightOffers[0].itineraries[0].segments.length - 1
+                            ].arrival.iataCode
+                          }
+                          : Yêu cầu Visa quá cảnh
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 max-w-[350px]">
+                          Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế hoạch
+                          cho chuyến đi của mình.
+                        </span>
+                      </div>
+                    </div>
+
+                    {data?.data.flightOffers[0].itineraries.length > 1 && (
+                      <div className="mt-3">
+                        <div className="mt-2 flex items-center gap-2">
                           <img src={icon2} alt="icon" className="w-5 h-5" />
                           <h3 className="text-sm text-textColor font-semibold">
                             {
-                              data.data.flightOffers[0].itineraries[0].segments[0].departure
-                                .iataCode
+                              data.data.flightOffers[0].itineraries[
+                                data.data.flightOffers[0].itineraries.length - 1
+                              ].segments[0].departure.iataCode
                             }
                             {"-"}
                             {
-                              data.data.flightOffers[0].itineraries[0].segments[
+                              data.data.flightOffers[0].itineraries[
+                                data.data.flightOffers[0].itineraries.length - 1
+                              ].segments[
                                 data.data.flightOffers[0].itineraries[0].segments.length - 1
                               ].arrival.iataCode
                             }
@@ -1034,128 +872,95 @@ export default function FlightOrder() {
                           </span>
                         </div>
                       </div>
+                    )}
 
-                      {data.data.flightOffers[0].itineraries.length > 1 && (
-                        <div className="mt-3">
-                          <div className="mt-2 flex items-center gap-2">
-                            <img src={icon2} alt="icon" className="w-5 h-5" />
-                            <h3 className="text-sm text-textColor font-semibold">
-                              {
-                                data.data.flightOffers[0].itineraries[
-                                  data.data.flightOffers[0].itineraries.length - 1
-                                ].segments[0].departure.iataCode
-                              }
-                              {"-"}
-                              {
-                                data.data.flightOffers[0].itineraries[
-                                  data.data.flightOffers[0].itineraries.length - 1
-                                ].segments[
-                                  data.data.flightOffers[0].itineraries[0].segments.length - 1
-                                ].arrival.iataCode
-                              }
-                              : Yêu cầu Visa quá cảnh
-                            </h3>
-                          </div>
-                          <div className="flex items-center gap-2 mt-2 ml-2">
-                            <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                            <span className="text-sm text-gray-600 max-w-[350px]">
-                              Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế
-                              hoạch cho chuyến đi của mình.
-                            </span>
-                          </div>
-                        </div>
-                      )}
+                    <div className="mt-3">
+                      <div className="flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          Chính sách vắng mặt
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ
+                          (PNR) sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm soát
+                          hoặc cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy chuyến
+                          sẽ áp dụng theo quy định của hãng hàng không.
+                        </span>
+                      </div>
+                    </div>
 
-                      <div className="mt-3">
-                        <div className="flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Chính sách vắng mặt
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ
-                            (PNR) sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm
-                            soát hoặc cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy
-                            chuyến sẽ áp dụng theo quy định của hãng hàng không.
-                          </span>
-                        </div>
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">Vui lòng ghi chú</h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Vui lòng ghi chú
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ
-                            phải trả thêm phí hoặc bị từ chối lên máy bay.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">Yêu cầu Visa</h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ
+                          phải trả thêm phí hoặc bị từ chối lên máy bay.
+                        </span>
+                      </div>
+                    </div>
 
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết
-                            trước khi đặt vé.
-                          </span>
-                        </div>
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">Yêu cầu Visa</h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
+                        </span>
                       </div>
 
-                      <div className="mt-3">
-                        <div className="mt-2 flex items-center gap-2">
-                          <img src={icon2} alt="icon" className="w-5 h-5" />
-                          <h3 className="text-base text-textColor font-semibold">
-                            Lưu ý về nguyên tắc
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-2 ml-2">
-                          <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                          <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                            Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh.
-                            Kiểm tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết trước
+                          khi đặt vé.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          Lưu ý về nguyên tắc
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh. Kiểm
+                          tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
+                        </span>
                       </div>
                     </div>
                   </div>

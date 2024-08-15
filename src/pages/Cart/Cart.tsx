@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger
 } from "src/components/ui/alert-dialog"
 import { setCartToLS } from "src/utils/auth"
+import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
 
 export default function Cart() {
   const navigate = useNavigate()
@@ -99,16 +100,20 @@ export default function Cart() {
         )}
 
         {listCart.length > 0 && (
-          <div className="mt-2 grid grid-cols-12 gap-4">
+          <div className="mt-4   grid grid-cols-12 gap-4">
             <div className="col-span-12 order-1 md:col-span-8 md:order-1">
-              <div className="p-4 border border-gray-300 bg-[#fff] shadow-lg rounded flex items-center gap-2">
-                <button aria-label="iconBack" onClick={handleBackPage}>
+              <div className="p-4 border border-gray-300 bg-[#fff] shadow-lg rounded-lg flex items-center gap-2">
+                <button
+                  aria-label="iconBack"
+                  onClick={handleBackPage}
+                  className="text-textColor hover:text-blueColor duration-200"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
-                    stroke="black"
+                    stroke="currentColor"
                     className="w-8 h-8"
                   >
                     <path
@@ -118,6 +123,20 @@ export default function Cart() {
                     />
                   </svg>
                 </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                  />
+                </svg>
                 <h1 className="text-xl text-textColor font-medium">
                   Giỏ hàng của Quý khách ({listCart.length})
                 </h1>
@@ -125,7 +144,18 @@ export default function Cart() {
 
               <div className="mt-2">
                 {listCart.map((cartItem, index) => (
-                  <div key={index}>
+                  <div key={index} className="relative">
+                    <div
+                      style={{
+                        backgroundImage: `url(${backgroundTicker})`,
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                        height: "100px",
+                        width: "150px"
+                      }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50"
+                    ></div>
                     <div className={`p-4 border border-gray-300 bg-white rounded-lg mb-2`}>
                       <div className="flex items-center justify-between">
                         <span className="p-2 bg-[#edf0f9] text-xs rounded-md">
@@ -288,8 +318,9 @@ export default function Cart() {
                               type="checkbox"
                               checked={checked === String(index)}
                               onChange={() => handleCheckedItem(String(index))}
+                              id={String(index)}
                             />
-                            <label htmlFor="traveler">
+                            <label htmlFor={String(index)}>
                               {cartItem.data.flightOffers[0].travelerPricings.length} x Hành khách
                             </label>
                           </div>

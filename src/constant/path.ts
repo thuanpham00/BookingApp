@@ -7,7 +7,10 @@ export const path = {
   flightSearch: "/flight/search",
   flightOrder: "/flight/order",
   flightPayment: "/flight/payment",
-  flightManagement: "/flight/management",
+
+  ManageTicket: "/manage/success",
+  CancelTicket: "/manage/cancel",
+  ManageUser: "/manage/user",
 
   paymentComplete: "/complete",
 

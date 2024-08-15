@@ -10,12 +10,13 @@ import { toast } from "react-toastify"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"
 import useFormHandler from "src/hooks/useFormHandler"
-import useValidateInput from "src/hooks/useValidateInput"
 
 const FetchDataListNational = () => Promise.resolve(listNationality)
 
 interface Props {
   addOnTraveller: (newTravellers: TravellerType) => void
+  typeTraveler: string
+  index: number
 }
 
 type FormData = Pick<
@@ -33,7 +34,7 @@ const schemaFormData = schema.pick([
   "national"
 ])
 
-export default function FormProfile({ addOnTraveller }: Props) {
+export default function FormProfile({ addOnTraveller, typeTraveler, index }: Props) {
   const [nationalList, setNationalList] = useState<CountryListCodeNumber>([])
   const [showListNationality, setShowListNationality] = useState<boolean>(false)
   const [nationalProfile, setNationalProfile] = useState("")
@@ -75,15 +76,13 @@ export default function FormProfile({ addOnTraveller }: Props) {
     return () => document.removeEventListener("mousedown", clickOutHideListAirport)
   }, [])
 
-  const { filterList, handleItemClick } = useFormHandler(
+  const { filterList, handleItemClick, handleChangeValueForm } = useFormHandler(
     nationalList,
     nationalProfile,
     setValue,
     setNationalProfile,
     setShowListNationality
   )
-
-  const { handleChangeValueForm } = useValidateInput(setValue)
 
   const handleSubmitForm = handleSubmit((data) => {
     const infoTraveller: TravellerType = {
@@ -120,10 +119,24 @@ export default function FormProfile({ addOnTraveller }: Props) {
 
   return (
     <form onSubmit={handleSubmitForm} className="w-full">
-      <span className="mt-2 block">
-        <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với hộ chiếu hoặc
-        giấy tờ tùy thân có ảnh của quý khách
-      </span>
+      <div className="flex items-center justify-between">
+        <div className="text-base text-textColor font-medium">
+          Hành khách {index + 1}: {typeTraveler}
+        </div>
+        <div className="flex items-center justify-end gap-2">
+          <button
+            className="text-sm text-gray-500 py-2 px-3 bg-transparent font-medium hover:underline rounded-sm hover:opacity-75"
+            onClick={handleResetForm}
+            type="button"
+          >
+            Xóa
+          </button>
+          <Button
+            nameButton="Lưu"
+            className=" py-2 px-4 bg-blueColor  text-whiteColor text-sm rounded-sm hover:bg-blueColor/80 duration-200"
+          />
+        </div>
+      </div>
       <div className="mt-2 grid grid-cols-6 items-center gap-x-4 gap-y-4 flex-wrap">
         <div className="col-span-6 md:col-span-6">
           <span className="mb-[2px] text-sm block">Giới tính</span>
@@ -236,20 +249,6 @@ export default function FormProfile({ addOnTraveller }: Props) {
             />
           </InputSearchV2>
         </div>
-      </div>
-
-      <div className="flex items-center justify-end gap-2">
-        <button
-          className="text-sm text-gray-500 py-2 px-3 bg-transparent font-medium border border-gray-300 hover:underline rounded-sm hover:opacity-75"
-          onClick={handleResetForm}
-          type="button"
-        >
-          Xóa
-        </button>
-        <Button
-          nameButton="Lưu"
-          className=" py-2 px-4 bg-blueColor  text-whiteColor text-sm rounded-sm hover:bg-blueColor/80 duration-200"
-        />
       </div>
     </form>
   )

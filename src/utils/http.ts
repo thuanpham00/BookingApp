@@ -18,7 +18,7 @@ class http {
 
     this.instanceV1 = axios.create({
       baseURL: "https://test.api.amadeus.com/v1/",
-      timeout: 30000, // thời gian chờ
+      timeout: 60000, // thời gian chờ // 60 giây
       headers: {
         "Content-Type": "application/json" // yêu cầu server trả về kết quả json
       }

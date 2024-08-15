@@ -34,15 +34,13 @@ export default function Login() {
     try {
       const res = await signInWithEmailAndPassword(auth, data.email, data.password)
       if (res) {
+        console.log(res)
         await res.user.getIdTokenResult().then((response) => {
           const token = response.token
           setAccessTokenToLS(`Bearer ${token}`)
         })
         setIsAuthenticated(true)
         setProfileToLS(res.user.email as string)
-        location.reload()
-
-        navigate(path.home)
         toast.success("Đăng nhập thành công !!!")
         setLoading(false)
       }

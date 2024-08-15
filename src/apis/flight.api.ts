@@ -25,5 +25,10 @@ export const flightApi = {
   // quản lý chuyến bay
   flightManagement: (id: string) => {
     return HttpV1.get(`booking/flight-orders/${id}`)
+  },
+
+  // quản lý chuyến bay
+  flightDelete: (id: string) => {
+    return HttpV1.delete(`booking/flight-orders/${id}`)
   }
 }
