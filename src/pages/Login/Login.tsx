@@ -40,6 +40,7 @@ export default function Login() {
           setAccessTokenToLS(`Bearer ${token}`)
         })
         setIsAuthenticated(true)
+        window.location.reload()
         setProfileToLS(res.user.email as string)
         toast.success("Đăng nhập thành công !!!")
         setLoading(false)
@@ -62,8 +63,7 @@ export default function Login() {
       }
       setIsAuthenticated(true)
       setProfileToLS(res.user.displayName as string)
-      location.reload()
-
+      window.location.reload()
       navigate(path.home)
       toast.success("Đăng nhập thành công !!!")
     } catch (error) {

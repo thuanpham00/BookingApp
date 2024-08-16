@@ -35,6 +35,7 @@ import useQueryConfig from "src/hooks/useQueryConfig"
 import Skeleton from "src/components/Skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
+import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 
 export type FormData = Pick<
   schemaType,
@@ -78,7 +79,7 @@ export default function Flight() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false)
-    }, 1500)
+    }, 500)
 
     return () => clearTimeout(timeout)
   }, [])
@@ -446,6 +447,10 @@ export default function Flight() {
                           <span className="mt-1 text-sm font-semibold text-blueColor">
                             Chuyến bay
                           </span>
+                        </Link>
+                        <Link to={path.hotel} className="flex flex-col items-center">
+                          <img src={iconHotel} alt="iconHotel" className="h-8 w-8" />
+                          <span className="mt-1 text-sm font-normal text-textColor">Khánh sạn</span>
                         </Link>
                         <Link to={path.ManageTicket} className="flex flex-col items-center">
                           <svg

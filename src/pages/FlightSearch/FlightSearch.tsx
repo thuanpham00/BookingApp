@@ -116,6 +116,7 @@ export default function FlightSearch() {
 
   useEffect(() => {
     if (state) {
+      // lưu trong cache của react query
       setSearchText(state.originLocationCode)
       setSearchText2(state.destinationLocationCode)
       setDate(state.departureDate)

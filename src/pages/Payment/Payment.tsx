@@ -42,7 +42,7 @@ export default function Payment() {
   })
   const data2 = getFlightOrderManageQuery.data?.data as ResponseFlightManage
 
-  // React nó phải render toàn bộ rồi mới cập nhật UI
+  // React render cả component (lần render đầu tiên) tạo ra DOM ảo từ JSX component trả về -> Tính toán tạo ra DOM thật , cập nhật UI và hiển thị người dùng -> sau lần render đầu tiên chạy UseEffect()
   // vì sao tách ra 2 useEffect vì react nó sẽ ko cập nhật UI liền mà nó sẽ chạy hết quá trình render component rồi mới cập nhật UI -> dẫn đến phải cập nhật listPurchase mới nhất -> thêm 1 useEffect để set localStorage (vì lúc này đã có giá trị mới nhất)
 
   // ví dụ để chung 1 hàm useEffect thì nếu không tách ra, setPurchaseListToLS có thể chạy trước khi listPurchased có giá trị mới nhất.

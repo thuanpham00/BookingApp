@@ -10,6 +10,7 @@ import { getNameFromEmail } from "src/utils/utils"
 import { clearLS } from "src/utils/auth"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 
 export default function Header2() {
   const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, listCart } =
@@ -42,6 +43,14 @@ export default function Header2() {
                   <img src={iconFlight} alt="icon" className="w-full h-full" />
                 </div>
                 <span className="text-base font-medium hover:underline block">Chuyến bay</span>
+              </Link>
+
+              <Link
+                to={path.hotel}
+                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+              >
+                <img src={iconHotel} alt="iconHotel" className="h-5 w-5" />
+                <span className="text-base font-medium hover:underline block">Khách sạn</span>
               </Link>
 
               <Link

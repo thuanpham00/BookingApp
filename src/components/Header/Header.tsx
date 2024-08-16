@@ -11,6 +11,7 @@ import { clearLS } from "src/utils/auth"
 import useScrollHeader from "src/hooks/useScrollHeader"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
+import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 
 export default function Header() {
   // xử lý header
@@ -47,6 +48,14 @@ export default function Header() {
                   <img src={iconFlight} alt="icon" className="w-full h-full" />
                 </div>
                 <span className="text-base font-medium hover:underline block">Chuyến bay</span>
+              </Link>
+
+              <Link
+                to={path.hotel}
+                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+              >
+                <img src={iconHotel} alt="iconHotel" className="h-5 w-5" />
+                <span className="text-base font-medium hover:underline block">Khách sạn</span>
               </Link>
 
               <Link

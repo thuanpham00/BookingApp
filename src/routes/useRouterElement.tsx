@@ -6,7 +6,6 @@ import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
 import RegisterLayout from "src/layouts/RegisterLayout"
 import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
-import User from "src/pages/Manage/Pages/User"
 
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
@@ -27,6 +26,8 @@ const Cart = lazy(() => import("src/pages/Cart"))
 const NotFound = lazy(() => import("src/pages/NotFound"))
 const ManageOrderCancel = lazy(() => import("src/pages/Manage/Pages/ManageOrderCancel"))
 const ManageOrderSuccess = lazy(() => import("src/pages/Manage/Pages/ManageOrderSuccess"))
+const ManageUser = lazy(() => import("src/pages/Manage/Pages/ManageUser"))
+const Hotel = lazy(() => import("src/pages/Hotel"))
 
 function ProtectedRouter() {
   const { pathname } = useLocation()
@@ -67,6 +68,14 @@ export default function useRouterElement() {
           element: (
             <Suspense>
               <Flight />
+            </Suspense>
+          )
+        },
+        {
+          path: path.hotel,
+          element: (
+            <Suspense>
+              <Hotel />
             </Suspense>
           )
         }
@@ -159,7 +168,7 @@ export default function useRouterElement() {
                   path: path.ManageUser, // quản lý chuyến bay đã hủy
                   element: (
                     <Suspense>
-                      <User />
+                      <ManageUser />
                     </Suspense>
                   )
                 }
