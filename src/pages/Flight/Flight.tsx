@@ -18,7 +18,6 @@ import schema, { schemaType } from "src/utils/rules"
 import { airportCodes, bannerAirLineList, travelClassList } from "src/constant/flightSearch"
 import { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { convertToYYYYMMDD, getNameFromEmail } from "src/utils/utils"
-import { AirportCodeList } from "src/types/flight.type"
 import InputSearch from "src/components/InputSearch"
 import SelectDate from "src/components/SelectDate"
 import { Popover as PopoverShadcn, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
@@ -36,6 +35,9 @@ import Skeleton from "src/components/Skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
 import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
+import { FlightContext } from "src/context/useContextFlight"
+import AirportCodeList from "src/components/AirportCodeList"
+import { AirportCodeList as AirportCodeListType } from "src/types/flight.type"
 
 export type FormData = Pick<
   schemaType,
@@ -69,10 +71,32 @@ const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 p
 // nó thực hiện onClick={handleFocus} và handleFocus nhân vào 1 hàm xử lý set state lại dẫn đến component re-render
 
 // component chỉ re-render khi props hoặc state thay đổi
-
 export default function Flight() {
   const { isAuthenticated, setIsAuthenticated, isProfile, setIsProfile, listCart } =
     useContext(AppContext)
+
+  const {
+    searchText,
+    setSearchText,
+    searchText2,
+    setSearchText2,
+    date,
+    setDate,
+    date2,
+    setDate2,
+    travelClass,
+    setTravelClass,
+    numberAdults,
+    setNumberAdults,
+    numberChildren,
+    setNumberChildren,
+    numberInfants,
+    setNumberInfants,
+    flightType,
+    setFlightType,
+    showPassenger,
+    setShowPassenger
+  } = useContext(FlightContext)
 
   // xử lý loading
   const [loading, setLoading] = useState(true)
@@ -105,24 +129,11 @@ export default function Flight() {
   })
 
   const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<AirportCodeList>([])
+  const [airportCodeList, setAirportCodeList] = useState<AirportCodeListType>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const inputRef2 = useRef<HTMLInputElement>(null)
-
-  // quản lý state lưu trữ của form
-  const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
-  const [searchText2, setSearchText2] = useState<string>("") // mã airport đích
-  const [date, setDate] = useState<Date | null>(null) // ngày đi
-  const [date2, setDate2] = useState<Date | null>(null) // ngày về
-  const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-  const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
-  const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
-  const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
-
-  const [flightType, setFlightType] = useState("oneWay")
-  const [showPassenger, setShowPassenger] = useState(0)
 
   useEffect(() => {
     fetchDataAirport().then((res) => {
@@ -177,7 +188,7 @@ export default function Flight() {
 
   useEffect(() => {
     setShowPassenger(numberAdults + numberChildren + numberInfants)
-  }, [numberAdults, numberChildren, numberInfants])
+  }, [numberAdults, numberChildren, numberInfants, setShowPassenger])
 
   const exchangeTwoValues = () => {
     setSearchText(searchText2)
@@ -211,20 +222,10 @@ export default function Flight() {
     // truyền các data mà form quản lý vào biến này để submit gọi api
 
     const config = createConfig(data)
-    const state = {
-      ...config,
-      flightType,
-      returnDate: data.returnDate || null
-    }
-    navigate(
-      {
-        pathname: path.flightSearch,
-        search: createSearchParams(config).toString() // tạo tham số truy vấn "?"
-      },
-      {
-        state
-      }
-    )
+    navigate({
+      pathname: path.flightSearch,
+      search: createSearchParams(config).toString() // tạo tham số truy vấn "?"
+    })
   })
 
   return (
@@ -522,14 +523,18 @@ export default function Flight() {
                       <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
                         {/* điểm xuất phát */}
                         <InputSearch
+                          iconChild={
+                            <img
+                              src={iconFlight}
+                              alt="icon flight"
+                              className="w-10 h-10 flex-shrink-0"
+                            />
+                          }
                           placeholder="Bay từ"
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                           ref={inputRef}
-                          filterList={filterAirportCodeList_1}
                           value={searchText}
                           showList={showListAirport}
-                          handleItemClick={handleItemClick}
-                          inputName="originLocationCode"
                           handleChangeValue={(event) => setSearchText(event.target.value)}
                           handleFocus={() => setShowListAirport(true)}
                           register={register}
@@ -537,23 +542,41 @@ export default function Flight() {
                           error={errors.originLocationCode?.message}
                           desc="Từ"
                         >
-                          <img
-                            src={iconFlight}
-                            alt="icon flight"
-                            className="w-10 h-10 flex-shrink-0"
+                          <AirportCodeList
+                            listAirport={filterAirportCodeList_1}
+                            handleItemClick={handleItemClick}
+                            inputName="originLocationCode"
                           />
                         </InputSearch>
                         {/* điểm đến */}
 
                         <InputSearch
+                          iconChild={
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="h-10 w-10 flex-shrink-0"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                              />
+                            </svg>
+                          }
                           placeholder="Bay đến"
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport2 ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                           ref={inputRef2}
-                          filterList={filterAirportCodeList_2}
                           value={searchText2}
                           showList={showListAirport2}
-                          handleItemClick={handleItemClick2}
-                          inputName="destinationLocationCode"
                           handleChangeValue={(event) => setSearchText2(event.target.value)}
                           handleFocus={() => setShowListAirport2(true)}
                           register={register}
@@ -561,25 +584,11 @@ export default function Flight() {
                           error={errors.destinationLocationCode?.message}
                           desc="Đến"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-10 w-10 flex-shrink-0"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                            />
-                          </svg>
+                          <AirportCodeList
+                            listAirport={filterAirportCodeList_2}
+                            handleItemClick={handleItemClick2}
+                            inputName="destinationLocationCode"
+                          />
                         </InputSearch>
 
                         {/* đổi 2 giá trị với nhau */}

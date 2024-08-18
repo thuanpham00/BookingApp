@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios"
 import { airlines, airportCodes } from "src/constant/flightSearch"
 import { AirportCodeItem, countryItem } from "src/types/flight.type"
+import { TypeCityCodeList } from "src/types/hotel.type"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -114,7 +115,10 @@ export const getCountryAirport = (code: string) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getCountry(list: AirportCodeItem[] | countryItem[], code: string) {
+export function getCountry(
+  list: AirportCodeItem[] | countryItem[] | TypeCityCodeList,
+  code: string
+) {
   if (code) {
     const res = list.find((item) => item.code === code)
     if (res) {

@@ -21,30 +21,62 @@ type TypeInitialState = {
   setFlightType: React.Dispatch<React.SetStateAction<string>>
   showPassenger: number
   setShowPassenger: React.Dispatch<React.SetStateAction<number>>
+
+  cityCode: string
+  setCityCode: React.Dispatch<React.SetStateAction<string>>
 }
 
 const initialState: TypeInitialState = {
-  // quản lý state lưu trữ của form
+  // quản lý state lưu trữ của form Flight
+  searchText: "",
+  setSearchText: () => null,
+  searchText2: "",
+  setSearchText2: () => null,
+  date: null,
+  setDate: () => null,
+  date2: null,
+  setDate2: () => null,
+  travelClass: "",
+  setTravelClass: () => null,
+  numberAdults: 0,
+  setNumberAdults: () => null,
+  numberChildren: 0,
+  setNumberChildren: () => null,
+  numberInfants: 0,
+  setNumberInfants: () => null,
+  flightType: "oneWay",
+  setFlightType: () => null,
+  showPassenger: 0,
+  setShowPassenger: () => null,
+
+  // quản lý state lưu trữ của form Hotel
+  cityCode: "",
+  setCityCode: () => null
 }
 
 export const FlightContext = createContext<TypeInitialState>(initialState)
 
 export default function FlightProvider({ children }: { children: React.ReactNode }) {
-  const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
-  const [searchText2, setSearchText2] = useState<string>("") // mã airport đích
-  const [date, setDate] = useState<Date | null>(null) // ngày đi
-  const [date2, setDate2] = useState<Date | null>(null) // ngày về
-  const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-  const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
-  const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
-  const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
+  // flight
+  const [searchText, setSearchText] = useState(initialState.searchText) // mã airport xuất phát
+  const [searchText2, setSearchText2] = useState(initialState.searchText2) // mã airport đích
+  const [date, setDate] = useState(initialState.date) // ngày đi
+  const [date2, setDate2] = useState(initialState.date2) // ngày về
+  const [travelClass, setTravelClass] = useState(initialState.travelClass) // hạng vé
+  const [numberAdults, setNumberAdults] = useState(initialState.numberAdults) // HK người lớn
+  const [numberChildren, setNumberChildren] = useState(initialState.numberChildren) // HK trẻ em
+  const [numberInfants, setNumberInfants] = useState(initialState.numberInfants) // HK em bé
 
-  const [flightType, setFlightType] = useState("oneWay")
-  const [showPassenger, setShowPassenger] = useState(0)
+  const [flightType, setFlightType] = useState(initialState.flightType)
+  const [showPassenger, setShowPassenger] = useState(initialState.showPassenger)
+
+  // hotel
+  const [cityCode, setCityCode] = useState(initialState.cityCode)
 
   return (
     <FlightContext.Provider
       value={{
+        // flight
         searchText,
         setSearchText,
         searchText2,
@@ -64,7 +96,11 @@ export default function FlightProvider({ children }: { children: React.ReactNode
         flightType,
         setFlightType,
         showPassenger,
-        setShowPassenger
+        setShowPassenger,
+
+        // hotel
+        cityCode,
+        setCityCode
       }}
     >
       {children}

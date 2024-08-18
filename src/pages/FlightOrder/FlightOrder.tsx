@@ -16,8 +16,8 @@ import {
   getHourFromAPI
 } from "src/utils/utils"
 import iconFlight from "src/img/Flight/iconFlightRed.webp"
-import checkInBaggage from "src/img/FlightOrder/checkin_baggage_icon.webp"
-import icon2 from "src/img/FlightOrder/imp-info.webp"
+import checkInBaggage from "src/img/Flight/FlightOrder/checkin_baggage_icon.webp"
+import icon2 from "src/img/Flight/FlightOrder/imp-info.webp"
 import { useNavigate } from "react-router-dom"
 import FormProfile from "./Components/FormProfile"
 import Button from "src/components/Button"

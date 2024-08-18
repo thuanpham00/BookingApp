@@ -12,31 +12,31 @@ import { path } from "src/constant/path"
 import Skeleton from "src/components/Skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
-import { Fragment, useContext, useEffect, useState } from "react"
+import { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { getNameFromEmail } from "src/utils/utils"
-import { listCityInVietNam } from "src/constant/hotelSearch"
+import { cityCodeList, listCityInVietNam } from "src/constant/hotelSearch"
 import InputSearch from "src/components/InputSearch"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { schemaHotel, schemaTypeHotel } from "src/utils/rules"
+import useFormHandler from "src/hooks/useFormHandler"
+import { FlightContext } from "src/context/useContextFlight"
+import { TypeCityCodeList } from "src/types/hotel.type"
+import CityCodeList from "src/components/CityCodeList"
+
+const fetchDataAirport = () => Promise.resolve(cityCodeList) // khởi tạo 1 promise
+type FormData = Pick<schemaTypeHotel, "cityCode">
+
+const schemaFormData = schemaHotel.pick(["cityCode"])
 
 export default function Hotel() {
   const { isAuthenticated, setIsAuthenticated, isProfile, setIsProfile, listCart } =
     useContext(AppContext)
-  const navigate = useNavigate()
+
+  const { cityCode, setCityCode } = useContext(FlightContext)
 
   // xử lý loading
   const [loading, setLoading] = useState(true)
-
-  const navigate = useNavigate()
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    control,
-    formState: { errors }
-  } = useForm<FormData>({
-    resolver: yupResolver(schemaFormData)
-  })
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -52,6 +52,48 @@ export default function Hotel() {
     setIsAuthenticated(false)
     setIsProfile(null)
   }
+
+  const navigate = useNavigate()
+  const [airportCodeList, setAirportCodeList] = useState<TypeCityCodeList>([])
+  const [showListAirport, setShowListAirport] = useState<boolean>(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const {
+    // handleSubmit,
+    register,
+    setValue,
+    // control,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schemaFormData)
+  })
+
+  useEffect(() => {
+    fetchDataAirport().then((res) => {
+      setAirportCodeList(res)
+    })
+  }, [])
+
+  useEffect(() => {
+    const clickOutHideListAirport = (event: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        // nơi được click nằm ngoài vùng phần tử
+        setShowListAirport(false)
+      }
+    }
+
+    document.addEventListener("mousedown", clickOutHideListAirport)
+
+    return () => document.removeEventListener("mousedown", clickOutHideListAirport)
+  }, [])
+
+  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+    airportCodeList,
+    cityCode,
+    setValue,
+    setCityCode,
+    setShowListAirport
+  )
 
   const handleNavigateSearchCity = (code: string) => {
     navigate(path.hotelSearch, {
@@ -322,29 +364,46 @@ export default function Hotel() {
                       className="p-4 md:p-8 md:pt-12 bg-whiteColor rounded-lg shadow-md"
                     >
                       <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
-                        {/* điểm xuất phát */}
                         <InputSearch
-                          placeholder="Bay từ"
+                          iconChild={
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-8 h-8 flex-shrink-0"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                              />
+                            </svg>
+                          }
+                          placeholder="Điểm du lịch hoặc tên khách sạn"
+                          classNameWrapper="col-span-4 relative"
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                           ref={inputRef}
-                          filterList={filterAirportCodeList_1}
-                          value={searchText}
+                          value={cityCode}
                           showList={showListAirport}
-                          handleItemClick={handleItemClick}
-                          inputName="originLocationCode"
-                          handleChangeValue={(event) => setSearchText(event.target.value)}
+                          handleChangeValue={(event) => setCityCode(event.target.value)}
                           handleFocus={() => setShowListAirport(true)}
                           register={register}
                           name="originLocationCode"
-                          error={errors.originLocationCode?.message}
+                          error={errors.cityCode?.message}
                           desc="Từ"
                         >
-                          <img
-                            src={iconFlight}
-                            alt="icon flight"
-                            className="w-10 h-10 flex-shrink-0"
+                          <CityCodeList
+                            listAirport={filterAirportCodeList_1}
+                            handleItemClick={handleItemClick}
+                            inputName="originLocationCode"
                           />
                         </InputSearch>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
+                        putSearch
                       </div>
                     </form>
                   </div>
@@ -356,7 +415,7 @@ export default function Hotel() {
           <div className="container">
             <div className="mt-4">
               <h2 className="text-center text-textColor text-2xl font-semibold">
-                Các điểm đến thu hút nhất Việt Nam
+                Các điểm đến du lịch thu hút
               </h2>
 
               <div className="my-4">
@@ -365,7 +424,7 @@ export default function Hotel() {
                     <button
                       onClick={() => handleNavigateSearchCity(item.code)}
                       key={index}
-                      className="w-full hover:scale-95 duration-200 "
+                      className="col-span-4 md:col-span-2 lg:col-span-1 hover:scale-95 duration-200 "
                     >
                       <img
                         src={item.img}

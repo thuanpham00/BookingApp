@@ -8,6 +8,7 @@ export type InputAirport =
   | "destinationLocationCode"
   | "codeNumber"
   | "national"
+  | "cityCode"
 
 export default function useFormHandler(
   list: any,
@@ -17,29 +18,20 @@ export default function useFormHandler(
   setShowList?: (value: React.SetStateAction<boolean>) => void
 ) {
   const handleItemClick = (inputName: InputAirport, value: string) => {
-    if (setValue) {
-      setValue(inputName, getCodeAirport(value) as string) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
-    }
     if (
       inputName === "originLocationCode" ||
       inputName === "destinationLocationCode" ||
-      inputName === "codeNumber" ||
-      inputName === "national"
+      inputName === "cityCode"
     ) {
-      if (setInputSearch && setShowList) {
-        setInputSearch(value) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
-        setShowList(false)
-      }
-    }
-  }
-
-  const handleItemClickV2 = (inputName: InputAirport, value: string) => {
-    if (setValue) {
-      setValue(inputName, getCodeAirport(value) as string) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
-    }
-    if (inputName === "originLocationCode" || inputName === "destinationLocationCode") {
+      setValue && setValue(inputName, getCodeAirport(value) as string) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
       if (setInputSearch && setShowList) {
         setInputSearch(getCodeAirport(value) as string) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
+        setShowList(false)
+      }
+    } else if (inputName === "national" || inputName === "codeNumber") {
+      setValue && setValue(inputName, value)
+      if (setInputSearch && setShowList) {
+        setInputSearch(value as string) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
         setShowList(false)
       }
     }
@@ -80,7 +72,8 @@ export default function useFormHandler(
         setValue && setValue(nameInput, valueInput2)
       }
     }
-  return { filterList, handleItemClick, handleItemClickV2, handleChangeValueForm }
+
+  return { filterList, handleItemClick, handleChangeValueForm }
 }
 
 /**

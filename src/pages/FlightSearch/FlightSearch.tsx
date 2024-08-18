@@ -4,11 +4,11 @@ import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { airportCodes, travelClassList, typeFlightList } from "src/constant/flightSearch"
 import {
   ResponseFlightList,
-  AirportCodeList,
+  AirportCodeList as AirportCodeListType,
   FlightOfferParamsConfig
 } from "src/types/flight.type.ts"
 import { Controller, useForm } from "react-hook-form"
@@ -22,7 +22,7 @@ import { flightApi } from "src/apis/flight.api"
 import FlightItem from "./components/FlightItem"
 import { InputController, schemaFormData } from "../Flight/Flight"
 import useQueryConfig from "src/hooks/useQueryConfig"
-import { createSearchParams, Link, useLocation, useNavigate } from "react-router-dom"
+import { createSearchParams, Link, useNavigate } from "react-router-dom"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { schemaType } from "src/utils/rules"
 import { path } from "src/constant/path"
@@ -36,6 +36,8 @@ import backGround from "src/img/FlightOrder/banner.webp"
 import useScrollHeader from "src/hooks/useScrollHeader"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
+import { FlightContext } from "src/context/useContextFlight"
+import AirportCodeList from "src/components/AirportCodeList"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -66,33 +68,45 @@ export type FormData = Pick<
 // flow: Tìm chuyến bay ở Flight -> navigate tới FlightSearch (render list chuyến bay) -> chọn chuyến bay thích hợp (item of list chuyến bay) -> navigate tới FlightOrder (điền thông tin) -> navigate tới FlightPayment (thanh toán với vnPay) -> Payment
 
 export default function FlightSearch() {
+  // state management
+  const {
+    searchText,
+    setSearchText,
+    searchText2,
+    setSearchText2,
+    date,
+    setDate,
+    date2,
+    setDate2,
+    travelClass,
+    setTravelClass,
+    numberAdults,
+    setNumberAdults,
+    numberChildren,
+    setNumberChildren,
+    numberInfants,
+    setNumberInfants,
+    flightType,
+    setFlightType,
+    showPassenger,
+    setShowPassenger
+  } = useContext(FlightContext)
+
+  console.log(searchText)
+
   // xử lý header
   const { showHeader } = useScrollHeader(200)
+
   // xử lý form
   const navigate = useNavigate()
   const queryConfig = useQueryConfig()
   const [open, setOpen] = useState(false)
   const [open2, setOpen2] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<AirportCodeList>([])
+  const [airportCodeList, setAirportCodeList] = useState<AirportCodeListType>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const inputRef2 = useRef<HTMLInputElement>(null)
-
-  // quản lý state lưu trữ của form
-  const [searchText, setSearchText] = useState<string>("") // mã airport xuất phát
-  const [searchText2, setSearchText2] = useState<string>("") // mã airport đích
-  const [date, setDate] = useState<Date | null>(null) // ngày đi
-  const [date2, setDate2] = useState<Date | null>(null) // ngày về
-  const [travelClass, setTravelClass] = useState<string>("") // hạng vé
-  const [numberAdults, setNumberAdults] = useState<number>(0) // HK người lớn
-  const [numberChildren, setNumberChildren] = useState<number>(0) // HK trẻ em
-  const [numberInfants, setNumberInfants] = useState<number>(0) // HK em bé
-
-  const [flightType, setFlightType] = useState("oneWay")
-  const [showPassenger, setShowPassenger] = useState(0)
-  const location = useLocation()
-  const { state } = location
 
   const {
     handleSubmit,
@@ -113,22 +127,6 @@ export default function FlightSearch() {
     },
     resolver: yupResolver(schemaFormData)
   })
-
-  useEffect(() => {
-    if (state) {
-      // lưu trong cache của react query
-      setSearchText(state.originLocationCode)
-      setSearchText2(state.destinationLocationCode)
-      setDate(state.departureDate)
-      setDate2(state.returnDate)
-      setTravelClass(state.travelClass)
-      setNumberAdults(Number(state.adults))
-      setNumberChildren(Number(state.children))
-      setNumberInfants(Number(state.infants))
-      setFlightType(state.flightType as string)
-      setShowPassenger(Number(state.adults) + Number(state.children) + Number(state.infants))
-    }
-  }, [state])
 
   useEffect(() => {
     fetchDataAirport().then((res) => {
@@ -154,7 +152,7 @@ export default function FlightSearch() {
 
   //`useCallback()`: khi cta không muốn function của cta được khởi tạo lại mỗi lần component chúng ta re-render - nếu có thay đổi nó mới chạy lại - re-render
   //`useMemo()`: tương tự, khi chúng ta muốn một biến không bị làm mới lại mỗi lần component re-render. - nếu có thay đổi nó mới chạy lại - re-render
-  const { filterList: filterAirportCodeList_1, handleItemClickV2 } = useFormHandler(
+  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
     airportCodeList,
     searchText,
     setValue,
@@ -162,8 +160,13 @@ export default function FlightSearch() {
     setShowListAirport
   )
 
-  const { filterList: filterAirportCodeList_2, handleItemClickV2: handleItemClickV2_2 } =
-    useFormHandler(airportCodeList, searchText2, setValue, setSearchText2, setShowListAirport2)
+  const { filterList: filterAirportCodeList_2, handleItemClick: handleItemClick2 } = useFormHandler(
+    airportCodeList,
+    searchText2,
+    setValue,
+    setSearchText2,
+    setShowListAirport2
+  )
 
   const handleChangeQuantity = (nameQuantity: InputController) => (value: number) => {
     setValue(nameQuantity, value) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
@@ -333,17 +336,17 @@ export default function FlightSearch() {
                 <div className="grid grid-cols-4 relative items-center gap-2">
                   {/* điểm xuất phát */}
                   <InputSearch
+                    iconChild={
+                      <img src={iconFlight} alt="icon flight" className="w-10 h-10 flex-shrink-0" />
+                    }
                     placeholder="Bay từ"
                     classNameList={`z-50 absolute top-16 left-0 w-full md:w-[400px] ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-auto rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                     classNameBlock="py-2 px-2 rounded-md flex items-center bg-gray-300 text-textColor"
                     classNameError="py-2 px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
                     classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                     ref={inputRef}
-                    filterList={filterAirportCodeList_1}
                     value={searchText}
                     showList={showListAirport}
-                    handleItemClick={handleItemClickV2}
-                    inputName="originLocationCode"
                     handleChangeValue={(event) => setSearchText(event.target.value)}
                     handleFocus={() => setShowListAirport(true)}
                     register={register}
@@ -352,21 +355,43 @@ export default function FlightSearch() {
                     desc="Từ"
                     classNameDesc="pl-2 text-textColor"
                   >
-                    <img src={iconFlight} alt="icon flight" className="w-10 h-10 flex-shrink-0" />
+                    <AirportCodeList
+                      listAirport={filterAirportCodeList_1}
+                      handleItemClick={handleItemClick}
+                      inputName="originLocationCode"
+                    />
                   </InputSearch>
                   {/* điểm đến */}
                   <InputSearch
+                    iconChild={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-10 w-10 flex-shrink-0"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                        />
+                      </svg>
+                    }
                     placeholder="Bay đến"
                     classNameList={`z-50 absolute top-16 left-0 w-full md:w-[400px] ${showListAirport2 ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-auto rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                     classNameBlock="py-2 px-2 rounded-md flex items-center bg-gray-300 text-textColor"
                     classNameError="py-2 px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
                     classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
                     ref={inputRef2}
-                    filterList={filterAirportCodeList_2}
                     value={searchText2}
                     showList={showListAirport2}
-                    handleItemClick={handleItemClickV2_2}
-                    inputName="destinationLocationCode"
                     handleChangeValue={(event) => setSearchText2(event.target.value)}
                     handleFocus={() => setShowListAirport2(true)}
                     register={register}
@@ -375,25 +400,11 @@ export default function FlightSearch() {
                     desc="Đến"
                     classNameDesc="pl-2 text-textColor"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-10 w-10 flex-shrink-0"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 10.5a4 3 4 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                      />
-                    </svg>
+                    <AirportCodeList
+                      listAirport={filterAirportCodeList_2}
+                      handleItemClick={handleItemClick2}
+                      inputName="destinationLocationCode"
+                    />
                   </InputSearch>
 
                   {/* đổi 2 giá trị với nhau */}

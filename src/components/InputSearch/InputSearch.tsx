@@ -1,48 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
-import { AirportCodeItem } from "src/types/flight.type"
-import AirportCodeList from "../AirportCodeList"
-import { InputAirport } from "src/hooks/useFormHandler"
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  iconChild?: React.ReactNode
   children?: React.ReactNode
   classNameList: string
   classNameBlock?: string
   classNameDesc?: string
   classNameInput?: string
   classNameError?: string
-  filterList: AirportCodeItem[]
+  classNameWrapper?: string
   value: string
   showList: boolean
-  handleItemClick: (inputName: InputAirport, value: string) => void
   handleChangeValue: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleFocus: () => void
   register?: UseFormRegister<any>
   name: string
-  inputName: InputAirport
   error?: string
   desc: string
 }
 
+// Có thể truyền nhiều hơn 1 children vào component
 // chỗ này hay - nâng cao
 // do sử dung ref truyền ref từ component cha xuống component con nên dùng forwardRef
 const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
   {
+    iconChild,
     children,
     classNameList,
     classNameError = "py-4 px-3 border-2 border-red-500 bg-red-100 rounded-md flex items-center",
     classNameBlock = "w-full py-4 px-3 border-2 border-gray-300 rounded-md flex items-center",
     classNameDesc = "pl-2 text-textColor",
     classNameInput = "px-2 outline-none bg-transparent md:text-xl lg:text-2xl font-semibold flex-grow",
-    filterList,
+    classNameWrapper = "col-span-4 md:col-span-2 relative",
     value,
     showList,
-    handleItemClick,
     handleChangeValue,
     handleFocus,
     register,
-    inputName,
     name,
     error,
     desc,
@@ -52,9 +48,9 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
 ) {
   const registerResult = register && name ? { ...register(name) } : ""
   return (
-    <div className="col-span-4 md:col-span-2 relative">
+    <div className={classNameWrapper}>
       <div className={error ? classNameError : classNameBlock}>
-        {children}
+        {iconChild}
         <div className="w-full flex flex-col">
           <span className={classNameDesc}>{desc}</span>
           <div className="flex justify-between items-center">
@@ -87,13 +83,7 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
         </div>
       </div>
       <div className={classNameList} ref={ref}>
-        {showList && (
-          <AirportCodeList
-            listAirport={filterList}
-            handleItemClick={handleItemClick}
-            inputName={inputName}
-          />
-        )}
+        {showList && children}
       </div>
     </div>
   )
