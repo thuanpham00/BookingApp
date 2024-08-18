@@ -433,7 +433,7 @@ export default function Flight() {
                     </div>
                   </div>
 
-                  <h1 className="hidden md:block text-whiteColor md:text-2xl lg:text-4xl font-semibold text-center my-2 lg:my-8">
+                  <h1 className="hidden md:block text-whiteColor md:text-xl lg:text-3xl font-semibold text-center my-2 lg:my-8">
                     Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn.
                   </h1>
 

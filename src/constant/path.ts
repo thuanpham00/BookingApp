@@ -15,6 +15,7 @@ export const path = {
   paymentComplete: "/complete",
 
   hotel: "/hotel",
+  hotelSearch: "/hotel/search",
   cart: "/cart",
   notFound: "/*"
 } as const

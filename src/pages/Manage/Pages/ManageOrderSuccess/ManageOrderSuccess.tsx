@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async"
 import { ResponseFlightManage } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem/ManageItem"
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +19,7 @@ import { setCancelListToLS, setPurchaseListToLS } from "src/utils/auth"
 import { AppContext } from "src/context/useContext"
 import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
+import useFilterManage from "src/hooks/useFilterManage"
 
 export default function ManageOrderSuccess() {
   const { listPurchased, setListPurchased, listCancel, setListCancel } = useContext(AppContext)
@@ -26,25 +27,7 @@ export default function ManageOrderSuccess() {
   const data = JSON.parse(dataLS) as ResponseFlightManage[]
   const [searchText, setSearchText] = useState("")
 
-  const filterList = useMemo(
-    () =>
-      data &&
-      data.filter(
-        (item) =>
-          item.data.flightOffers[0].itineraries[0].segments[0].departure.iataCode
-            .toLowerCase()
-            .includes(searchText.toLowerCase()) ||
-          item.data.flightOffers[0].itineraries[0].segments[
-            item.data.flightOffers[0].itineraries[0].segments.length - 1
-          ].arrival.iataCode
-            .toLowerCase()
-            .includes(searchText.toLowerCase()) ||
-          item.data.flightOffers[0].itineraries[0].segments[0].departure.at
-            .toLowerCase()
-            .includes(searchText.toLowerCase())
-      ),
-    [data, searchText]
-  )
+  const filterList = useFilterManage(data, searchText)
 
   const deleteFlightTicketMutation = useMutation({
     mutationFn: (id: string) => {

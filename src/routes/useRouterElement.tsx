@@ -5,6 +5,7 @@ import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
 import RegisterLayout from "src/layouts/RegisterLayout"
+import HotelSearch from "src/pages/HotelSearch"
 import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
 
 /**
@@ -90,6 +91,14 @@ export default function useRouterElement() {
           element: (
             <Suspense>
               <FlightSearch />
+            </Suspense>
+          )
+        },
+        {
+          path: path.hotelSearch, // trạm tìm chuyến bay
+          element: (
+            <Suspense>
+              <HotelSearch />
             </Suspense>
           )
         },

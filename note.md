@@ -38,6 +38,14 @@
 * useQuery()
 * useMutation()
 
+```ts
+const searchParam = useQueryParam() // lấy cả mảng params - trong hook đã chuyển mỗi params thành cặp key -value
+console.log(searchParam)
+
+const [searchParam2] = useSearchParams()
+console.log(searchParam2.get("currencyCode"))
+```
+
 - sử dụng setInterval và setTimeout nhớ clear nó đi
 
 - dùng setValue của `react-hook-form` đảm bảo rằng giá trị của input được quản lý và cập nhật chính xác
@@ -52,6 +60,7 @@
 - join() : nối chuỗi
 - split(): tách chuỗi
 - find(): tìm phần tử đầu tiên (thoa điều kiện)
+
 ---
 
 1. Cái input file là uncontrolled component, nó không thể chuyển thành control component được.
@@ -73,28 +82,6 @@ ví dụ là component selectDate và component Hạng vé khong cần value kh�
 - createUserWithEmailAndPassword() - hàm tạo tài khoản user email & password
 - signInWithEmailAndPassword() - hàm đăng nhập user
 - signInWithPopup() - hàm đăng nhập google (popup)
-
-## API
-
-### Flight booking
-
-4. Flight Order Management API: Sau khi đã tạo thành công đơn đặt hàng, bạn có thể sử dụng API này để quản lý các đơn đặt hàng đã được tạo. Các chức năng bao gồm lấy thông tin chi tiết đơn hàng, cập nhật thông tin và hủy đơn hàng khi cần thiết.
-
-6. Branded Fares Upsell API: Nếu bạn muốn cung cấp cho khách hàng các lựa chọn hạng vé khác nhau hoặc nâng cao giá trị bán hàng, bạn có thể sử dụng API này để bán các hạng vé thương hiệu (branded fares).
-
-7. Flight Price Analysis API: API này có thể được sử dụng bất cứ lúc nào để phân tích giá cả của các chuyến bay, giúp bạn hiểu rõ hơn về các mẫu giá và xu hướng giá cả.
-
-8. Flight Choice Prediction API: Nếu bạn muốn cung cấp các đề xuất chuyến bay dựa trên dữ liệu lịch sử và hành vi của khách hàng, bạn có thể sử dụng API này để dự đoán các lựa chọn chuyến bay phù hợp.
-
-![alt text](./src/img/doc/image.png)
-![alt text](./src/img/doc/image2.png)
-![alt text](./src/img/doc/image3.png)
-![alt text](./src/img/doc/image4.png)
-![alt text](./src/img/doc/image5.png)
-
-### Lỗi tồn động :
-
--
 
 #### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)
 

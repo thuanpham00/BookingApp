@@ -42,7 +42,7 @@ const initialState: initialStateType = {
 // ĐẦU tiên khởi tạo Context với các giá trị khởi tạo (ban đầu)
 // Truyền các giá trị khởi tạo này vào state management (state global)
 // Truyền state vào Provider (để quản lý trạng thái app) -> truyền xuống component con
-// và tên state phải trùng với các giá trị khởi tạo
+// và tên state phải trùng với tên các giá trị khởi tạo (vì đã createContext)
 export const AppContext = createContext<initialStateType>(initialState)
 
 export default function AppProvider({ children }: Props) {

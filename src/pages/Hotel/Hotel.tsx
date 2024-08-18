@@ -1,18 +1,10 @@
 import { Helmet } from "react-helmet-async"
-import bg1 from "../../img/bgLogin/bg-6.webp"
+import bg1 from "../../img/Hotel/bg1.webp"
 import coVN from "../../img/lauguage/coVN.webp"
 import coMy from "../../img/lauguage/coMy.webp"
-import banner1 from "../../img/Flight/banner1.webp"
-import banner2 from "../../img/Flight/banner2.webp"
-import banner3 from "../../img/Flight/banner3.webp"
 import logo from "../../img/favicon/FaviconFlight.webp"
-import paymentImg from "../../img/Home/payment/pm1.jpg"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
-import ticketBanner from "src/img/Flight/air-ticket-offer.webp"
-import ticketBanner2 from "src/img/Flight/air-ticket-offer_2.webp"
-import bannerFlight from "src/img/Flight/vja330-1685604407424.webp"
-import bannerFlight2 from "src/img/Flight/thumb-website-Vi-VNPAY-1280x720.webp"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AppContext } from "src/context/useContext"
 import { clearLS } from "src/utils/auth"
 import Popover from "src/components/Popover"
@@ -21,15 +13,31 @@ import Skeleton from "src/components/Skeleton"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 import { Fragment, useContext, useEffect, useState } from "react"
-import { bannerAirLineList } from "src/constant/flightSearch"
 import { getNameFromEmail } from "src/utils/utils"
+import { listCityInVietNam } from "src/constant/hotelSearch"
+import InputSearch from "src/components/InputSearch"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 export default function Hotel() {
   const { isAuthenticated, setIsAuthenticated, isProfile, setIsProfile, listCart } =
     useContext(AppContext)
+  const navigate = useNavigate()
 
   // xử lý loading
   const [loading, setLoading] = useState(true)
+
+  const navigate = useNavigate()
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    control,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schemaFormData)
+  })
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false)
@@ -44,6 +52,17 @@ export default function Hotel() {
     setIsAuthenticated(false)
     setIsProfile(null)
   }
+
+  const handleNavigateSearchCity = (code: string) => {
+    navigate(path.hotelSearch, {
+      state: {
+        cityCode: code, //  Mã IATA của thành phố nơi bạn muốn tìm khách sạn.
+        radius: 5, // Bán kính tìm kiếm xung quanh
+        radiusUnit: "KM" // Đơn vị đo của bán kính
+      }
+    })
+  }
+
   return (
     // khắc phục lệch layout
     <div className="h-[3180px] md:h-[2600px] bg-[#fff]">
@@ -52,8 +71,8 @@ export default function Hotel() {
       ) : (
         <Fragment>
           <Helmet>
-            <title>Chuyến bay</title>
-            <meta name="description" content="Chuyến bay - Booking." />
+            <title>Khách sạn</title>
+            <meta name="description" content="Khách sạn - Booking." />
           </Helmet>
 
           <div className="w-full h-[600px]">
@@ -250,8 +269,8 @@ export default function Hotel() {
                     </div>
                   </div>
 
-                  <h1 className="hidden md:block text-whiteColor md:text-2xl lg:text-4xl font-semibold text-center my-2 lg:my-8">
-                    Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn.
+                  <h1 className="hidden md:block text-textColor md:text-xl lg:text-3xl font-semibold text-center my-2 lg:my-8">
+                    Tìm tổ ấm với Booking. home
                   </h1>
 
                   <div className="mt-8 md:mt-0 relative z-20 mx-auto w-full md:w-[55%]">
@@ -301,7 +320,33 @@ export default function Hotel() {
                       // onSubmit={handleSubmitSearch}
                       noValidate
                       className="p-4 md:p-8 md:pt-12 bg-whiteColor rounded-lg shadow-md"
-                    ></form>
+                    >
+                      <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
+                        {/* điểm xuất phát */}
+                        <InputSearch
+                          placeholder="Bay từ"
+                          classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
+                          ref={inputRef}
+                          filterList={filterAirportCodeList_1}
+                          value={searchText}
+                          showList={showListAirport}
+                          handleItemClick={handleItemClick}
+                          inputName="originLocationCode"
+                          handleChangeValue={(event) => setSearchText(event.target.value)}
+                          handleFocus={() => setShowListAirport(true)}
+                          register={register}
+                          name="originLocationCode"
+                          error={errors.originLocationCode?.message}
+                          desc="Từ"
+                        >
+                          <img
+                            src={iconFlight}
+                            alt="icon flight"
+                            className="w-10 h-10 flex-shrink-0"
+                          />
+                        </InputSearch>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -309,99 +354,32 @@ export default function Hotel() {
           </div>
 
           <div className="container">
-            <div className="mt-8 px-8 hidden md:grid grid-cols-3 items-center justify-between gap-4">
-              <div className="col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
-                <div className="flex items-center gap-4">
-                  <img src={banner3} alt="" className="flex-shrink-0 w-14 h-14" />
-                  <div className="flex-grow">
-                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Điểm đến tốt nhất?
-                    </h2>
-                    <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Khám phá những điểm đến tuyệt vời nhất với chúng tôi.
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
-                <div className="flex items-center gap-4">
-                  <img src={banner2} alt="" className="flex-shrink-0 w-14 h-14" />
-                  <div className="flex-grow">
-                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Đa dạng ngôn ngữ trên trang web
-                    </h2>
-                    <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Thay đổi ngôn ngữ
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-1 border border-gray-200 rounded-md shadow-lg p-4">
-                <div className="flex items-center gap-4">
-                  <img src={banner1} alt="" className="flex-shrink-0 w-14 h-14" />
-                  <div className="flex-grow">
-                    <h2 className="text-base lg:text-lg text-textColor font-semibold">Booking.</h2>
-                    <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Hoàn tất việc đăng ký trên web của bạn khi Booking. với các bước dễ dàng
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className="mt-4">
+              <h2 className="text-center text-textColor text-2xl font-semibold">
+                Các điểm đến thu hút nhất Việt Nam
+              </h2>
 
-            <div className="mt-4 grid grid-cols-2 items-center flex-wrap gap-4">
-              <div className="col-span-2 md:col-span-1 h-[450px]">
-                <img src={ticketBanner} alt="banner" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-2 md:col-span-1 h-[450px]">
-                <img src={ticketBanner2} alt="banner" className="w-full h-full object-cover" />
-              </div>
-            </div>
-
-            <div className="mt-8 pb-8 relative">
-              <div className="w-full h-[400px]">
-                <img
-                  src={bannerFlight}
-                  alt="bannerFlight"
-                  className="w-full h-full object-cover brightness-50 rounded-sm"
-                />
-              </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
-                <h3 className="text-lg lg:text-2xl text-center font-semibold text-textColor">
-                  Đối tác hàng không
-                </h3>
-                <div className="mt-0 md:mt-4 grid grid-cols-8 items-center gap-2 flex-wrap">
-                  {bannerAirLineList.map((item, index) => (
-                    <div key={index}>
-                      <div className="col-span-1">
-                        <img
-                          src={item}
-                          alt={item}
-                          className="w-10 h-10 md:w-10 md:h-8 lg:w-16 lg:h-18 object-contain"
-                        />
-                      </div>
-                    </div>
+              <div className="my-4">
+                <div className="grid grid-cols-4 gap-4">
+                  {listCityInVietNam.map((item, index) => (
+                    <button
+                      onClick={() => handleNavigateSearchCity(item.code)}
+                      key={index}
+                      className="w-full hover:scale-95 duration-200 "
+                    >
+                      <img
+                        src={item.img}
+                        alt="danang"
+                        className="w-full h-[250px] object-cover rounded-lg"
+                      />
+                      <span className="mt-2 text-textColor text-base text-center block font-medium">
+                        {item.name}
+                      </span>
+                      <span className="text-textColor text-sm text-center block font-normal">
+                        {item.quantity}
+                      </span>
+                    </button>
                   ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-0 mt:py-8 relative">
-              <div className="w-full h-[400px]">
-                <img
-                  src={bannerFlight2}
-                  alt="bannerFlight"
-                  className="w-full h-full object-cover brightness-50 rounded-sm"
-                />
-              </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
-                <div className="flex flex-col items-center gap-2">
-                  <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
-                    Đối tác thanh toán
-                  </h3>
-                  <div className="md:w-20 md:h-20 lg:w-32 lg:h-32">
-                    <img src={paymentImg} alt="payment" className="w-full h-full object-contain" />
-                  </div>
                 </div>
               </div>
             </div>

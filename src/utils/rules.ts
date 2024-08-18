@@ -68,3 +68,9 @@ const schema = yup
 export default schema
 
 export type schemaType = yup.InferType<typeof schema>
+
+export const schemaHotel = yup.object({
+  cityCode: yup.string().required()
+})
+
+export type schemaTypeHotel = yup.InferType<typeof schemaHotel>
