@@ -4,7 +4,6 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
-import RegisterLayout from "src/layouts/RegisterLayout"
 import HotelSearch from "src/pages/HotelSearch"
 import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
 
@@ -194,7 +193,7 @@ export default function useRouterElement() {
         {
           path: "",
           // sử dụng <Outlet/> bên trong component <RegisterLayout/> để truyền component con vào
-          element: <RegisterLayout />, // sử dụng chung // fix re-render
+          element: <MainLayout2 />, // sử dụng chung // fix re-render
           children: [
             {
               path: path.login,

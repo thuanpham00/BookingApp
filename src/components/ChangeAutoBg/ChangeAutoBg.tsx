@@ -19,7 +19,7 @@ export default function ChangeAutoBg({ listImg, className, indexEnd }: Props) {
         setImgCurrent(listImg[index])
         setIndex((prev) => prev + 1)
       }
-    }, 4000)
+    }, 3000)
 
     return () => clearInterval(img) // lưu ý
   }, [index, imgCurrent, listImg, indexEnd])

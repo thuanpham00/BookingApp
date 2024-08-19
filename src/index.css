@@ -25,3 +25,11 @@ body {
 input[type="checkbox"]:checked ~ .FormProfile {
   display: block;
 }
+
+.custom-calc-height {
+  height: 600px;
+}
+
+.custom-calc-height-2 {
+  height: calc(100vh - 64px);
+}

@@ -32,7 +32,7 @@ import Pagination from "src/components/Pagination"
 import banner from "src/img/Flight/ticker-banner-flight.webp"
 import banner2 from "src/img/Flight/air-ticket-booking.webp"
 import banner3 from "src/img/Flight/travel-design-template.webp"
-import backGround from "src/img/FlightOrder/banner.webp"
+import backGround from "src/img/Flight/FlightOrder/banner.webp"
 import useScrollHeader from "src/hooks/useScrollHeader"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
@@ -91,8 +91,6 @@ export default function FlightSearch() {
     showPassenger,
     setShowPassenger
   } = useContext(FlightContext)
-
-  console.log(searchText)
 
   // xử lý header
   const { showHeader } = useScrollHeader(200)

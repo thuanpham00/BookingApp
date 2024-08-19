@@ -98,9 +98,8 @@ export default function Header() {
                 </div>
               }
             >
-              <div className="hidden md:flex gap-1 items-center p-2 duration-200 hover:text-gray-500 text-textColor rounded-sm text-sm">
-                <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
-                Ngôn ngữ
+              <div className="hidden md:flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-sm">
+                <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
               </div>
             </Popover>
 
@@ -158,7 +157,7 @@ export default function Header() {
                         <div className="px-3 w-full flex items-center gap-1">
                           <Link
                             to={path.register}
-                            className="w-[50%] py-2 px-3 duration-200 hover:text-[#ddd]/80 rounded-sm text-sm text-textColor border border-gray-300"
+                            className="w-[50%] py-2 px-3 duration-200 hover:text-[#ddd]/80 rounded-sm text-sm text-textColor"
                           >
                             Đăng ký
                           </Link>

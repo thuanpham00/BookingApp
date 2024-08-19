@@ -157,9 +157,8 @@ export default function Hotel() {
                           </div>
                         }
                       >
-                        <div className="hidden md:flex gap-1 items-center px-2 text-whiteColor rounded-sm text-sm duration-200 hover:text-gray-300">
-                          <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
-                          Ngôn ngữ
+                        <div className="hidden md:flex gap-1 items-center text-whiteColor rounded-sm text-sm duration-200 hover:text-gray-300">
+                          <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
                         </div>
                       </Popover>
 

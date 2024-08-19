@@ -17,6 +17,7 @@ import { cityCodeList } from "src/constant/hotelSearch"
 
 export default function HotelSearch() {
   const queryConfig = useQueryConfig()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { cityCode } = useContext(FlightContext)
   // xử lý header
   const { showHeader } = useScrollHeader(200)

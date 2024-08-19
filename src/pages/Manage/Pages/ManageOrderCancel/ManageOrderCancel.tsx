@@ -9,9 +9,7 @@ import useFilterManage from "src/hooks/useFilterManage"
 export default function ManageOrderCancel() {
   const dataLS = localStorage.getItem("listCancel") as string
   const data = JSON.parse(dataLS) as ResponseFlightManage[]
-
   const [searchText, setSearchText] = useState("")
-
   const filterList = useFilterManage(data, searchText)
 
   return (

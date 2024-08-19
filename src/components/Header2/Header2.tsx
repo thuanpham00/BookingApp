@@ -93,9 +93,8 @@ export default function Header2() {
                 </div>
               }
             >
-              <div className="hidden md:flex gap-1 items-center p-2 duration-200 text-textColor rounded-sm text-sm hover:text-gray-500">
-                <img src={coVN} alt="Cờ Việt Nam" className="h-5 w-5 object-contain" />
-                Ngôn ngữ
+              <div className="hidden md:flex gap-1 items-center duration-200 text-textColor rounded-sm text-sm hover:text-gray-500">
+                <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
               </div>
             </Popover>
 

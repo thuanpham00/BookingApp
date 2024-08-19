@@ -26,7 +26,6 @@ export default function ManageOrderSuccess() {
   const dataLS = localStorage.getItem("listPurchased") as string
   const data = JSON.parse(dataLS) as ResponseFlightManage[]
   const [searchText, setSearchText] = useState("")
-
   const filterList = useFilterManage(data, searchText)
 
   const deleteFlightTicketMutation = useMutation({
@@ -72,7 +71,7 @@ export default function ManageOrderSuccess() {
       </Helmet>
 
       <>
-        <div className="md:flex block items-center justify-between bg-[#fff] rounded-lg p-4 border border-gray-300">
+        <div className="flex items-center justify-between bg-[#fff] rounded-lg p-4 border border-gray-300">
           <h1 className="text-xl text-textColor font-medium">
             Đơn đã mua của Quý khách ({data?.length || 0})
           </h1>

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form"
-import logo from "../../img/favicon/FaviconFlight.webp"
 import Input from "src/components/Input"
 import { Link, useNavigate } from "react-router-dom"
 import { path } from "src/constant/path"
@@ -13,6 +12,19 @@ import { useContext, useState } from "react"
 import { setAccessTokenToLS, setProfileToLS } from "src/utils/auth"
 import { toast } from "react-toastify"
 import { AppContext } from "src/context/useContext"
+import ChangeAutoBg from "src/components/ChangeAutoBg"
+import bg1 from "../../img/bgLogin/bg-1.webp"
+import bg2 from "../../img/bgLogin/bg-2.webp"
+import bg3 from "../../img/bgLogin/bg-3.webp"
+import bg4 from "../../img/bgLogin/bg-4.webp"
+import bg5 from "../../img/bgLogin/bg-5.webp"
+import bg6 from "../../img/bgLogin/bg-6.webp"
+import bg7 from "../../img/Hotel/imgHotelRandom/hotel6.webp"
+import bg8 from "../../img/Hotel/imgHotelRandom/hotel4.webp"
+import bg9 from "../../img/Flight/thumb-website-Vi-VNPAY-1280x720.webp"
+import bg10 from "../../img/Flight/delay-chuyen-bay.jpg"
+
+export const backgroundList = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10]
 
 const schemaForm = schema.pick(["email", "password"])
 
@@ -70,70 +82,83 @@ export default function Login() {
       console.log(error)
     }
   }
-
+  //
   return (
-    <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-whiteColor absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
+    <div>
       <Helmet>
         <title>Đăng nhập</title>
         <meta name="description" content="Đăng nhập - Amadeus Booking" />
       </Helmet>
 
-      <Link to={path.home} className="flex items-center justify-center cursor-pointer">
-        <div className="w-14 h-14">
-          <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+      <div className="w-full custom-calc-height-2 relative">
+        <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="flex items-center">
+            <ChangeAutoBg
+              className="shadow-lg hidden lg:block lg:w-[60%] custom-calc-height transition-all duration-1000 ease-linear"
+              listImg={backgroundList}
+              indexEnd={9}
+            />
+            <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] custom-calc-height bg-white relative">
+              <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="text-textColor text-2xl font-semibold text-center">Đăng nhập</div>
+                <button
+                  onClick={loginGoogle}
+                  className="mt-4 w-[90%] mx-auto flex items-center justify-center gap-2 rounded-full border border-[#4e6c8d] py-2"
+                >
+                  <div
+                    className="w-5 h-5"
+                    style={{
+                      backgroundImage: `url(https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg)`,
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat"
+                    }}
+                  ></div>
+                  <span className="text-base text-textColor font-medium">Đăng nhập với Google</span>
+                </button>
+
+                <form onSubmit={onSubmit} className="mt-5" noValidate>
+                  <Input
+                    className="mt-1"
+                    nameInput="Email"
+                    type="email"
+                    name="email"
+                    autoComplete="on"
+                    placeholder="Nhập email"
+                    messageError={errors.email?.message}
+                    register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
+                  />
+                  <Input
+                    className="mt-1 relative"
+                    nameInput="Mật khẩu"
+                    type="password"
+                    name="password"
+                    autoComplete="on"
+                    placeholder="Nhập mật khẩu"
+                    messageError={errors.password?.message}
+                    register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
+                  />
+                  <Button
+                    type="submit"
+                    nameButton="Đăng nhập"
+                    disable={loading}
+                    loading={loading}
+                  />
+                </form>
+                <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
+
+                <div className="flex justify-center items-center gap-1">
+                  <span className="text-base">Bạn chưa có tài khoản?</span>
+                  <Link
+                    to={path.register}
+                    className=" text-textColor font-semibold text-base underline"
+                  >
+                    Đăng ký
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-2xl text-textColor font-semibold text-center">Amadeus Booking</h1>
-      </Link>
-
-      <div className="text-textColor text-3xl font-semibold text-center">Đăng nhập</div>
-
-      <button
-        onClick={loginGoogle}
-        className="mt-4 flex items-center justify-center gap-2 w-full rounded-full border border-[#4e6c8d] py-2"
-      >
-        <div
-          className="w-5 h-5"
-          style={{
-            backgroundImage: `url(https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg)`,
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
-          }}
-        ></div>
-        <span className="text-base text-textColor font-medium">Đăng nhập với Google</span>
-      </button>
-
-      <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
-
-      <form onSubmit={onSubmit} className="mt-5" noValidate>
-        <Input
-          className="mt-1"
-          nameInput="Email"
-          type="email"
-          name="email"
-          autoComplete="on"
-          placeholder="Nhập email"
-          messageError={errors.email?.message}
-          register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
-        />
-        <Input
-          className="mt-1 relative"
-          nameInput="Mật khẩu"
-          type="password"
-          name="password"
-          autoComplete="on"
-          placeholder="Nhập mật khẩu"
-          messageError={errors.password?.message}
-          register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
-        />
-        <Button type="submit" nameButton="Đăng nhập" disable={loading} loading={loading} />
-      </form>
-      <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
-
-      <div className="flex justify-center items-center gap-1">
-        <span className="text-base">Bạn chưa có tài khoản?</span>
-        <Link to={path.register} className=" text-textColor font-semibold text-base underline">
-          Đăng ký
-        </Link>
       </div>
     </div>
   )

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form"
-import logo from "../../img/favicon/FaviconFlight.webp"
 import Input from "src/components/Input"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"
@@ -12,6 +11,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "src/firebase"
 import { doc, setDoc } from "firebase/firestore"
 import { toast } from "react-toastify"
+import ChangeAutoBg from "src/components/ChangeAutoBg"
+import { backgroundList } from "../Login/Login"
 
 const schemaForm = schema.pick(["userName", "email", "password", "confirmPassword"])
 
@@ -50,73 +51,82 @@ export default function Register() {
   })
 
   return (
-    <div className="min-w-[350px] md:min-w-[450px] p-6 md:p-8 bg-whiteColor absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-xl rounded-md">
+    <div className="">
       <Helmet>
         <title>Đăng ký</title>
         <meta name="description" content="Đăng ký - Amadeus Booking" />
       </Helmet>
 
-      <Link to={path.home} className="flex items-center justify-center cursor-pointer">
-        <div className="w-14 h-14">
-          <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+      <div className="w-full custom-calc-height-2 relative">
+        <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="flex items-center">
+            <ChangeAutoBg
+              className="shadow-lg hidden lg:block lg:w-[60%] custom-calc-height transition-all duration-1000 ease-linear"
+              listImg={backgroundList}
+              indexEnd={9}
+            />
+            <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] custom-calc-height bg-white relative">
+              <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="text-textColor text-2xl font-semibold text-center">Đăng ký</div>
+
+                <form onSubmit={onSubmit} className="mt-5" noValidate>
+                  <Input
+                    className="mt-2"
+                    nameInput="Tên đăng nhập"
+                    type="text"
+                    name="userName" // name phải khớp trong schema
+                    autoComplete="on"
+                    placeholder="Nhập tên"
+                    messageError={errors.userName?.message}
+                    register={register}
+                  />
+                  <Input
+                    className="mt-1"
+                    nameInput="Email"
+                    type="email"
+                    name="email"
+                    autoComplete="on"
+                    placeholder="Nhập email"
+                    messageError={errors.email?.message}
+                    register={register}
+                  />
+                  <Input
+                    className="mt-1 relative"
+                    nameInput="Mật khẩu"
+                    type="password"
+                    name="password"
+                    autoComplete="on"
+                    placeholder="Nhập mật khẩu"
+                    messageError={errors.password?.message}
+                    register={register}
+                  />
+                  <Input
+                    className="mt-1 relative"
+                    nameInput="Xác nhận mật khẩu"
+                    type="password"
+                    name="confirmPassword"
+                    autoComplete="on"
+                    placeholder="Nhập mật khẩu lần 2"
+                    messageError={errors.confirmPassword?.message}
+                    register={register}
+                  />
+                  <Button type="submit" nameButton="Đăng ký" disable={loading} loading={loading} />
+                </form>
+                <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
+
+                <div className="flex justify-center items-center gap-1">
+                  <span className="text-base">Bạn đã có tài khoản?</span>
+                  <Link
+                    to={path.login}
+                    className=" text-textColor font-semibold text-base underline"
+                  >
+                    Đăng nhập
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-2xl text-textColor font-semibold text-center">Amadeus Booking</h1>
-      </Link>
-
-      <div className="text-textColor text-3xl font-semibold text-center">Đăng ký</div>
-
-      <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
-
-      <form onSubmit={onSubmit} className="mt-5" noValidate>
-        <Input
-          className="mt-2"
-          nameInput="Tên đăng nhập"
-          type="text"
-          name="userName" // name phải khớp trong schema
-          autoComplete="on"
-          placeholder="Nhập tên"
-          messageError={errors.userName?.message}
-          register={register}
-        />
-        <Input
-          className="mt-1"
-          nameInput="Email"
-          type="email"
-          name="email"
-          autoComplete="on"
-          placeholder="Nhập email"
-          messageError={errors.email?.message}
-          register={register}
-        />
-        <Input
-          className="mt-1 relative"
-          nameInput="Mật khẩu"
-          type="password"
-          name="password"
-          autoComplete="on"
-          placeholder="Nhập mật khẩu"
-          messageError={errors.password?.message}
-          register={register}
-        />
-        <Input
-          className="mt-1 relative"
-          nameInput="Xác nhận mật khẩu"
-          type="password"
-          name="confirmPassword"
-          autoComplete="on"
-          placeholder="Nhập mật khẩu lần 2"
-          messageError={errors.confirmPassword?.message}
-          register={register}
-        />
-        <Button type="submit" nameButton="Đăng ký" disable={loading} loading={loading} />
-      </form>
-      <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
-
-      <div className="flex justify-center items-center gap-1">
-        <span className="text-base">Bạn đã có tài khoản?</span>
-        <Link to={path.login} className=" text-textColor font-semibold text-base underline">
-          Đăng nhập
-        </Link>
       </div>
     </div>
   )
