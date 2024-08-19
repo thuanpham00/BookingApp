@@ -1,5 +1,4 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { useContext } from "react"
 import { Helmet } from "react-helmet-async"
 import { Link, useLocation } from "react-router-dom"
 import { hotelApi } from "src/apis/hotel.api"
@@ -11,14 +10,13 @@ import backGround from "src/img/bgLogin/bg-6.webp"
 import HotelItem from "./Components/HotelItem"
 import AsideFilterFlight from "../FlightSearch/components/AsideFilterFlight"
 import useQueryConfig from "src/hooks/useQueryConfig"
-import { FlightContext } from "src/context/useContextFlight"
 import { getCountry } from "src/utils/utils"
 import { cityCodeList } from "src/constant/hotelSearch"
 
 export default function HotelSearch() {
   const queryConfig = useQueryConfig()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { cityCode } = useContext(FlightContext)
+  // const { cityCode } = useContext(FlightContext)
   // xử lý header
   const { showHeader } = useScrollHeader(200)
 
