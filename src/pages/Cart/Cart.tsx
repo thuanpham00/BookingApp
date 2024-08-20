@@ -86,7 +86,7 @@ export default function Cart() {
               <h1 className="mt-8 text-center text-textColor font-semibold text-lg lg:text-2xl">
                 Giỏ hàng của quý khách chẳng có gì bên trong
               </h1>
-              <h2 className="text-base mt-4 text-textColor">
+              <h2 className="text-base mt-4 text-textColor text-center">
                 Hãy mua vé chuyến bay cho chuyến đi tiếp theo
               </h2>
               <Link
