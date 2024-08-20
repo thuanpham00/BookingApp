@@ -536,9 +536,6 @@ export default function Flight() {
                             </div>
                           </Popover>
                         )}
-                      </div>
-
-                      <div className="hidden md:block">
                         {!isAuthenticated && (
                           <div className="hidden md:flex items-center gap-4">
                             <Link

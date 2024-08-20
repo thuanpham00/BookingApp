@@ -291,9 +291,6 @@ export default function Hotel() {
                             </div>
                           </Popover>
                         )}
-                      </div>
-
-                      <div className="hidden md:block">
                         {!isAuthenticated && (
                           <div className="flex items-center gap-4">
                             <Link

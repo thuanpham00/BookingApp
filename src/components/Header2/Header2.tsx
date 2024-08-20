@@ -341,9 +341,6 @@ export default function Header2() {
                   </div>
                 </Popover>
               )}
-            </div>
-
-            <div className="hidden md:block">
               {!isAuthenticated && (
                 <div className="hidden md:flex items-center gap-4">
                   <Link
@@ -361,6 +358,8 @@ export default function Header2() {
                 </div>
               )}
             </div>
+
+            <div className="hidden md:block"></div>
           </div>
         </div>
       </div>
