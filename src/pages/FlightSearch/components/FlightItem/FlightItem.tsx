@@ -20,7 +20,7 @@ import {
 import Button from "src/components/Button"
 import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
-import { Fragment, useContext, useEffect, useState } from "react"
+import { Fragment, memo, useContext, useEffect, useState } from "react"
 import { airportCodes } from "src/constant/flightSearch"
 import {
   AlertDialog,
@@ -45,7 +45,7 @@ interface Props {
   list: ResponseFlightList
 }
 
-export default function FlightItem({ item, list }: Props) {
+function FlightItemInner({ item, list }: Props) {
   const navigate = useNavigate()
   const { setListCart, listCart } = useContext(AppContext)
   const [showFlightDetail, setShowFlightDetail] = useState(false)
@@ -208,7 +208,7 @@ export default function FlightItem({ item, list }: Props) {
           </div>
         ))}
 
-        <div className="w-full bg-[#f8f8f8] py-2 px-4">
+        <div className="w-full bg-[#f8f8f8] py-2 px-4 rounded-bl rounded-br">
           <div className="flex items-center justify-between gap-2">
             <button
               onClick={handleDetailFlight}
@@ -620,3 +620,7 @@ export default function FlightItem({ item, list }: Props) {
     </Fragment>
   )
 }
+
+const FlightItem = memo(FlightItemInner)
+export default FlightItem
+// khi scroll window thì state thay đổi dẫn đến nguyên component cha FlightItem re-render kéo theo component con re-render liên tục -> giải pháp là dùng memo (tránh re-render khi không cần thiết)

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { omit } from "lodash"
+import omit from "lodash/omit"
 import { useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import Button from "src/components/Button"

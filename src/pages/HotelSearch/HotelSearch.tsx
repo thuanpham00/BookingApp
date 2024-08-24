@@ -1,22 +1,35 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Helmet } from "react-helmet-async"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { hotelApi } from "src/apis/hotel.api"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import { path } from "src/constant/path"
 import useScrollHeader from "src/hooks/useScrollHeader"
-import { TypeHotelListResponse, HotelParamsConfig } from "src/types/hotel.type"
+import { TypeHotelListResponse, HotelParamsConfig, TypeCityCodeList } from "src/types/hotel.type"
 import backGround from "src/img/bgLogin/bg-6.webp"
 import HotelItem from "./Components/HotelItem"
 import AsideFilterFlight from "../FlightSearch/components/AsideFilterFlight"
 import useQueryConfig from "src/hooks/useQueryConfig"
 import { getCountry } from "src/utils/utils"
-import { cityCodeList } from "src/constant/hotelSearch"
+import { cityCodeList, hotelRatingList } from "src/constant/hotelSearch"
+import InputSearch from "src/components/InputSearch"
+import CityCodeList from "src/components/CityCodeList"
+import useFormHandler from "src/hooks/useFormHandler"
+import { useContext, useEffect, useRef, useState } from "react"
+import { FlightContext } from "src/context/useContextFlight"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { fetchDataHotel, FormDataHotel, schemaFormDataHotel } from "../Hotel/Hotel"
+import { Controller, useForm } from "react-hook-form"
+import Button from "src/components/Button"
+import { PopoverTrigger, Popover as PopoverLib, PopoverContent } from "src/components/ui/popover"
+import { Button as ButtonShadcn } from "src/components/ui/button"
+import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
+import iconStar from "src/img/Hotel/star.png"
 
 export default function HotelSearch() {
+  const { cityCode, setCityCode, radius, setRadius, ratings, setRatings } =
+    useContext(FlightContext)
   const queryConfig = useQueryConfig()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { cityCode } = useContext(FlightContext)
   // xử lý header
   const { showHeader } = useScrollHeader(200)
 
@@ -36,6 +49,61 @@ export default function HotelSearch() {
     staleTime: 5 * 60 * 1000
   })
   const listHotel = getListHotelByCityQuery.data?.data as TypeHotelListResponse
+
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const [airportCodeList, setAirportCodeList] = useState<TypeCityCodeList>([])
+  const [showListAirport, setShowListAirport] = useState<boolean>(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    control,
+    formState: { errors }
+  } = useForm<FormDataHotel>({
+    resolver: yupResolver(schemaFormDataHotel)
+  })
+
+  useEffect(() => {
+    fetchDataHotel().then((res) => {
+      setAirportCodeList(res)
+    })
+  }, [])
+
+  useEffect(() => {
+    const clickOutHideListAirport = (event: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        // nơi được click nằm ngoài vùng phần tử
+        setShowListAirport(false)
+      }
+    }
+
+    document.addEventListener("mousedown", clickOutHideListAirport)
+
+    return () => document.removeEventListener("mousedown", clickOutHideListAirport)
+  }, [])
+
+  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+    airportCodeList,
+    cityCode,
+    setValue,
+    setCityCode,
+    setShowListAirport
+  )
+
+  const handleSubmitSearch = handleSubmit((data) => {
+    navigate(path.hotelSearch, {
+      state: {
+        cityCode: data.cityCode, //  Mã IATA của thành phố nơi bạn muốn tìm khách sạn.
+        radius: Number(data.radius), // Bán kính tìm kiếm xung quanh
+        radiusUnit: "KM", // Đơn vị đo của bán kính
+        ratings: data.ratings,
+        hotelSource: "ALL"
+      }
+    })
+  })
 
   return (
     <div>
@@ -59,11 +127,117 @@ export default function HotelSearch() {
           <div className="container">
             <form
               autoComplete="off"
-              // onSubmit={handleSubmitSearch}
+              onSubmit={handleSubmitSearch}
               noValidate
               className="grid grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap py-2"
             >
-              1
+              <div className="col-span-6 md:col-span-3">
+                <InputSearch
+                  iconChild={
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-8 h-8 flex-shrink-0"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                      />
+                    </svg>
+                  }
+                  placeholder="Bay từ"
+                  classNameList={`z-50 absolute top-16 left-0 w-full md:w-[400px] ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-auto rounded-sm shadow-sm transition-all duration-200 ease-linear`}
+                  classNameBlock="py-2 px-2 rounded-md flex items-center bg-gray-300 text-textColor"
+                  classNameError="py-2 px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
+                  classNameInput="px-2 outline-none bg-transparent text-xl flex-grow font-semibold w-[120px] truncate"
+                  ref={inputRef}
+                  value={cityCode}
+                  showList={showListAirport}
+                  handleChangeValue={(event) => setCityCode(event.target.value)}
+                  handleFocus={() => setShowListAirport(true)}
+                  register={register}
+                  name="cityCOde"
+                  error={errors.cityCode?.message}
+                  desc="Từ"
+                  classNameDesc="pl-2 text-textColor"
+                >
+                  <CityCodeList
+                    listAirport={filterAirportCodeList_1}
+                    handleItemClick={handleItemClick}
+                    inputName="cityCode"
+                  />
+                </InputSearch>
+              </div>
+
+              <div className="col-span-6 md:col-span-3">
+                <input
+                  className="w-full px-4 py-[20px] outline-none bg-gray-300 font-normal rounded-md text-base"
+                  type="text"
+                  autoComplete="on"
+                  placeholder="Bán kính dò tìm (vd: 5)"
+                  value={radius}
+                  {...register("radius")}
+                  onChange={(event) => setRadius(event.target.value)}
+                />
+              </div>
+
+              <div className="col-span-6 md:col-span-3 rounded-md relative bg-transparent">
+                <PopoverLib open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <ButtonShadcn
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      aria-label="ratings"
+                      className="flex justify-center items-center gap-1 bg-gray-300 py-8 shadow-none text-sm hover:opacity-60 duration-200 w-full border-none"
+                    >
+                      {ratings
+                        ? hotelRatingList.find((item) => item.value === ratings)?.value
+                        : "Xếp hạng"}
+                      <img src={iconStar} alt="iconStar" className="w-4 h-4" />
+                    </ButtonShadcn>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandList>
+                        <CommandGroup>
+                          {hotelRatingList.map((item, index) => (
+                            <Controller
+                              key={index}
+                              control={control}
+                              name="ratings" // tên trường dữ liệu
+                              render={({ field }) => (
+                                <CommandItem
+                                  key={item.value}
+                                  value={item.value}
+                                  onSelect={(currentValue) => {
+                                    field.onChange(currentValue) // quản lý và cập nhật trường dữ liệu
+                                    setOpen(false)
+                                    setRatings(currentValue)
+                                  }}
+                                >
+                                  {item.value}
+                                </CommandItem>
+                              )}
+                            />
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </PopoverLib>
+              </div>
+
+              <Button
+                classNameWrapper="col-span-6 md:col-span-3 relative"
+                type="submit"
+                nameButton="Tìm kiếm"
+                className="py-[20px] lg:py-[20px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
+              />
             </form>
           </div>
         </div>
@@ -76,7 +250,6 @@ export default function HotelSearch() {
                 {listHotel?.data.length > 0 && (
                   <div className="py-8 grid grid-cols-12 gap-4">
                     <div className="hidden lg:block lg:col-span-3">
-                      {" "}
                       <AsideFilterFlight queryConfig={queryConfig} />
                     </div>
 

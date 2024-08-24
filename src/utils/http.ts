@@ -12,6 +12,7 @@ const APIsecret = "mTu3hCC549SlbEcp"
 class http {
   instanceV1: AxiosInstance
   instanceV2: AxiosInstance
+  instanceV3: AxiosInstance
   private tokenAPI: string | null
   constructor() {
     this.tokenAPI = null // khởi tạo
@@ -32,8 +33,17 @@ class http {
       }
     })
 
+    this.instanceV3 = axios.create({
+      baseURL: "https://test.api.amadeus.com/v3/",
+      timeout: 30000, // thời gian chờ
+      headers: {
+        "Content-Type": "application/json" // yêu cầu server trả về kết quả json
+      }
+    })
+
     this.setUpInstance(this.instanceV1)
     this.setUpInstance(this.instanceV2)
+    this.setUpInstance(this.instanceV3)
   }
 
   // xử lý chung
@@ -95,4 +105,5 @@ class http {
 const Http = new http()
 export const HttpV1 = Http.instanceV1
 export const HttpV2 = Http.instanceV2
+export const HttpV3 = Http.instanceV3
 export default Http

@@ -12,10 +12,11 @@ export const path = {
   CancelTicket: "/manage/cancel",
   ManageUser: "/manage/user",
 
-  paymentComplete: "/complete",
+  billPayment: "/bill",
 
   hotel: "/hotel",
   hotelSearch: "/hotel/search",
+  hotelDetail: "/hotel/:hotelId",
   cart: "/cart",
   notFound: "/*"
 } as const

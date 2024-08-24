@@ -14,26 +14,32 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/
 import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 import { Fragment, useContext, useEffect, useRef, useState } from "react"
 import { getNameFromEmail } from "src/utils/utils"
-import { cityCodeList, listCityInVietNam } from "src/constant/hotelSearch"
+import { cityCodeList, hotelRatingList, listCityInVietNam } from "src/constant/hotelSearch"
 import InputSearch from "src/components/InputSearch"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { schemaHotel, schemaTypeHotel } from "src/utils/rules"
 import useFormHandler from "src/hooks/useFormHandler"
 import { FlightContext } from "src/context/useContextFlight"
 import { TypeCityCodeList } from "src/types/hotel.type"
 import CityCodeList from "src/components/CityCodeList"
+import Button from "src/components/Button"
+import { PopoverTrigger, Popover as PopoverLib, PopoverContent } from "src/components/ui/popover"
+import { Button as ButtonShadcn } from "src/components/ui/button"
+import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
+import iconStar from "src/img/Hotel/star.png"
 
-const fetchDataAirport = () => Promise.resolve(cityCodeList) // khởi tạo 1 promise
-type FormData = Pick<schemaTypeHotel, "cityCode">
+export const fetchDataHotel = () => Promise.resolve(cityCodeList) // khởi tạo 1 promise
+export type FormDataHotel = Pick<schemaTypeHotel, "cityCode" | "radius" | "ratings">
 
-const schemaFormData = schemaHotel.pick(["cityCode"])
+export const schemaFormDataHotel = schemaHotel.pick(["cityCode", "radius", "ratings"])
 
 export default function Hotel() {
   const { isAuthenticated, setIsAuthenticated, isProfile, setIsProfile, listCart } =
     useContext(AppContext)
 
-  const { cityCode, setCityCode } = useContext(FlightContext)
+  const { cityCode, setCityCode, radius, setRadius, ratings, setRatings } =
+    useContext(FlightContext)
 
   // xử lý loading
   const [loading, setLoading] = useState(true)
@@ -54,22 +60,23 @@ export default function Hotel() {
   }
 
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
   const [airportCodeList, setAirportCodeList] = useState<TypeCityCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
-    // handleSubmit,
+    handleSubmit,
     register,
     setValue,
-    // control,
+    control,
     formState: { errors }
-  } = useForm<FormData>({
-    resolver: yupResolver(schemaFormData)
+  } = useForm<FormDataHotel>({
+    resolver: yupResolver(schemaFormDataHotel)
   })
 
   useEffect(() => {
-    fetchDataAirport().then((res) => {
+    fetchDataHotel().then((res) => {
       setAirportCodeList(res)
     })
   }, [])
@@ -100,14 +107,27 @@ export default function Hotel() {
       state: {
         cityCode: code, //  Mã IATA của thành phố nơi bạn muốn tìm khách sạn.
         radius: 5, // Bán kính tìm kiếm xung quanh
-        radiusUnit: "KM" // Đơn vị đo của bán kính
+        radiusUnit: "KM", // Đơn vị đo của bán kính
+        hotelSource: "ALL"
       }
     })
   }
 
+  const handleSubmitSearch = handleSubmit((data) => {
+    navigate(path.hotelSearch, {
+      state: {
+        cityCode: data.cityCode, //  Mã IATA của thành phố nơi bạn muốn tìm khách sạn.
+        radius: Number(data.radius), // Bán kính tìm kiếm xung quanh
+        radiusUnit: "KM", // Đơn vị đo của bán kính
+        ratings: data.ratings,
+        hotelSource: "ALL"
+      }
+    })
+  })
+
   return (
     // khắc phục lệch layout
-    <div className="h-[3180px] md:h-[2600px] bg-[#fff]">
+    <div className="h-[3080px] md:h-[1500px] bg-[#fff]">
       {loading ? (
         <Skeleton className="flex flex-col justify-center items-center absolute left-1/2 top-[10%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -359,11 +379,11 @@ export default function Hotel() {
                   <div className="mt-4 md:-mt-8 mx-auto w-full md:w-[90%]">
                     <form
                       autoComplete="off"
-                      // onSubmit={handleSubmitSearch}
+                      onSubmit={handleSubmitSearch}
                       noValidate
-                      className="p-4 md:p-8 md:pt-12 bg-whiteColor rounded-lg shadow-md"
+                      className="p-4 md:p-8 md:pt-12 md:pb-6 grid grid-cols-6 flex-wrap gap-2 bg-whiteColor rounded-lg shadow-md"
                     >
-                      <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
+                      <div className="col-span-6 md:col-span-3">
                         <InputSearch
                           iconChild={
                             <svg
@@ -382,29 +402,91 @@ export default function Hotel() {
                             </svg>
                           }
                           placeholder="Điểm du lịch hoặc tên khách sạn"
-                          classNameWrapper="col-span-4 relative"
+                          classNameWrapper="relative"
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
+                          classNameInput="px-2 outline-none bg-transparent md:text-xl lg:text-2xl font-medium flex-grow"
                           ref={inputRef}
                           value={cityCode}
                           showList={showListAirport}
                           handleChangeValue={(event) => setCityCode(event.target.value)}
                           handleFocus={() => setShowListAirport(true)}
-                          register={register}
-                          name="originLocationCode"
+                          register={register} // đăng ký trường dữ liệu
+                          name="cityCode"
                           error={errors.cityCode?.message}
-                          desc="Từ"
                         >
                           <CityCodeList
                             listAirport={filterAirportCodeList_1}
                             handleItemClick={handleItemClick}
-                            inputName="originLocationCode"
+                            inputName="cityCode"
                           />
                         </InputSearch>
                       </div>
 
-                      <div className="mt-4 grid grid-cols-4 relative gap-2 flex-wrap">
-                        putSearch
+                      <div className="col-span-6 md:col-span-1">
+                        <input
+                          className="w-full px-4 py-5 outline-none bg-transparent font-normal rounded-md text-base border-2 border-gray-300"
+                          type="text"
+                          autoComplete="on"
+                          placeholder="Bán kính dò tìm (vd: 5)"
+                          value={radius}
+                          {...register("radius")}
+                          onChange={(event) => setRadius(event.target.value)}
+                        />
                       </div>
+
+                      <div className="col-span-6 md:col-span-1 rounded-md relative bg-transparent">
+                        <PopoverLib open={open} onOpenChange={setOpen}>
+                          <PopoverTrigger asChild>
+                            <ButtonShadcn
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={open}
+                              aria-label="ratings"
+                              className="flex justify-center items-center gap-1 bg-transparent py-8 shadow-none text-sm hover:bg-transparent w-full border-2 border-gray-300"
+                            >
+                              {ratings
+                                ? hotelRatingList.find((item) => item.value === ratings)?.value
+                                : "Xếp hạng"}
+                              <img src={iconStar} alt="iconStar" className="w-4 h-4" />
+                            </ButtonShadcn>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandList>
+                                <CommandGroup>
+                                  {hotelRatingList.map((item, index) => (
+                                    <Controller
+                                      key={index}
+                                      control={control}
+                                      name="ratings" // tên trường dữ liệu
+                                      render={({ field }) => (
+                                        <CommandItem
+                                          key={item.value}
+                                          value={item.value}
+                                          onSelect={(currentValue) => {
+                                            field.onChange(currentValue) // quản lý và cập nhật trường dữ liệu
+                                            setOpen(false)
+                                            setRatings(currentValue)
+                                          }}
+                                        >
+                                          {item.value}
+                                        </CommandItem>
+                                      )}
+                                    />
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </PopoverLib>
+                      </div>
+
+                      <Button
+                        classNameWrapper="col-span-6 md:col-span-1 relative"
+                        type="submit"
+                        nameButton="Tìm kiếm"
+                        className="py-[20px] lg:py-[20px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
+                      />
                     </form>
                   </div>
                 </div>
@@ -448,3 +530,6 @@ export default function Hotel() {
     </div>
   )
 }
+
+// nó sẽ xuất hiện 2 component hotel và hotelSearch giải pháp lưu vào ram useContext
+// để khi navigate có thể render ra được

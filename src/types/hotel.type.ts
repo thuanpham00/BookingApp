@@ -8,6 +8,18 @@ export type HotelParamsConfig = {
   hotelSource?: string // nguồn cung cấp thông tin khách sạn
 }
 
+export type HotelSearchParamsConfig = {
+  hotelIds?: string[] // mã code đã tìm được trước đó trong list
+  adults?: number // số lượng khách
+  checkInDate?: string // ngày nhận phòng
+  checkOutDate?: string // ngày trả phòng
+  roomQuantity?: number // số lượng phòng yêu cầu
+  priceRange?: string // Khoảng giá mà bạn muốn giới hạn kết quả tìm kiếm, được định dạng dưới dạng chuỗi
+  currency?: string // tiền tệ
+  paymentPolicy?: string // điều kiện thanh toán
+  boardType?: string // Loại dịch vụ ăn uống bạn muốn tìm kiếm.
+}
+
 export type TypeCityCodeItem = {
   code: string
   name: string

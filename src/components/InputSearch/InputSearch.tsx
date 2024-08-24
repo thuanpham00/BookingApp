@@ -18,7 +18,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   register?: UseFormRegister<any>
   name: string
   error?: string
-  desc: string
+  desc?: string
 }
 
 // Có thể truyền nhiều hơn 1 children vào component

@@ -11,8 +11,8 @@ export type InputAirport =
   | "cityCode"
 
 export default function useFormHandler(
-  list: any,
-  inputSearch: string,
+  list?: any,
+  inputSearch?: string,
   setValue?: UseFormSetValue<any>,
   setInputSearch?: (value: React.SetStateAction<string>) => void,
   setShowList?: (value: React.SetStateAction<boolean>) => void
@@ -41,8 +41,8 @@ export default function useFormHandler(
     () =>
       list.filter(
         (item: any) =>
-          item.name?.toLowerCase().includes(inputSearch.toLowerCase()) ||
-          item.country?.toLowerCase().includes(inputSearch.toLowerCase())
+          item.name?.toLowerCase().includes((inputSearch as string).toLowerCase()) ||
+          item.country?.toLowerCase().includes((inputSearch as string).toLowerCase())
       ),
     [list, inputSearch]
   )

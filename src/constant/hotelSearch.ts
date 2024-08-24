@@ -181,3 +181,21 @@ export const imageHotelList = [
   imgHotel14,
   imgHotel15
 ]
+
+export const hotelRatingList = [
+  {
+    value: "1"
+  },
+  {
+    value: "2"
+  },
+  {
+    value: "3"
+  },
+  {
+    value: "4"
+  },
+  {
+    value: "5"
+  }
+]

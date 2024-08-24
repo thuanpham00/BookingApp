@@ -11,7 +11,7 @@ interface Props {
   setDate: (date: Date) => void
   date: Date | null | string
   convertToYYYYMMDD: (date: Date) => string
-  errors: string
+  errors?: string
   name: string
   text: string
   className?: string

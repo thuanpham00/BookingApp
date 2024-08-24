@@ -26,7 +26,7 @@ import { createSearchParams, Link, useNavigate } from "react-router-dom"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { schemaType } from "src/utils/rules"
 import { path } from "src/constant/path"
-import { omit } from "lodash"
+import omit from "lodash/omit"
 import AsideFilterFlight from "./components/AsideFilterFlight"
 import Pagination from "src/components/Pagination"
 import banner from "src/img/Flight/ticker-banner-flight.webp"
@@ -93,7 +93,7 @@ export default function FlightSearch() {
   } = useContext(FlightContext)
 
   // xử lý header
-  const { showHeader } = useScrollHeader(200)
+  const { showHeader } = useScrollHeader(200) // -> scroll nó set state lại dẫn đến component re-render liên tục
 
   // xử lý form
   const navigate = useNavigate()
@@ -203,7 +203,7 @@ export default function FlightSearch() {
     },
     retry: 1, // số lần fetch lại khi thất bại
     placeholderData: keepPreviousData, // giữ data cũ
-    staleTime: 5 * 60 * 1000 // dưới 5 phút không refetch
+    staleTime: 5 * 60 * 1000 // dưới 5 phút không refetch api
   })
 
   const flightList = flightOffersSearchQuery?.data?.data as ResponseFlightList

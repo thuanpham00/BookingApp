@@ -657,7 +657,7 @@ export default function Flight() {
                           ref={inputRef}
                           value={searchText}
                           showList={showListAirport}
-                          handleChangeValue={(event) => setSearchText(event.target.value)}
+                          handleChangeValue={(event) => setSearchText(event.target.value)} // state context (state global)
                           handleFocus={() => setShowListAirport(true)}
                           register={register}
                           name="originLocationCode"

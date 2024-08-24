@@ -4,17 +4,7 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
-import HotelSearch from "src/pages/HotelSearch"
 import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
-
-/**
- * Khi url thay đổi thì các component nào dùng các hook như
- * useRoutes, useParams, useSearchParams,...
- * sẽ bị re-render
- * ví dụ component `App` dưới đây bị re-render khi mà url thay đổi
- * vì dùng `useRouterElement` (đây là custom hook của `useRoutes`)
- */
-
 const Login = lazy(() => import("src/pages/Login"))
 const Register = lazy(() => import("src/pages/Register"))
 const Flight = lazy(() => import("src/pages/Flight"))
@@ -28,6 +18,16 @@ const ManageOrderCancel = lazy(() => import("src/pages/Manage/Pages/ManageOrderC
 const ManageOrderSuccess = lazy(() => import("src/pages/Manage/Pages/ManageOrderSuccess"))
 const ManageUser = lazy(() => import("src/pages/Manage/Pages/ManageUser"))
 const Hotel = lazy(() => import("src/pages/Hotel"))
+const HotelSearch = lazy(() => import("src/pages/HotelSearch"))
+const HotelDetail = lazy(() => import("src/pages/HotelDetail"))
+
+/**
+ * Khi url thay đổi thì các component nào dùng các hook như
+ * useRoutes, useParams, useSearchParams,...
+ * sẽ bị re-render
+ * ví dụ component `App` dưới đây bị re-render khi mà url thay đổi
+ * vì dùng `useRouterElement` (đây là custom hook của `useRoutes`)
+ */
 
 function ProtectedRouter() {
   const { pathname } = useLocation()
@@ -94,10 +94,18 @@ export default function useRouterElement() {
           )
         },
         {
-          path: path.hotelSearch, // trạm tìm chuyến bay
+          path: path.hotelSearch, // trạm tìm khách sạn
           element: (
             <Suspense>
               <HotelSearch />
+            </Suspense>
+          )
+        },
+        {
+          path: path.hotelDetail, // 404 page
+          element: (
+            <Suspense>
+              <HotelDetail />
             </Suspense>
           )
         },
@@ -137,7 +145,7 @@ export default function useRouterElement() {
               )
             },
             {
-              path: path.paymentComplete, // thanh toán thành công
+              path: path.billPayment, // thanh toán thành công
               element: (
                 <Suspense>
                   <PaymentComplete />

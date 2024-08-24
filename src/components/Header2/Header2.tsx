@@ -85,7 +85,7 @@ export default function Header2() {
 
           <div className="flex items-center gap-4">
             <Popover
-              className="sticky top-0 left-0"
+              className="sticky top-0 left-0 z-30"
               renderPopover={
                 <div className="shadow-lg flex flex-col">
                   <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
@@ -321,7 +321,7 @@ export default function Header2() {
                     </div>
                   }
                 >
-                  <div className="hidden py-[6px] px-3 border-2 border-textColor rounded-sm duration-200 hover:bg-[#ddd]/80 md:flex items-center gap-1 text-textColor font-semibold text-sm">
+                  <div className="py-[6px] px-3 border-2 border-textColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -342,7 +342,7 @@ export default function Header2() {
                 </Popover>
               )}
               {!isAuthenticated && (
-                <div className="hidden md:flex items-center gap-4">
+                <div className="flex items-center gap-4">
                   <Link
                     to={path.register}
                     className="duration-200 hover:underline rounded-sm text-sm text-textColor font-medium hover:text-textColor/80"
@@ -358,8 +358,6 @@ export default function Header2() {
                 </div>
               )}
             </div>
-
-            <div className="hidden md:block"></div>
           </div>
         </div>
       </div>
