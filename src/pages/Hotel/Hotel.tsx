@@ -106,7 +106,7 @@ export default function Hotel() {
     navigate(path.hotelSearch, {
       state: {
         cityCode: code, //  Mã IATA của thành phố nơi bạn muốn tìm khách sạn.
-        radius: 5, // Bán kính tìm kiếm xung quanh
+        radius: 10, // Bán kính tìm kiếm xung quanh
         radiusUnit: "KM", // Đơn vị đo của bán kính
         hotelSource: "ALL"
       }

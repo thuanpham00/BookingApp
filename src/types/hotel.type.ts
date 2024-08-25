@@ -18,6 +18,10 @@ export type HotelSearchParamsConfig = {
   currency?: string // tiền tệ
   paymentPolicy?: string // điều kiện thanh toán
   boardType?: string // Loại dịch vụ ăn uống bạn muốn tìm kiếm.
+  includeClosed?: boolean // Nếu đặt là true, kết quả tìm kiếm sẽ bao gồm cả các khách sạn hiện đang đóng cửa.
+  bestRateOnly?: boolean // Nếu đặt là true, kết quả tìm kiếm chỉ hiển thị các phòng có giá tốt nhất.
+  countryOfResidence?: string // Mã quốc gia của nơi cư trú của khách, theo chuẩn ISO 3166-1 alpha-2 (ví dụ: US cho Hoa Kỳ). Thông tin này có thể ảnh hưởng đến giá cả hoặc các điều kiện khác.
+  lang?: string // ngon ngu
 }
 
 export type TypeCityCodeItem = {

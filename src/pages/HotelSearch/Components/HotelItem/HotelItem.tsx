@@ -1,7 +1,6 @@
 import { memo } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "src/components/Button"
-
 import { imageHotelList } from "src/constant/hotelSearch"
 import { path } from "src/constant/path"
 import { TypeHotelItemResponse } from "src/types/hotel.type"
@@ -16,6 +15,7 @@ function HotelItemInner({ item }: Props) {
 
   const handleNavigateDetail = (id: string) => {
     navigate(`${path.hotel}/${id}`)
+    localStorage.setItem("hotelItem", JSON.stringify({ ...item, imageHotel })) // nào payment thành công sẽ delete cái này
   }
 
   return (

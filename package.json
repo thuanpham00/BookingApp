@@ -38,6 +38,7 @@
     "framer-motion": "^11.2.11",
     "immer": "^10.1.1",
     "lodash": "^4.17.21",
+    "print-screen": "^1.1.2",
     "react": "^18.2.0",
     "react-datepicker": "^7.2.0",
     "react-day-picker": "^8.10.1",

@@ -44,9 +44,14 @@ export function useQueryConfigHotel() {
   const queryConfigHotel: QueryParamsConfigHotel = omitBy(
     {
       hotelIds: queryParam.hotelIds,
+      adults: queryParam.adults,
       checkInDate: queryParam.checkInDate,
       checkOutDate: queryParam.checkOutDate,
-      adults: queryParam.adults
+      roomQuantity: 1,
+      bestRateOnly: "true",
+      paymentPolicy: "NONE",
+      currency: "VND",
+      includeClosed: "false"
     },
     isUndefined
   )

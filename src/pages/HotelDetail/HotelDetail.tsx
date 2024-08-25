@@ -6,19 +6,23 @@ import Button from "src/components/Button"
 import { useForm } from "react-hook-form"
 import SelectDate from "src/components/SelectDate"
 import { convertToYYYYMMDD } from "src/utils/utils"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FlightContext } from "src/context/useContextFlight"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
 import QuantityController from "src/components/QuantityController"
 import { schemaHotel, schemaTypeHotel } from "src/utils/rules"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useQueryConfigHotel } from "src/hooks/useQueryConfig"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { path } from "src/constant/path"
+import { hotelApi } from "src/apis/hotel.api"
+import { HotelSearchParamsConfig } from "src/types/hotel.type"
+import { printScreen } from "print-screen"
 
 type FormData = Pick<schemaTypeHotel, "checkInDate" | "checkOutDate" | "adultsHotel">
 const schemaFormData = schemaHotel.pick(["checkInDate", "checkOutDate", "adultsHotel"])
-
+// MCTYOMCM dùng khách sạn sẽ ko lỗi
+// tokyo trang 1
 export default function HotelDetail() {
   const {
     adultsHotel,
@@ -30,14 +34,14 @@ export default function HotelDetail() {
   } = useContext(FlightContext)
   const { hotelId } = useParams()
 
+  console.log(adultsHotel, checkInDate, checkOutDate)
   // xử lý header
   const { showHeader } = useScrollHeader(200)
   const navigate = useNavigate()
-  const getHotelDetailQuery = useQuery({
-    queryKey: ["hotelDetail", hotelId]
-  })
 
   const queryConfigHotel = useQueryConfigHotel()
+  const hotelItemJSON = localStorage.getItem("hotelItem")
+  const hotelItem = JSON.parse(hotelItemJSON as string)
 
   // xử lý form
   const {
@@ -47,7 +51,12 @@ export default function HotelDetail() {
     setValue,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schemaFormData)
+    resolver: yupResolver(schemaFormData),
+    defaultValues: {
+      // adultsHotel: adultsHotel,
+      // checkInDate: String(checkInDate),
+      // checkOutDate: String(checkOutDate)
+    }
   })
 
   const handleChangeQuantity = (value: number) => {
@@ -65,10 +74,38 @@ export default function HotelDetail() {
     }
   }
 
+  const [flag, setFlag] = useState(false)
+
+  const getHotelDetailQuery = useQuery({
+    queryKey: ["hotelDetail", hotelId],
+    queryFn: () => {
+      const controller = new AbortController()
+      setTimeout(() => {
+        controller.abort()
+      }, 30000)
+      const response = hotelApi
+        .getHotelSearch(queryConfigHotel as HotelSearchParamsConfig, controller.signal)
+        .then((res) => {
+          console.log(res)
+          setFlag(false)
+          return res
+          // nếu nó trả về được kết quả thì set state lại
+        })
+      return response
+    },
+    retry: 1,
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
+    enabled: flag
+  })
+
   const handleSubmitSearchHotel = handleSubmit((data: FormData) => {
     const config = createConfig(data)
-    console.log(data)
-    navigate({ pathname: path.hotel, search: createSearchParams(config).toString() })
+    navigate({
+      pathname: `${path.hotel}/${hotelId}`,
+      search: createSearchParams(config).toString()
+    })
+    setFlag(true)
   })
 
   return (
@@ -78,15 +115,7 @@ export default function HotelDetail() {
         <meta name="description" content="Tìm kiếm khách sạn - Booking." />
       </Helmet>
 
-      <div
-        className="relative z-10 h-[650px]"
-        style={{
-          backgroundImage: `url(${backGround})`,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover"
-        }}
-      >
+      <div className="relative z-10 h-[650px]">
         <div
           className={`w-full bg-[#778da9] ${showHeader ? "md:fixed md:top-0 md:left-1/2 md:-translate-x-1/2 shadow-xl" : "md:absolute md:top-0 md:left-1/2 md:-translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -123,6 +152,7 @@ export default function HotelDetail() {
                       errors={errors.checkOutDate?.message as string}
                       convertToYYYYMMDD={convertToYYYYMMDD}
                       className="py-[14px] bg-gray-300 rounded-md flex items-center w-full justify-center"
+                      classNameError="py-[14px] border border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
                     />
                   </div>
                 </div>
@@ -199,7 +229,6 @@ export default function HotelDetail() {
               </div>
 
               <Button
-                disable={getHotelDetailQuery.isPending}
                 classNameWrapper="col-span-6 md:col-span-2 relative"
                 nameButton="Tìm kiếm"
                 type="submit"
@@ -210,7 +239,26 @@ export default function HotelDetail() {
         </div>
 
         <div className="z-30 w-full absolute top-[410px] md:top-32 lg:top-16 left-1/2 -translate-x-1/2">
-          <div className="container"></div>
+          <div className="container">
+            <div className="mt-8 w-full flex items-center mb-4 h-[200px]">
+              <div className="w-[30%] h-full">
+                <img
+                  src={hotelItem.imageHotel}
+                  alt="ảnh"
+                  className="w-full h-full object-cover rounded-tl rounded-bl"
+                />
+              </div>
+              <div className="w-[70%] p-4 h-full bg-white flex items-center justify-center flex-col rounded-tr rounded-br">
+                <h2 className="text-base text-textColor font-semibold">{hotelItem.name}</h2>
+                <h3 className="text-base text-textColor font-normal">
+                  Quốc gia: {hotelItem.address.countryCode}
+                </h3>
+                <span className="block text-base text-gray-500">
+                  Mã khách sạn: {hotelItem.hotelId}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

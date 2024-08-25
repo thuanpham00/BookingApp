@@ -25,6 +25,7 @@ import { PopoverTrigger, Popover as PopoverLib, PopoverContent } from "src/compo
 import { Button as ButtonShadcn } from "src/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList } from "src/components/ui/command"
 import iconStar from "src/img/Hotel/star.png"
+import Pagination from "src/components/Pagination"
 
 export default function HotelSearch() {
   const { cityCode, setCityCode, radius, setRadius, ratings, setRatings } =
@@ -104,6 +105,17 @@ export default function HotelSearch() {
       }
     })
   })
+
+  // phân trang
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalItem = 10
+  const startIndex = (currentPage - 1) * totalItem
+  const endIndex = startIndex + totalItem
+  const currentList = listHotel?.data.slice(startIndex, endIndex)
+
+  const handleChangePage = (numberPage: number) => {
+    setCurrentPage(numberPage)
+  }
 
   return (
     <div>
@@ -290,7 +302,7 @@ export default function HotelSearch() {
                         </h1>
                       </div>
 
-                      {listHotel.data?.map((item, index) => {
+                      {currentList?.map((item, index) => {
                         return (
                           <div key={index}>
                             <HotelItem item={item} />
@@ -299,12 +311,12 @@ export default function HotelSearch() {
                       })}
 
                       <div className="my-4">
-                        {/* <Pagination
+                        <Pagination
                           totalOfPage={totalItem}
-                          totalAllPage={flightList.data.length}
+                          totalAllPage={listHotel.data.length}
                           currentPage={currentPage}
                           onChangePage={handleChangePage}
-                        /> */}
+                        />
                       </div>
                     </div>
                   </div>

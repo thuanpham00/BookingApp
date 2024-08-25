@@ -19,6 +19,15 @@
 
 ## ÔN TẬP KIẾN THỨC
 
+1
+- Context API: dùng để quản lý các state global - truyền xuống cho các component con
+- React-query: thư viện - dùng để xử lý và gọi các api (post, get, put, delete )
+  -> dự án đơn giản nhỏ
+
+2
+- Redux Toolkit: vừa có thể quản lý các state global (store) - vừa có thể xử lý các api (createAsyncThunk())
+  -> phù hợp dự án lớn phức tạp
+
 - Tổng hợp hook đã xài
 
 * useRoutes() - array router
@@ -76,13 +85,17 @@ Uncontrolled component thì không khởi tạo giá trị được như control
 ví dụ là component selectDate và component Hạng vé khong cần value khởi tạo
 -> Các input mà không trực tiếp tương thích với register từ react-hook-form, chẳng hạn như các component từ thư viện UI (Material-UI, Ant Design, Chakra UI, v.v.), thường không thể sử dụng trực tiếp register.
 Trong những trường hợp này, bạn cần sử dụng Controller để kết nối chúng với react-hook-form.
+
 ---
 
 ## Firebase
+
 - createUserWithEmailAndPassword() - hàm tạo tài khoản user email & password
 - signInWithEmailAndPassword() - hàm đăng nhập user
 - signInWithPopup() - hàm đăng nhập google (popup)
 
 #### Dùng react.memo() để fix tình trạng component chung re-render khi không cần thiết
+
 #### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)
+
 #### đã optimize giảm kích thước file build production

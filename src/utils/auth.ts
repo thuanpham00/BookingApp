@@ -21,7 +21,7 @@ export const clearLS = () => {
   localStorage.removeItem("profile")
 }
 
-// cart
+// list cart
 export const setCartToLS = (cartItem: ResponseFlightPrice[]) => {
   return localStorage.setItem("listCart", JSON.stringify(cartItem))
 }
@@ -31,7 +31,7 @@ export const getCartToLS = () => {
   return res ? JSON.parse(res) : []
 }
 
-// purchase
+// list purchased
 export const setPurchaseListToLS = (cartItem: ResponseFlightManage[]) => {
   return localStorage.setItem("listPurchased", JSON.stringify(cartItem))
 }
@@ -41,7 +41,7 @@ export const getPurchaseListToLS = () => {
   return res ? JSON.parse(res) : []
 }
 
-// deleted purchase
+// list cancelled
 export const setCancelListToLS = (cartItem: ResponseFlightManage[]) => {
   return localStorage.setItem("listCancel", JSON.stringify(cartItem))
 }
