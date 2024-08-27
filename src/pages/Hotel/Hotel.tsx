@@ -127,7 +127,7 @@ export default function Hotel() {
 
   return (
     // khắc phục lệch layout
-    <div className="h-[3080px] md:h-[2000px] lg:h-[1500px] bg-[#fff]">
+    <div className="h-[2700px] md:h-[1800px] lg:h-[1500px] bg-[#fff]">
       {loading ? (
         <Skeleton className="flex flex-col justify-center items-center absolute left-1/2 top-[10%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -422,7 +422,7 @@ export default function Hotel() {
                         </InputSearch>
                       </div>
 
-                      <div className="col-span-6 md:col-span-1">
+                      <div className="col-span-6 md:col-span-1 relative">
                         <input
                           className={`w-full px-4 py-5 outline-none font-normal rounded-md text-base border-2 ${errors.radius?.message ? "border-red-500 bg-red-100" : "border-gray-300 bg-transparent"}`}
                           type="text"
@@ -432,6 +432,24 @@ export default function Hotel() {
                           {...register("radius")}
                           onChange={(event) => setRadius(event.target.value)}
                         />
+                        {errors.radius?.message && (
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="red"
+                              className="h-5 w-5 flex-shrink-0"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                              />
+                            </svg>
+                          </div>
+                        )}
                       </div>
 
                       <div className="col-span-6 md:col-span-1 rounded-md relative bg-transparent">

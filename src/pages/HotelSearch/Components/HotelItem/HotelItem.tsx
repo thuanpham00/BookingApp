@@ -19,7 +19,7 @@ function HotelItemInner({ item }: Props) {
   }
 
   return (
-    <div className="w-full flex items-center mb-4 h-[200px]">
+    <div className="w-full flex items-center mb-4 h-[300px]">
       <div className="w-[60%] h-full">
         <img
           src={imageHotel}

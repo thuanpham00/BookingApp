@@ -251,64 +251,58 @@ export default function HotelSearch() {
             {!getListHotelByCityQuery.isFetching && (
               <div>
                 {listHotel?.data.length > 0 && (
-                  <div className="py-8 grid grid-cols-12 gap-4">
-                    <div className="hidden lg:block lg:col-span-3">
-                      <AsideFilterFlight queryConfig={queryConfig} />
+                  <div className="mt-8 w-full">
+                    <div className="flex items-center gap-2 lg:gap-0 mb-2">
+                      <Sheet>
+                        <SheetTrigger aria-label="filter">
+                          <div className="md:block lg:hidden p-2 bg-blueColor rounded-xl">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="white"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
+                              />
+                            </svg>
+                          </div>
+                        </SheetTrigger>
+                        <SheetContent className="p-0" side="left">
+                          <SheetHeader>
+                            <SheetTitle className="mt-10">
+                              <AsideFilterFlight queryConfig={queryConfig} />
+                            </SheetTitle>
+                          </SheetHeader>
+                        </SheetContent>
+                      </Sheet>
+
+                      <h1 className="text-lg lg:text-2xl text-textColor font-semibold ">
+                        Tìm khách sạn tại {getCountry(cityCodeList, state.cityCode)}
+                        {" - "}
+                        {state.cityCode}
+                      </h1>
                     </div>
 
-                    <div className="col-span-12 lg:col-span-9">
-                      <div className="flex items-center gap-2 lg:gap-0 mb-2">
-                        <Sheet>
-                          <SheetTrigger aria-label="filter">
-                            <div className="md:block lg:hidden p-2 bg-blueColor rounded-xl">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="white"
-                                className="size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-                                />
-                              </svg>
-                            </div>
-                          </SheetTrigger>
-                          <SheetContent className="p-0" side="left">
-                            <SheetHeader>
-                              <SheetTitle className="mt-10">
-                                <AsideFilterFlight queryConfig={queryConfig} />
-                              </SheetTitle>
-                            </SheetHeader>
-                          </SheetContent>
-                        </Sheet>
+                    {currentList?.map((item, index) => {
+                      return (
+                        <div key={index}>
+                          <HotelItem item={item} />
+                        </div>
+                      )
+                    })}
 
-                        <h1 className="text-lg lg:text-2xl text-textColor font-semibold ">
-                          Tìm khách sạn tại {getCountry(cityCodeList, state.cityCode)}
-                          {" - "}
-                          {state.cityCode}
-                        </h1>
-                      </div>
-
-                      {currentList?.map((item, index) => {
-                        return (
-                          <div key={index}>
-                            <HotelItem item={item} />
-                          </div>
-                        )
-                      })}
-
-                      <div className="my-4">
-                        <Pagination
-                          totalOfPage={totalItem}
-                          totalAllPage={listHotel.data.length}
-                          currentPage={currentPage}
-                          onChangePage={handleChangePage}
-                        />
-                      </div>
+                    <div className="my-4">
+                      <Pagination
+                        totalOfPage={totalItem}
+                        totalAllPage={listHotel.data.length}
+                        currentPage={currentPage}
+                        onChangePage={handleChangePage}
+                      />
                     </div>
                   </div>
                 )}

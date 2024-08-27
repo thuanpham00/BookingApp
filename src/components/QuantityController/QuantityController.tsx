@@ -3,7 +3,7 @@ import { InputHTMLAttributes } from "react"
 import { UseFormRegister } from "react-hook-form"
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  nameQuantity: string
+  nameQuantity?: string
   onValueInput: (value: number) => void
   onIncrease: (value: number) => void
   onDecrease: (value: number) => void

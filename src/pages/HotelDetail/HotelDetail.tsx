@@ -240,10 +240,10 @@ export default function HotelDetail() {
                         </div>
                       </div>
                     </PopoverTrigger>
-                    <PopoverContent>
+                    <PopoverContent className="w-[230px]">
                       <div>
                         <QuantityController
-                          nameQuantity="Người lớn (12 tuổi trở lên)"
+                          nameQuantity="Khách"
                           value={adultsHotel}
                           onValueInput={handleChangeQuantity}
                           onIncrease={handleChangeQuantity}

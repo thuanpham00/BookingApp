@@ -813,7 +813,7 @@ export default function Flight() {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="red"
-                                        className="ml-1 h-6 w-6 flex-shrink-0"
+                                        className="ml-1 h-5 w-5 flex-shrink-0"
                                       >
                                         <path
                                           strokeLinecap="round"
@@ -894,7 +894,7 @@ export default function Flight() {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="red"
-                                        className="ml-1 h-6 w-6 flex-shrink-0"
+                                        className="ml-1 h-5 w-5 flex-shrink-0"
                                       >
                                         <path
                                           strokeLinecap="round"
