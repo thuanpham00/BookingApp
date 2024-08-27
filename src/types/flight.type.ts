@@ -132,7 +132,7 @@ type DocumentType = {
 export type FlightCreateOrder = {
   data: {
     type: "flight-order"
-    flightOffers: ResponseFlightPriceItem[]
+    flightOffers: TypeFlightPriceItemResponse[]
     travelers: //  Danh sách các hành khách:
     TravellerType[]
 
@@ -179,12 +179,12 @@ export type countryItem = {
   country: string
 }
 
-export type AirportCodeItem = {
+export type TypeAirportCodeItem = {
   code: string
   airport: string
   country: string
 }
-export type AirportCodeList = AirportCodeItem[]
+export type TypeAirportCodeList = TypeAirportCodeItem[]
 
 export type countTravelerType = {
   adult: number
@@ -192,15 +192,14 @@ export type countTravelerType = {
   infant: number
 }
 
-export type CountryItemCodeNumber = {
+export type TypeCountryItemCodeNumber = {
   code: string
   name: string
 }
-
-export type CountryListCodeNumber = CountryItemCodeNumber[]
+export type TypeCountryListCodeNumber = TypeCountryItemCodeNumber[]
 
 // response của flight offer search
-export type ResponseFlightItem = {
+export type TypeFlightItemResponse = {
   // Thông tin chung về chuyến bay
   type: string // Loại đối tượng (e.g., "flight-offer")
   id: string // ID duy nhất của chuyến bay
@@ -293,7 +292,7 @@ export type ResponseFlightItem = {
     }
   ]
 }
-export type ResponseFlightList = {
+export type TypeFlightListResponse = {
   // Metadata của phản hồi
   meta: {
     // Tổng số kết quả trả về
@@ -305,7 +304,7 @@ export type ResponseFlightList = {
   }
 
   // Dữ liệu chính của các chuyến bay
-  data: ResponseFlightItem[]
+  data: TypeFlightItemResponse[]
 
   // Từ điển chứa thông tin bổ sung
   dictionaries: {
@@ -328,21 +327,7 @@ export type ResponseFlightList = {
 }
 
 // response của flight offer price
-export type ResponseFlightPrice = {
-  data: {
-    type: string // Loại dữ liệu, ví dụ "flight-offers-pricing"
-    flightOffers: ResponseFlightPriceItem[]
-  }
-  dictionaries: {
-    locations: {
-      [key: string]: {
-        cityCode: string
-        countryCode: string
-      }
-    }
-  }
-}
-export type ResponseFlightPriceItem = {
+export type TypeFlightPriceItemResponse = {
   type: string // Loại đề xuất, ví dụ "flight-offer"
   id: string // ID của đề xuất chuyến bay
   source: string // Nguồn dữ liệu, ví dụ "GDS"
@@ -425,9 +410,23 @@ export type ResponseFlightPriceItem = {
   ]
   paymentCardRequired: false
 }
+export type TypeFlightPriceResponse = {
+  data: {
+    type: string // Loại dữ liệu, ví dụ "flight-offers-pricing"
+    flightOffers: TypeFlightPriceItemResponse[]
+  }
+  dictionaries: {
+    locations: {
+      [key: string]: {
+        cityCode: string
+        countryCode: string
+      }
+    }
+  }
+}
 
 // response của flight create order
-export type ResponseFlightOrder = {
+export type TypeFlightOrderResponse = {
   data: {
     type: "flight-order"
     id: string
@@ -584,7 +583,7 @@ export type ResponseFlightOrder = {
 }
 
 // response của flight order management
-export type ResponseFlightManage = {
+export type TypeFlightManageResponse = {
   data: {
     type: string // "flight-order"
     id: string // Ví dụ: "MlpZVkFMfFdBVFNPTnwyMDE1LTExLTAy"

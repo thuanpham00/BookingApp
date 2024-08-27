@@ -20,7 +20,8 @@ const ManageUser = lazy(() => import("src/pages/Manage/Pages/ManageUser"))
 const Hotel = lazy(() => import("src/pages/Hotel"))
 const HotelSearch = lazy(() => import("src/pages/HotelSearch"))
 const HotelDetail = lazy(() => import("src/pages/HotelDetail"))
-
+const HotelOrder = lazy(() => import("src/pages/HotelOrder"))
+const HotelPayment = lazy(() => import("src/pages/HotelPayment"))
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
  * useRoutes, useParams, useSearchParams,...
@@ -137,10 +138,26 @@ export default function useRouterElement() {
               )
             },
             {
+              path: path.hotelOrder, // tới trạm tạo đơn
+              element: (
+                <Suspense>
+                  <HotelOrder />
+                </Suspense>
+              )
+            },
+            {
               path: path.flightPayment, // tới trạm thanh toán
               element: (
                 <Suspense>
                   <FlightPayment />
+                </Suspense>
+              )
+            },
+            {
+              path: path.hotelPayment, // tới trạm thanh toán
+              element: (
+                <Suspense>
+                  <HotelPayment />
                 </Suspense>
               )
             },

@@ -7,9 +7,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popov
 import { useContext, useEffect, useRef, useState } from "react"
 import { airportCodes, travelClassList, typeFlightList } from "src/constant/flightSearch"
 import {
-  ResponseFlightList,
-  AirportCodeList as AirportCodeListType,
-  FlightOfferParamsConfig
+  TypeAirportCodeList,
+  FlightOfferParamsConfig,
+  TypeFlightListResponse
 } from "src/types/flight.type.ts"
 import { Controller, useForm } from "react-hook-form"
 import Button from "src/components/Button/Button.tsx"
@@ -37,7 +37,7 @@ import useScrollHeader from "src/hooks/useScrollHeader"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
 import { FlightContext } from "src/context/useContextFlight"
-import AirportCodeList from "src/components/AirportCodeList"
+import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -100,7 +100,7 @@ export default function FlightSearch() {
   const queryConfig = useQueryConfig()
   const [open, setOpen] = useState(false)
   const [open2, setOpen2] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<AirportCodeListType>([])
+  const [airportCodeList, setTypeAirportCodeList] = useState<TypeAirportCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -128,7 +128,7 @@ export default function FlightSearch() {
 
   useEffect(() => {
     fetchDataAirport().then((res) => {
-      setAirportCodeList(res)
+      setTypeAirportCodeList(res)
     })
   }, [])
 
@@ -150,7 +150,7 @@ export default function FlightSearch() {
 
   //`useCallback()`: khi cta không muốn function của cta được khởi tạo lại mỗi lần component chúng ta re-render - nếu có thay đổi nó mới chạy lại - re-render
   //`useMemo()`: tương tự, khi chúng ta muốn một biến không bị làm mới lại mỗi lần component re-render. - nếu có thay đổi nó mới chạy lại - re-render
-  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+  const { filterList: filterTypeAirportCodeList_1, handleItemClick } = useFormHandler(
     airportCodeList,
     searchText,
     setValue,
@@ -158,13 +158,8 @@ export default function FlightSearch() {
     setShowListAirport
   )
 
-  const { filterList: filterAirportCodeList_2, handleItemClick: handleItemClick2 } = useFormHandler(
-    airportCodeList,
-    searchText2,
-    setValue,
-    setSearchText2,
-    setShowListAirport2
-  )
+  const { filterList: filterTypeAirportCodeList_2, handleItemClick: handleItemClick2 } =
+    useFormHandler(airportCodeList, searchText2, setValue, setSearchText2, setShowListAirport2)
 
   const handleChangeQuantity = (nameQuantity: InputController) => (value: number) => {
     setValue(nameQuantity, value) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
@@ -206,7 +201,7 @@ export default function FlightSearch() {
     staleTime: 5 * 60 * 1000 // dưới 5 phút không refetch api
   })
 
-  const flightList = flightOffersSearchQuery?.data?.data as ResponseFlightList
+  const flightList = flightOffersSearchQuery?.data?.data as TypeFlightListResponse
 
   // xử lý navigate form
   const handleSubmitSearch = handleSubmit((data) => {
@@ -354,7 +349,7 @@ export default function FlightSearch() {
                     classNameDesc="pl-2 text-textColor"
                   >
                     <AirportCodeList
-                      listAirport={filterAirportCodeList_1}
+                      listAirport={filterTypeAirportCodeList_1}
                       handleItemClick={handleItemClick}
                       inputName="originLocationCode"
                     />
@@ -399,7 +394,7 @@ export default function FlightSearch() {
                     classNameDesc="pl-2 text-textColor"
                   >
                     <AirportCodeList
-                      listAirport={filterAirportCodeList_2}
+                      listAirport={filterTypeAirportCodeList_2}
                       handleItemClick={handleItemClick2}
                       inputName="destinationLocationCode"
                     />

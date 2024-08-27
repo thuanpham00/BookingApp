@@ -1,8 +1,8 @@
-import { CountryListCodeNumber } from "src/types/flight.type"
+import { TypeCountryListCodeNumber } from "src/types/flight.type"
 import { InputName } from "../../FlightOrder"
 
 interface Props {
-  listAirport: CountryListCodeNumber
+  listAirport: TypeCountryListCodeNumber
   inputName: InputName
   handleItemClick: (inputName: InputName, value: string) => void
 }

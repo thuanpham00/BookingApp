@@ -71,3 +71,216 @@ export type TypeHotelListResponse = {
     }
   }
 }
+
+export type TypeHotelSearchResponse = {
+  data: {
+    type: string // Loại đối tượng, ví dụ: "hotel-offers".
+    hotel: {
+      type: string // Loại đối tượng khách sạn, luôn là "hotel".
+      hotelId: string // Mã định danh duy nhất của khách sạn.
+      chainCode: string // Mã chuỗi khách sạn (nếu có).
+      dupeId: string // Mã định danh khác của khách sạn, dùng cho các mục đích so sánh.
+      name: string // Tên của khách sạn.
+      cityCode: string // Mã thành phố nơi khách sạn tọa lạc.
+      latitude: number // Vĩ độ địa lý của khách sạn.
+      longitude: number // Kinh độ địa lý của khách sạn.
+    }
+    available: boolean // Xác định liệu có phòng trống tại khách sạn hay không.
+    offers: {
+      id: string // Mã định danh của offer.
+      checkInDate: string // Ngày khách nhận phòng.
+      checkOutDate: string // Ngày khách trả phòng.
+      rateCode: string // Mã rate áp dụng cho phòng.
+      commission: {
+        percentage: string // Phần trăm hoa hồng được áp dụng cho offer.
+      }
+      room: {
+        type: string // Mã loại phòng.
+        typeEstimated: {
+          category: string // Hạng phòng (ví dụ: "SUPERIOR_ROOM").
+          beds: number // Số lượng giường trong phòng.
+          bedType: string // Loại giường (ví dụ: "KING").
+        }
+        description: {
+          text: string // Mô tả về phòng.
+          lang: string // Ngôn ngữ của mô tả phòng.
+        }
+      }
+      guests: {
+        adults: number // Số lượng khách người lớn cho offer này.
+      }
+      price: {
+        currency: string // Loại tiền tệ của giá phòng.
+        base: string // Giá cơ bản của phòng.
+        total: string // Tổng giá phòng bao gồm tất cả các khoản phí.
+        variations: {
+          average: {
+            base: string // Giá trung bình cho toàn bộ kỳ nghỉ.
+          }
+          changes: {
+            startDate: string // Ngày bắt đầu của thay đổi giá.
+            endDate: string // Ngày kết thúc của thay đổi giá.
+            base: string // Giá cơ bản trong khoảng thời gian này.
+          }[]
+        }
+      }
+      policies: {
+        cancellations: {
+          description: {
+            text: string // Mô tả về chính sách hủy phòng.
+          }
+          type: string // Loại hủy phòng (ví dụ: "FULL_STAY").
+        }[]
+        prepay: {
+          deadline: string // Hạn chót để trả trước cho phòng.
+        }
+        paymentType: string // Loại thanh toán (ví dụ: "prepay").
+      }
+      self: string // Đường dẫn URL để lấy chi tiết về offer này.
+    }[]
+    self: string // Đường dẫn URL để lấy chi tiết về hotel-offers này.
+  }[]
+}
+
+export type TypeTravelerHotel = {
+  title: string
+  firstName: string
+  lastName: string
+  phone: string
+  email: string
+}
+
+export type TypeHotelCreateOrder = {
+  data: {
+    type: string
+    guests: TypeTravelerHotel[]
+    travelAgent: {
+      contact: {
+        email: string
+      }
+    }
+    roomAssociations: [
+      {
+        guestReferences: [
+          {
+            guestReference: string
+          }
+        ]
+        hotelOfferId: string
+      }
+    ]
+    payment: {
+      method: string
+      paymentCard: {
+        paymentCardInfo: {
+          vendorCode: string
+          cardNumber: string
+          expiryDate: string
+          holderName: string
+        }
+      }
+    }
+  }
+}
+
+export type TypeHotelOrderResponse = {
+  data: {
+    type: string // "hotel-order"
+    id: string
+    hotelBookings: {
+      type: string // "hotel-booking"
+      id: string
+      bookingStatus: string // "CONFIRMED"
+      hotelProviderInformation: {
+        hotelProviderCode: string
+        confirmationNumber: string
+      }[]
+      roomAssociations: {
+        hotelOfferId: string
+        guestReferences: {
+          guestReference: string
+        }[]
+      }[]
+      hotelOffer: {
+        id: string
+        type: string // "hotel-offer"
+        category: string // "TYPE_CONDITIONAL"
+        checkInDate: string
+        checkOutDate: string
+        guests: {
+          adults: number
+        }
+        policies: {
+          cancellations: {
+            amount: string
+            deadline: string
+          }[]
+          paymentType: string // "GUARANTEE"
+        }
+        price: {
+          base: string
+          currency: string
+          sellingTotal: string
+          taxes: {
+            amount: string
+            code: string // "VALUE_ADDED_TAX"
+            currency: string
+            included: boolean
+            pricingFrequency: string // "PER_STAY"
+            pricingMode: string // "PER_PRODUCT"
+          }[]
+          total: string
+          variations: {
+            changes: {
+              endDate: string
+              startDate: string
+              base: string
+              currency: string
+            }[]
+          }
+        }
+        rateCode: string
+        room: {
+          description: {
+            lang: string
+            text: string
+          }
+          type: string
+        }
+        roomQuantity: number
+      }
+      hotel: {
+        hotelId: string
+        chainCode: string
+        name: string
+        self: string
+      }
+      payment: {
+        method: string // "CREDIT_CARD"
+        paymentCard: {
+          paymentCardInfo: {
+            vendorCode: string
+            cardNumber: string
+            expiryDate: string
+            holderName: string
+          }
+        }
+      }
+      travelAgentId: string
+    }[]
+    guests: {
+      tid: number
+      id: number
+      title: string
+      firstName: string
+      lastName: string
+      phone: string
+      email: string
+    }[]
+    associatedRecords: {
+      reference: string
+      originSystemCode: string
+    }[]
+    self: string
+  }
+}

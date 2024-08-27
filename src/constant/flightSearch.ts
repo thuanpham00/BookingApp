@@ -27,7 +27,7 @@ import bannerAl26 from "../img/Home/airline/al26.webp"
 import bannerAl27 from "../img/Home/airline/al27.webp"
 import bannerAl28 from "../img/Home/airline/al28.webp"
 
-import { AirportCodeItem, countryItem } from "src/types/flight.type"
+import { TypeAirportCodeItem, countryItem } from "src/types/flight.type"
 
 export const bannerAirLineList = [
   bannerAl1,
@@ -61,7 +61,7 @@ export const bannerAirLineList = [
 ]
 
 // mã sân bay
-export const airportCodes: AirportCodeItem[] = [
+export const airportCodes: TypeAirportCodeItem[] = [
   { code: "SGN", airport: "Sân bay Quốc tế Tân Sơn Nhất", country: "Việt Nam" },
   { code: "HAN", airport: "Sân bay Quốc tế Nội Bài", country: "Việt Nam" },
   { code: "DAD", airport: "Sân bay Quốc tế Đà Nẵng", country: "Việt Nam" },

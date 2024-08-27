@@ -7,12 +7,12 @@ import {
 } from "src/utils/utils"
 import iconFlightRed from "src/img/Flight/iconFlightRed.webp"
 import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
-import { ResponseFlightManage } from "src/types/flight.type"
+import { TypeFlightManageResponse } from "src/types/flight.type"
 import { useState } from "react"
 import ticket from "src/img/Flight/ticket-flight.png"
 
 interface Props {
-  item: ResponseFlightManage
+  item: TypeFlightManageResponse
   children?: React.ReactNode
 }
 

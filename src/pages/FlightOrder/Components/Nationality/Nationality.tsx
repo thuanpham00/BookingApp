@@ -1,8 +1,8 @@
 import { InputAirport } from "src/hooks/useFormHandler"
-import { CountryListCodeNumber } from "src/types/flight.type"
+import { TypeCountryListCodeNumber } from "src/types/flight.type"
 
 interface Props {
-  listAirport: CountryListCodeNumber
+  listAirport: TypeCountryListCodeNumber
   inputName: InputAirport
   handleItemClick: (inputName: InputAirport, value: string) => void
 }

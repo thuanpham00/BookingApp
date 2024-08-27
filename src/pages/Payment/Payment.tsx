@@ -7,7 +7,7 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import useQueryParam from "src/hooks/useQueryParam"
 import useScrollHeader from "src/hooks/useScrollHeader"
-import { ResponseFlightManage, ResponseFlightOrder } from "src/types/flight.type"
+import { TypeFlightManageResponse, TypeFlightOrderResponse } from "src/types/flight.type"
 import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 
@@ -17,10 +17,12 @@ export default function Payment() {
   const paramsUrl = useQueryParam()
 
   const dataLS = localStorage.getItem("detailPaymentData") as string
-  const data = JSON.parse(dataLS) as ResponseFlightOrder
+  const data = JSON.parse(dataLS) as TypeFlightOrderResponse
   const idFlight = data?.data.id
 
   localStorage.removeItem("flightPriceData")
+  localStorage.removeItem("hotelPriceData")
+  localStorage.removeItem("hotelItem")
 
   const getFlightOrderManageQuery = useQuery({
     queryKey: ["flightOrderManage", idFlight],
@@ -40,7 +42,7 @@ export default function Payment() {
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
-  const data2 = getFlightOrderManageQuery.data?.data as ResponseFlightManage
+  const data2 = getFlightOrderManageQuery.data?.data as TypeFlightManageResponse
 
   // React render cả component (lần render đầu tiên) tạo ra DOM ảo từ JSX component trả về -> Tính toán tạo ra DOM thật , cập nhật UI và hiển thị người dùng -> sau lần render đầu tiên chạy UseEffect()
   // vì sao tách ra 2 useEffect vì react nó sẽ ko cập nhật UI liền mà nó sẽ chạy hết quá trình render component rồi mới cập nhật UI -> dẫn đến phải cập nhật listPurchase mới nhất -> thêm 1 useEffect để set localStorage (vì lúc này đã có giá trị mới nhất)

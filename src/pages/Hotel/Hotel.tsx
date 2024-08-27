@@ -61,7 +61,7 @@ export default function Hotel() {
 
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<TypeCityCodeList>([])
+  const [airportCodeList, setTypeAirportCodeList] = useState<TypeCityCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -77,7 +77,7 @@ export default function Hotel() {
 
   useEffect(() => {
     fetchDataHotel().then((res) => {
-      setAirportCodeList(res)
+      setTypeAirportCodeList(res)
     })
   }, [])
 
@@ -94,7 +94,7 @@ export default function Hotel() {
     return () => document.removeEventListener("mousedown", clickOutHideListAirport)
   }, [])
 
-  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+  const { filterList: filterTypeAirportCodeList_1, handleItemClick } = useFormHandler(
     airportCodeList,
     cityCode,
     setValue,
@@ -127,7 +127,7 @@ export default function Hotel() {
 
   return (
     // khắc phục lệch layout
-    <div className="h-[3080px] md:h-[1500px] bg-[#fff]">
+    <div className="h-[3080px] md:h-[2000px] lg:h-[1500px] bg-[#fff]">
       {loading ? (
         <Skeleton className="flex flex-col justify-center items-center absolute left-1/2 top-[10%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -415,7 +415,7 @@ export default function Hotel() {
                           error={errors.cityCode?.message}
                         >
                           <CityCodeList
-                            listAirport={filterAirportCodeList_1}
+                            listAirport={filterTypeAirportCodeList_1}
                             handleItemClick={handleItemClick}
                             inputName="cityCode"
                           />
@@ -424,10 +424,10 @@ export default function Hotel() {
 
                       <div className="col-span-6 md:col-span-1">
                         <input
-                          className="w-full px-4 py-5 outline-none bg-transparent font-normal rounded-md text-base border-2 border-gray-300"
+                          className={`w-full px-4 py-5 outline-none font-normal rounded-md text-base border-2 ${errors.radius?.message ? "border-red-500 bg-red-100" : "border-gray-300 bg-transparent"}`}
                           type="text"
                           autoComplete="on"
-                          placeholder="Bán kính dò tìm (vd: 5)"
+                          placeholder="Bán kính dò tìm"
                           value={radius}
                           {...register("radius")}
                           onChange={(event) => setRadius(event.target.value)}

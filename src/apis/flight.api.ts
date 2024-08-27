@@ -2,14 +2,14 @@ import {
   FlightCreateOrder,
   FlightOfferParamsConfig,
   FlightPricingParams,
-  ResponseFlightList
+  TypeFlightListResponse
 } from "src/types/flight.type"
 import { HttpV1, HttpV2 } from "src/utils/http"
 
 export const flightApi = {
   // tìm kiếm chuyến bay
   flightOfferSearchGet: (params: FlightOfferParamsConfig, signal?: AbortSignal) => {
-    return HttpV2.get<ResponseFlightList>("shopping/flight-offers", { params, signal })
+    return HttpV2.get<TypeFlightListResponse>("shopping/flight-offers", { params, signal })
   },
 
   // giá chi tiết của 1 chuyến bay

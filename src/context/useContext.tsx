@@ -1,5 +1,5 @@
 import { createContext, useState } from "react"
-import { ResponseFlightManage, ResponseFlightPrice } from "src/types/flight.type"
+import { TypeFlightManageResponse, TypeFlightPriceResponse } from "src/types/flight.type"
 import {
   getAccessTokenToLS,
   getCancelListToLS,
@@ -17,12 +17,12 @@ type initialStateType = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   isProfile: string | null
   setIsProfile: React.Dispatch<React.SetStateAction<string | null>>
-  listCart: ResponseFlightPrice[]
-  setListCart: React.Dispatch<React.SetStateAction<ResponseFlightPrice[]>>
-  listPurchased: ResponseFlightManage[]
-  setListPurchased: React.Dispatch<React.SetStateAction<ResponseFlightManage[]>>
-  listCancel: ResponseFlightManage[]
-  setListCancel: React.Dispatch<React.SetStateAction<ResponseFlightManage[]>>
+  listCart: TypeFlightPriceResponse[]
+  setListCart: React.Dispatch<React.SetStateAction<TypeFlightPriceResponse[]>>
+  listPurchased: TypeFlightManageResponse[]
+  setListPurchased: React.Dispatch<React.SetStateAction<TypeFlightManageResponse[]>>
+  listCancel: TypeFlightManageResponse[]
+  setListCancel: React.Dispatch<React.SetStateAction<TypeFlightManageResponse[]>>
 }
 
 const initialState: initialStateType = {

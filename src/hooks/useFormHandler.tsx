@@ -39,6 +39,7 @@ export default function useFormHandler(
 
   const filterList = useMemo(
     () =>
+      list &&
       list.filter(
         (item: any) =>
           item.name?.toLowerCase().includes((inputSearch as string).toLowerCase()) ||

@@ -1,7 +1,7 @@
 import { useMemo } from "react"
-import { ResponseFlightManage } from "src/types/flight.type"
+import { TypeFlightManageResponse } from "src/types/flight.type"
 
-export default function useFilterManage(data: ResponseFlightManage[], searchText: string) {
+export default function useFilterManage(data: TypeFlightManageResponse[], searchText: string) {
   const filterList = useMemo(
     () =>
       data &&

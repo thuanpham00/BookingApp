@@ -72,7 +72,7 @@ export type schemaType = yup.InferType<typeof schema>
 export const schemaHotel = yup.object({
   cityCode: yup.string().required(),
   radius: yup.string().required("Bắt buộc"),
-  ratings: yup.string().required(),
+  ratings: yup.string(),
 
   hotelIds: yup.string().required(),
   checkInDate: yup.string().required(),

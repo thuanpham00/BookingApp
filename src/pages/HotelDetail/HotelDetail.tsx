@@ -1,12 +1,11 @@
-import { createSearchParams, useNavigate, useParams } from "react-router-dom"
+import { createSearchParams, Link, useNavigate, useParams } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
 import useScrollHeader from "src/hooks/useScrollHeader"
-import backGround from "src/img/bgLogin/bg-6.webp"
 import Button from "src/components/Button"
 import { useForm } from "react-hook-form"
 import SelectDate from "src/components/SelectDate"
-import { convertToYYYYMMDD } from "src/utils/utils"
-import { useContext, useEffect, useState } from "react"
+import { convertToYYYYMMDD, formatCurrency } from "src/utils/utils"
+import { useContext } from "react"
 import { FlightContext } from "src/context/useContextFlight"
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
 import QuantityController from "src/components/QuantityController"
@@ -16,14 +15,15 @@ import { useQueryConfigHotel } from "src/hooks/useQueryConfig"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { path } from "src/constant/path"
 import { hotelApi } from "src/apis/hotel.api"
-import { HotelSearchParamsConfig } from "src/types/hotel.type"
-import { printScreen } from "print-screen"
+import { HotelSearchParamsConfig, TypeHotelSearchResponse } from "src/types/hotel.type"
+import DOMPurify from "dompurify"
 
 type FormData = Pick<schemaTypeHotel, "checkInDate" | "checkOutDate" | "adultsHotel">
 const schemaFormData = schemaHotel.pick(["checkInDate", "checkOutDate", "adultsHotel"])
-// MCTYOMCM dùng khách sạn sẽ ko lỗi
-// tokyo trang 1
+
 export default function HotelDetail() {
+  // const { listCart, setListCart } = useContext(AppContext)
+
   const {
     adultsHotel,
     setAdultsHotel,
@@ -31,10 +31,9 @@ export default function HotelDetail() {
     setCheckInDate,
     checkOutDate,
     setCheckOutDate
-  } = useContext(FlightContext)
+  } = useContext(FlightContext) // global state
   const { hotelId } = useParams()
 
-  console.log(adultsHotel, checkInDate, checkOutDate)
   // xử lý header
   const { showHeader } = useScrollHeader(200)
   const navigate = useNavigate()
@@ -57,6 +56,7 @@ export default function HotelDetail() {
       // checkInDate: String(checkInDate),
       // checkOutDate: String(checkOutDate)
     }
+    // nó vẫn lưu giá trị input ra màn hình nhưng giá trị trong form thì rỗng
   })
 
   const handleChangeQuantity = (value: number) => {
@@ -74,10 +74,8 @@ export default function HotelDetail() {
     }
   }
 
-  const [flag, setFlag] = useState(false)
-
   const getHotelDetailQuery = useQuery({
-    queryKey: ["hotelDetail", hotelId],
+    queryKey: ["hotelDetail", queryConfigHotel],
     queryFn: () => {
       const controller = new AbortController()
       setTimeout(() => {
@@ -86,18 +84,22 @@ export default function HotelDetail() {
       const response = hotelApi
         .getHotelSearch(queryConfigHotel as HotelSearchParamsConfig, controller.signal)
         .then((res) => {
-          console.log(res)
-          setFlag(false)
           return res
           // nếu nó trả về được kết quả thì set state lại
         })
+        .catch((error) => {
+          console.log(error)
+        })
       return response
     },
-    retry: 1,
+    retry: 0,
     placeholderData: keepPreviousData,
-    staleTime: 5 * 60 * 1000,
-    enabled: flag
+    staleTime: 5 * 60 * 1000
   })
+
+  const data = getHotelDetailQuery.data?.data as TypeHotelSearchResponse
+  // const error = getHotelDetailQuery.error
+  // console.log(JSON.parse(error))
 
   const handleSubmitSearchHotel = handleSubmit((data: FormData) => {
     const config = createConfig(data)
@@ -105,8 +107,35 @@ export default function HotelDetail() {
       pathname: `${path.hotel}/${hotelId}`,
       search: createSearchParams(config).toString()
     })
-    setFlag(true)
   })
+
+  // xử lý navigate tới flight order
+  const handleNavigatePage = () => {
+    navigate({
+      pathname: path.hotelOrder
+    })
+    localStorage.setItem("hotelPriceData", JSON.stringify(data))
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  // const handleAddToCart = () => {
+  //   setListCart((prev) => {
+  //     const findItem = listCart.find(
+  //       (item) =>
+  //         item. ===
+  //           flightPrice.data.flightOffers[0].itineraries[0].segments[0].departure.at &&
+  //         item.data.flightOffers[0].itineraries[0].segments[0].arrival.at ===
+  //           flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at
+  //     ) // trả về true false
+  //     if (findItem) {
+  //       toast.error("Chuyến bay này đã có trong giỏ hàng")
+  //       return [...prev]
+  //     } else {
+  //       toast.success("Thêm vào giỏ hàng thành công!!!")
+  //       return [...prev, flightPrice]
+  //     }
+  //   })
+  // }
 
   return (
     <div>
@@ -115,7 +144,7 @@ export default function HotelDetail() {
         <meta name="description" content="Tìm kiếm khách sạn - Booking." />
       </Helmet>
 
-      <div className="relative z-10 h-[650px]">
+      <div className="relative">
         <div
           className={`w-full bg-[#778da9] ${showHeader ? "md:fixed md:top-0 md:left-1/2 md:-translate-x-1/2 shadow-xl" : "md:absolute md:top-0 md:left-1/2 md:-translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -126,7 +155,7 @@ export default function HotelDetail() {
               noValidate
               className="grid grid-cols-6 lg:grid-cols-12 items-center gap-2 flex-wrap py-2"
             >
-              <div className="col-span-6 md:col-span-2 lg:col-span-4">
+              <div className="col-span-6 md:col-span-4 lg:col-span-4">
                 <div className="w-full flex items-center gap-2">
                   <div className="w-[50%]">
                     <SelectDate
@@ -161,7 +190,7 @@ export default function HotelDetail() {
               <div className="col-span-6 md:col-span-2 lg:col-span-2">
                 {/* hành khách */}
                 <div
-                  className={`rounded-md py-[16px] flex items-center justify-center ${adultsHotel === 0 ? "border-red-500 bg-red-100 border" : "bg-gray-300"}`}
+                  className={`rounded-md py-[16px] flex items-center justify-center ${errors.adultsHotel?.message ? "border-red-500 bg-red-100 border" : "bg-gray-300"}`}
                 >
                   <Popover>
                     <PopoverTrigger>
@@ -192,7 +221,7 @@ export default function HotelDetail() {
 
                           <span className="text-base text-textColor font-semibold">Khách</span>
 
-                          {adultsHotel === 0 && (
+                          {errors.adultsHotel?.message && (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -229,7 +258,7 @@ export default function HotelDetail() {
               </div>
 
               <Button
-                classNameWrapper="col-span-6 md:col-span-2 relative"
+                classNameWrapper="col-span-6 md:col-span-1 lg:col-span-2 relative"
                 nameButton="Tìm kiếm"
                 type="submit"
                 className="py-[20px] lg:py-[20px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
@@ -237,18 +266,17 @@ export default function HotelDetail() {
             </form>
           </div>
         </div>
-
-        <div className="z-30 w-full absolute top-[410px] md:top-32 lg:top-16 left-1/2 -translate-x-1/2">
+        <div className="z-30 w-full absolute top-[210px] md:top-32 lg:top-16 left-1/2 -translate-x-1/2">
           <div className="container">
-            <div className="mt-8 w-full flex items-center mb-4 h-[200px]">
-              <div className="w-[30%] h-full">
+            <div className="mt-8 mb-12 md:mt-8 md:mb-4 w-full flex items-center flex-col md:flex-row h-[300px]">
+              <div className="w-full md:w-[60%] h-full shadow">
                 <img
                   src={hotelItem.imageHotel}
                   alt="ảnh"
                   className="w-full h-full object-cover rounded-tl rounded-bl"
                 />
               </div>
-              <div className="w-[70%] p-4 h-full bg-white flex items-center justify-center flex-col rounded-tr rounded-br">
+              <div className="w-full md:w-[40%] p-4 h-full bg-white flex items-center justify-center flex-col rounded-tr rounded-br shadow">
                 <h2 className="text-base text-textColor font-semibold">{hotelItem.name}</h2>
                 <h3 className="text-base text-textColor font-normal">
                   Quốc gia: {hotelItem.address.countryCode}
@@ -257,6 +285,125 @@ export default function HotelDetail() {
                   Mã khách sạn: {hotelItem.hotelId}
                 </span>
               </div>
+            </div>
+            <div>
+              {data && !getHotelDetailQuery.isPending && (
+                <div>
+                  <div className="mt-4 px-4 py-6 bg-white rounded shadow">
+                    <div className="pb-2 flex items-center justify-between">
+                      <h1 className="text-textColor text-xl font-semibold">
+                        {data?.data[0].hotel.name}
+                      </h1>
+                      <span className="text-base text-gray-500 font-normal">
+                        ({data?.data[0].available === true ? "Hiện còn phòng" : ""})
+                      </span>
+                    </div>
+
+                    <div
+                      className="pt-2 border-t border-t-gray-300 text-lg text-textColor"
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(data?.data[0].offers[0].room.description.text)
+                      }}
+                    ></div>
+
+                    <div className="pt-2 flex items-center justify-between text-gray-500">
+                      <span>Hạng phòng:</span>
+                      <span className="text-textColor">
+                        {data?.data[0].offers[0].room.typeEstimated.category}
+                      </span>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between text-gray-500">
+                      <span>Số lượng giường:</span>
+                      <span className="text-textColor">
+                        {data?.data[0].offers[0].room.typeEstimated.beds}
+                      </span>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between text-gray-500">
+                      <span>Loại giường:</span>
+                      <span className="text-textColor">
+                        {data?.data[0].offers[0].room.typeEstimated.bedType}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="my-4 px-4 py-6 bg-white rounded shadow">
+                    <div className="text-textColor text-lg font-semibold pb-2">Thông tin phòng</div>
+
+                    <div className="pt-2 border-t border-t-gray-300 text-base text-gray-500">
+                      <div className="pt-2 flex items-center justify-between text-gray-500">
+                        <span>Mã phòng:</span>
+                        <span className="text-textColor font-medium">
+                          {data?.data[0].offers[0].id}
+                        </span>
+                      </div>
+                      <div className="pt-2 flex items-center justify-between text-gray-500">
+                        <span>Ngày check in:</span>
+                        <span className="text-textColor font-medium">
+                          {data?.data[0].offers[0].checkInDate}
+                        </span>
+                      </div>
+                      <div className="pt-2 flex items-center justify-between text-gray-500">
+                        <span>Ngày check out:</span>
+                        <span className="text-textColor font-medium">
+                          {data?.data[0].offers[0].checkOutDate}
+                        </span>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between text-gray-500">
+                        <span>Số lượng khách:</span>
+                        <span className="text-textColor font-medium">
+                          x{data?.data[0].offers[0].guests.adults}
+                        </span>
+                      </div>
+
+                      <div className="pt-2 flex items-center justify-between text-gray-500">
+                        <span>Giá phòng (đã bao gồm tất cả thuế và phí):</span>
+                        <span className="text-red-500 font-medium text-lg">
+                          {formatCurrency(Number(data?.data[0].offers[0].price.total))} (
+                          {data?.data[0].offers[0].price.currency})
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-end gap-2">
+                      <Button
+                        // onClick={handleAddToCart}
+                        nameButton="Thêm vào giỏ hàng"
+                        className="capitalize py-2 px-4 text-blueColor w-full border border-gray-300 text-sm rounded-full bg-transparent hover:bg-gray-100 hover:border-blueColor duration-200"
+                      />
+                      <Button
+                        onClick={handleNavigatePage}
+                        nameButton="Đặt phòng ngay!"
+                        className="uppercase py-2 px-4 bg-blueColor w-full text-whiteColor text-sm rounded-full bg-tra hover:bg-blueColor/80 duration-200"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {!data && getHotelDetailQuery.isError && <div>Lỗi</div>}
+
+              {!data && (
+                <div className="flex flex-col items-center">
+                  <img
+                    src="https://cdn6.agoda.net/images/kite-js/illustrations/athena/baggage/group.svg"
+                    width="102px"
+                    height="102px"
+                    alt="baggage"
+                  />
+                  <h1 className="mt-4 text-center text-textColor font-semibold text-lg lg:text-2xl">
+                    Vui lòng điền thông tin phòng cần tìm !
+                  </h1>
+                  <Link
+                    to={path.hotel}
+                    className="w-[300px] bg-blueColor p-4 mt-4 text-center text-whiteColor shadow-md rounded-full hover:opacity-75 duration-200"
+                  >
+                    Tìm kiếm khách sạn
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

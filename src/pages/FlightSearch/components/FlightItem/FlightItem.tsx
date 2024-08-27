@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   FlightPricingParams,
-  ResponseFlightItem,
-  ResponseFlightList,
-  ResponseFlightPrice
+  TypeFlightItemResponse,
+  TypeFlightListResponse,
+  TypeFlightPriceResponse
 } from "src/types/flight.type"
 import iconFlightRed from "../../../../img/Flight/iconFlightRed.webp"
 import iconFlight2 from "../../../../img/svg/flight.svg"
@@ -41,8 +41,8 @@ import { toast } from "react-toastify"
 import { setCartToLS } from "src/utils/auth"
 
 interface Props {
-  item: ResponseFlightItem
-  list: ResponseFlightList
+  item: TypeFlightItemResponse
+  list: TypeFlightListResponse
 }
 
 function FlightItemInner({ item, list }: Props) {
@@ -76,7 +76,7 @@ function FlightItemInner({ item, list }: Props) {
     })
   }
 
-  const flightPrice = flightOffersPriceMutation.data?.data as ResponseFlightPrice
+  const flightPrice = flightOffersPriceMutation.data?.data as TypeFlightPriceResponse
 
   const handleNavigatePage = () => {
     navigate({

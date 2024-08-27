@@ -1,9 +1,9 @@
-import { AirportCodeItem as AirportCodeItemType } from "src/types/flight.type"
+import { TypeAirportCodeItem } from "src/types/flight.type"
 import iconFlight2 from "src/img/svg/flight-airplane-svgrepo-com.svg"
 import { InputAirport } from "src/hooks/useFormHandler"
 
 interface Props {
-  item: AirportCodeItemType
+  item: TypeAirportCodeItem
   inputName: InputAirport
   handleItemClick: (inputName: InputAirport, value: string) => void
 }

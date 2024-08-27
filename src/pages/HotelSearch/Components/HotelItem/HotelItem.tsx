@@ -20,14 +20,14 @@ function HotelItemInner({ item }: Props) {
 
   return (
     <div className="w-full flex items-center mb-4 h-[200px]">
-      <div className="w-[30%] h-full">
+      <div className="w-[60%] h-full">
         <img
           src={imageHotel}
           alt="ảnh"
           className="w-full h-full object-cover rounded-tl rounded-bl"
         />
       </div>
-      <div className="w-[70%] p-4 h-full bg-white flex items-center justify-center flex-col rounded-tr rounded-br">
+      <div className="w-[40%] p-4 h-full bg-white flex items-center justify-center flex-col rounded-tr rounded-br">
         <h2 className="text-base text-textColor font-semibold">{item.name}</h2>
         <h3 className="text-base text-textColor font-normal">
           Quốc gia: {item.address.countryCode}

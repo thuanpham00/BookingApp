@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async"
 import { useNavigate } from "react-router-dom"
 import usePriceTraveller from "src/hooks/usePriceTraveller"
 import useScrollHeader from "src/hooks/useScrollHeader"
-import { ResponseFlightOrder } from "src/types/flight.type"
+import { TypeFlightOrderResponse } from "src/types/flight.type"
 import { formatCurrency } from "src/utils/utils"
 import icon2 from "src/img/Flight/FlightOrder/imp-info.webp"
 import vnpay from "../../img/Flight/vnpay.jpg"
@@ -18,7 +18,7 @@ export default function FlightPayment() {
   }
 
   const dataLS = localStorage.getItem("detailPaymentData") as string
-  const data = JSON.parse(dataLS) as ResponseFlightOrder
+  const data = JSON.parse(dataLS) as TypeFlightOrderResponse
 
   const priceAdult = usePriceTraveller(data, "ADULT")
   const priceChild = usePriceTraveller(data, "CHILD")

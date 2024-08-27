@@ -17,6 +17,8 @@ export const path = {
   hotel: "/hotel",
   hotelSearch: "/hotel/search",
   hotelDetail: "/hotel/:hotelId",
+  hotelOrder: "/hotel/order",
+  hotelPayment: "/hotel/payment",
   cart: "/cart",
   notFound: "/*"
 } as const

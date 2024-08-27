@@ -1,5 +1,9 @@
-import { HotelParamsConfig, HotelSearchParamsConfig } from "src/types/hotel.type"
-import { HttpV1, HttpV3 } from "src/utils/http"
+import {
+  HotelParamsConfig,
+  HotelSearchParamsConfig,
+  TypeHotelCreateOrder
+} from "src/types/hotel.type"
+import { HttpV1, HttpV2, HttpV3 } from "src/utils/http"
 
 export const hotelApi = {
   getHotelList: (params: HotelParamsConfig, signal?: AbortSignal) => {
@@ -8,5 +12,9 @@ export const hotelApi = {
 
   getHotelSearch: (params: HotelSearchParamsConfig, signal?: AbortSignal) => {
     return HttpV3.get("shopping/hotel-offers", { params, signal })
+  },
+
+  hotelCreateOrder: (body: TypeHotelCreateOrder) => {
+    return HttpV2.post("booking/hotel-orders", body)
   }
 }

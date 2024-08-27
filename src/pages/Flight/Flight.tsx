@@ -43,8 +43,8 @@ import {
 import useFormHandler from "src/hooks/useFormHandler"
 import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 import { FlightContext } from "src/context/useContextFlight"
-import AirportCodeList from "src/components/AirportCodeList"
-import { AirportCodeList as AirportCodeListType } from "src/types/flight.type"
+import { TypeAirportCodeList as TypeAirportCodeListType } from "src/types/flight.type"
+import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 
 export type FormData = Pick<
   schemaType,
@@ -136,7 +136,7 @@ export default function Flight() {
   })
 
   const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<AirportCodeListType>([])
+  const [airportCodeList, setTypeAirportCodeList] = useState<TypeAirportCodeListType>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const [showListAirport2, setShowListAirport2] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -144,7 +144,7 @@ export default function Flight() {
 
   useEffect(() => {
     fetchDataAirport().then((res) => {
-      setAirportCodeList(res)
+      setTypeAirportCodeList(res)
     })
   }, [])
 
@@ -166,7 +166,7 @@ export default function Flight() {
 
   // nâng cao
   // flow: truyền các `tham số` yêu cầu (state, ...) vào hook -> hook nhận tham số -> xử lý logic -> lấy ra (destructuring) -> truyền vào props -> kết quả
-  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+  const { filterList: filterTypeAirportCodeList_1, handleItemClick } = useFormHandler(
     airportCodeList,
     searchText,
     setValue,
@@ -174,13 +174,8 @@ export default function Flight() {
     setShowListAirport
   )
 
-  const { filterList: filterAirportCodeList_2, handleItemClick: handleItemClick2 } = useFormHandler(
-    airportCodeList,
-    searchText2,
-    setValue,
-    setSearchText2,
-    setShowListAirport2
-  )
+  const { filterList: filterTypeAirportCodeList_2, handleItemClick: handleItemClick2 } =
+    useFormHandler(airportCodeList, searchText2, setValue, setSearchText2, setShowListAirport2)
 
   const handleChangeQuantity = (nameQuantity: InputController) => (value: number) => {
     setValue(nameQuantity, value) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
@@ -665,7 +660,7 @@ export default function Flight() {
                           desc="Từ"
                         >
                           <AirportCodeList
-                            listAirport={filterAirportCodeList_1}
+                            listAirport={filterTypeAirportCodeList_1}
                             handleItemClick={handleItemClick}
                             inputName="originLocationCode"
                           />
@@ -707,7 +702,7 @@ export default function Flight() {
                           desc="Đến"
                         >
                           <AirportCodeList
-                            listAirport={filterAirportCodeList_2}
+                            listAirport={filterTypeAirportCodeList_2}
                             handleItemClick={handleItemClick2}
                             inputName="destinationLocationCode"
                           />

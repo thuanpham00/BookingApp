@@ -2,10 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { countries, countryCodePhone } from "src/constant/flightSearch"
 import {
-  CountryListCodeNumber,
   FlightCreateOrder,
-  ResponseFlightPrice,
-  TravellerType
+  TypeFlightPriceResponse,
+  TravellerType,
+  TypeCountryListCodeNumber
 } from "src/types/flight.type"
 import {
   formatCurrency,
@@ -41,7 +41,7 @@ export type FormData = Pick<
 >
 export type InputName = "codeNumber"
 const schemaFormData = schema.pick(["codeNumber", "numberPhone", "email", "userName2", "lastName2"])
-const FetchDataListNational = () => Promise.resolve(countryCodePhone)
+export const FetchDataListNational = () => Promise.resolve(countryCodePhone)
 
 export default function FlightOrder() {
   const navigate = useNavigate()
@@ -50,12 +50,12 @@ export default function FlightOrder() {
   // xử lý form
   // const [checkState, setCheckState] = useState<boolean[]>(Array(currentAdult).fill(true)) // khởi tạo 1 mảng trạng thái toàn true
   const inputRef = useRef<HTMLInputElement>(null)
-  const [codeNumberList, setCodeNumberList] = useState<CountryListCodeNumber>([])
+  const [codeNumberList, setCodeNumberList] = useState<TypeCountryListCodeNumber>([])
   const [codeNumber, setCodeNumber] = useState("")
   const [showListCodeNumber, setShowListCodeNumber] = useState<boolean>(false)
 
   const dataLS = localStorage.getItem("flightPriceData") as string
-  const data = JSON.parse(dataLS) as ResponseFlightPrice
+  const data = JSON.parse(dataLS) as TypeFlightPriceResponse
 
   useEffect(() => {
     FetchDataListNational().then((res) => {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Input from "src/components/Input"
 import { listNationality } from "src/constant/flightSearch"
-import { CountryListCodeNumber, TravellerType } from "src/types/flight.type"
+import { TravellerType, TypeCountryListCodeNumber } from "src/types/flight.type"
 import Nationality from "../Nationality"
 import InputSearchV2 from "../InputSearchV2/InputSearchV2"
 import Button from "src/components/Button"
@@ -35,7 +35,7 @@ const schemaFormData = schema.pick([
 ])
 
 export default function FormProfile({ addOnTraveller, typeTraveler, index }: Props) {
-  const [nationalList, setNationalList] = useState<CountryListCodeNumber>([])
+  const [nationalList, setNationalList] = useState<TypeCountryListCodeNumber>([])
   const [showListNationality, setShowListNationality] = useState<boolean>(false)
   const [nationalProfile, setNationalProfile] = useState("")
   const inputRef2 = useRef<HTMLInputElement>(null)

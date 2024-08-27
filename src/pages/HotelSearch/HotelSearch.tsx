@@ -6,7 +6,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/
 import { path } from "src/constant/path"
 import useScrollHeader from "src/hooks/useScrollHeader"
 import { TypeHotelListResponse, HotelParamsConfig, TypeCityCodeList } from "src/types/hotel.type"
-import backGround from "src/img/bgLogin/bg-6.webp"
 import HotelItem from "./Components/HotelItem"
 import AsideFilterFlight from "../FlightSearch/components/AsideFilterFlight"
 import useQueryConfig from "src/hooks/useQueryConfig"
@@ -53,7 +52,7 @@ export default function HotelSearch() {
 
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const [airportCodeList, setAirportCodeList] = useState<TypeCityCodeList>([])
+  const [airportCodeList, setTypeAirportCodeList] = useState<TypeCityCodeList>([])
   const [showListAirport, setShowListAirport] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -69,7 +68,7 @@ export default function HotelSearch() {
 
   useEffect(() => {
     fetchDataHotel().then((res) => {
-      setAirportCodeList(res)
+      setTypeAirportCodeList(res)
     })
   }, [])
 
@@ -86,7 +85,7 @@ export default function HotelSearch() {
     return () => document.removeEventListener("mousedown", clickOutHideListAirport)
   }, [])
 
-  const { filterList: filterAirportCodeList_1, handleItemClick } = useFormHandler(
+  const { filterList: filterTypeAirportCodeList_1, handleItemClick } = useFormHandler(
     airportCodeList,
     cityCode,
     setValue,
@@ -124,15 +123,7 @@ export default function HotelSearch() {
         <meta name="description" content="Tìm kiếm khách sạn - Booking." />
       </Helmet>
 
-      <div
-        className="relative z-10 h-[650px]"
-        style={{
-          backgroundImage: `url(${backGround})`,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover"
-        }}
-      >
+      <div className="relative z-10 h-[650px]">
         <div
           className={`w-full bg-[#778da9] ${showHeader ? "md:fixed md:top-0 md:left-1/2 md:-translate-x-1/2 shadow-xl" : "md:absolute md:top-0 md:left-1/2 md:-translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -178,7 +169,7 @@ export default function HotelSearch() {
                   classNameDesc="pl-2 text-textColor"
                 >
                   <CityCodeList
-                    listAirport={filterAirportCodeList_1}
+                    listAirport={filterTypeAirportCodeList_1}
                     handleItemClick={handleItemClick}
                     inputName="cityCode"
                   />

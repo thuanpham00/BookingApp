@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async"
-import { ResponseFlightManage } from "src/types/flight.type"
+import { TypeFlightManageResponse } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem/ManageItem"
 import { useContext, useEffect, useState } from "react"
 import {
@@ -24,7 +24,7 @@ import useFilterManage from "src/hooks/useFilterManage"
 export default function ManageOrderSuccess() {
   const { listPurchased, setListPurchased, listCancel, setListCancel } = useContext(AppContext)
   const dataLS = localStorage.getItem("listPurchased") as string
-  const data = JSON.parse(dataLS) as ResponseFlightManage[]
+  const data = JSON.parse(dataLS) as TypeFlightManageResponse[]
   const [searchText, setSearchText] = useState("")
   const filterList = useFilterManage(data, searchText)
 

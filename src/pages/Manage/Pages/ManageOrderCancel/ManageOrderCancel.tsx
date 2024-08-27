@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { ResponseFlightManage } from "src/types/flight.type"
+import { TypeFlightManageResponse } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem"
 import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
@@ -8,7 +8,7 @@ import useFilterManage from "src/hooks/useFilterManage"
 
 export default function ManageOrderCancel() {
   const dataLS = localStorage.getItem("listCancel") as string
-  const data = JSON.parse(dataLS) as ResponseFlightManage[]
+  const data = JSON.parse(dataLS) as TypeFlightManageResponse[]
   const [searchText, setSearchText] = useState("")
   const filterList = useFilterManage(data, searchText)
 

@@ -12,7 +12,7 @@ import iconFlightRed from "../../img/Flight/iconFlightRed.webp"
 import Button from "src/components/Button"
 import { Link, useNavigate } from "react-router-dom"
 import { path } from "src/constant/path"
-import { ResponseFlightPrice } from "src/types/flight.type"
+import { TypeFlightPriceResponse } from "src/types/flight.type"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +30,7 @@ export default function Cart() {
   const navigate = useNavigate()
   const { listCart, setListCart } = useContext(AppContext)
   const [checked, setChecked] = useState<string>("")
-  const [flightPrice, setFlightPrice] = useState<ResponseFlightPrice>()
+  const [flightPrice, setFlightPrice] = useState<TypeFlightPriceResponse>()
 
   // xử lý back page
   const handleBackPage = () => {
