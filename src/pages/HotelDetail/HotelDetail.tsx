@@ -50,13 +50,7 @@ export default function HotelDetail() {
     setValue,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schemaFormData),
-    defaultValues: {
-      // adultsHotel: adultsHotel,
-      // checkInDate: String(checkInDate),
-      // checkOutDate: String(checkOutDate)
-    }
-    // nó vẫn lưu giá trị input ra màn hình nhưng giá trị trong form thì rỗng
+    resolver: yupResolver(schemaFormData)
   })
 
   const handleChangeQuantity = (value: number) => {
