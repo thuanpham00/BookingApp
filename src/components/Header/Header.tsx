@@ -38,57 +38,35 @@ export default function Header() {
     >
       <div className="container">
         <div className="flex items-center justify-between cursor-pointer">
-          <div className="flex items-center">
-            <Link to={path.home} className="flex items-center">
-              <div className="hidden lg:block w-10 h-10">
-                <img src={logo} alt="Logo" className="w-full h-full object-contain" />
-              </div>
-              <div className="text-xl text-textColor font-semibold">Booking.</div>
-            </Link>
-
-            <nav className="ml-8 hidden md:flex items-center gap-4">
-              <Link
-                to={path.flight}
-                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
-              >
-                <div className="w-6 h-6">
-                  <img src={iconFlight} alt="icon" className="w-full h-full" />
-                </div>
-                <span className="text-base font-medium hover:underline block">Chuyến bay</span>
-              </Link>
-
-              <Link
-                to={path.hotel}
-                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
-              >
-                <img src={iconHotel} alt="iconHotel" className="h-5 w-5" />
-                <span className="text-base font-medium hover:underline block">Khách sạn</span>
-              </Link>
-
-              <Link
-                to={path.ManageTicket}
-                className="flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
-                  />
-                </svg>
-                <span className="text-base font-medium hover:underline block">Đơn đặt chỗ</span>
-              </Link>
-            </nav>
-          </div>
+          <Link to={path.home} className="flex items-center">
+            <div className="hidden lg:block w-10 h-10">
+              <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+            </div>
+            <div className="text-xl text-textColor font-semibold">Booking.</div>
+          </Link>
 
           <div className="flex items-center gap-4">
+            <Link
+              to={path.ManageTicket}
+              className="hidden md:flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
+                />
+              </svg>
+              <span className="text-base font-medium hover:underline block">Đơn đặt chỗ</span>
+            </Link>
+
             <Popover
               className="sticky top-0 left-0 z-30"
               renderPopover={
@@ -136,22 +114,20 @@ export default function Header() {
 
             <Sheet>
               <SheetTrigger className="block md:hidden">
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="black"
-                    className="mt-1 h-8 w-8"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                    />
-                  </svg>
-                </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="black"
+                  className="mt-1 h-8 w-8"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
               </SheetTrigger>
               <SheetContent className="p-0">
                 <SheetHeader>
@@ -326,7 +302,7 @@ export default function Header() {
                     </div>
                   }
                 >
-                  <div className="py-[6px] px-3 border-2 border-textColor rounded-sm duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
+                  <div className="py-[6px] px-3 border-2 border-textColor rounded-full duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

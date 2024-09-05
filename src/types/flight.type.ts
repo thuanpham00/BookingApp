@@ -428,7 +428,7 @@ export type TypeFlightPriceResponse = {
 // response của flight create order
 export type TypeFlightOrderResponse = {
   data: {
-    type: "flight-order"
+    type: string // "flight-order"
     id: string
     queuingOfficeId: string
     associatedRecords: {

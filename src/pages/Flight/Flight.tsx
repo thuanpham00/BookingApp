@@ -262,6 +262,29 @@ export default function Flight() {
                       <div className="text-xl text-whiteColor font-semibold">Booking.</div>
                     </div>
                     <div className="flex items-center gap-4">
+                      <Link
+                        to={path.ManageTicket}
+                        className="hidden md:flex items-center gap-1 text-textColor duration-200 hover:text-gray-500"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="h-5 w-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
+                          />
+                        </svg>
+                        <span className="text-base font-medium hover:underline block">
+                          Đơn đặt chỗ
+                        </span>
+                      </Link>
+
                       <Popover
                         className="sticky top-0 left-0 z-30"
                         renderPopover={
@@ -300,7 +323,7 @@ export default function Flight() {
                           fill="none"
                           viewBox="0 0 24 24"
                           strokeWidth={1.5}
-                          stroke="white"
+                          stroke="black"
                           className="h-6 w-6"
                         >
                           <path
@@ -313,22 +336,20 @@ export default function Flight() {
 
                       <Sheet>
                         <SheetTrigger className="block md:hidden">
-                          <button>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="white"
-                              className="mt-1 h-8 w-8"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                              />
-                            </svg>
-                          </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="black"
+                            className="mt-1 h-8 w-8"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                            />
+                          </svg>
                         </SheetTrigger>
                         <SheetContent className="p-0">
                           <SheetHeader>
@@ -511,7 +532,7 @@ export default function Flight() {
                               </div>
                             }
                           >
-                            <div className="py-[6px] px-3 border-2 rounded-sm duration-200 hover:bg-[#ddd]/20 flex items-center gap-1 text-whiteColor font-medium text-sm">
+                            <div className="py-[6px] px-3 border-2 border-[#000] rounded-full duration-200 hover:bg-[#ddd]/20 flex items-center gap-1 text-[#000]/80 font-medium text-sm">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -535,7 +556,7 @@ export default function Flight() {
                           <div className="hidden md:flex items-center gap-4">
                             <Link
                               to={path.register}
-                              className="duration-200 hover:underline rounded-sm text-sm text-whiteColor font-medium hover:text-whiteColor/80"
+                              className="duration-200 hover:underline rounded-sm text-sm text-[#000]/80 font-medium hover:text-whiteColor/80"
                             >
                               Đăng ký
                             </Link>
@@ -551,55 +572,16 @@ export default function Flight() {
                     </div>
                   </div>
 
-                  <h1 className="hidden md:block text-whiteColor md:text-xl lg:text-3xl font-semibold text-center my-2 lg:my-8">
+                  <h1 className="hidden md:block text-whiteColor md:text-xl lg:text-3xl font-semibold text-center my-2 lg:mt-16">
                     Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn.
                   </h1>
 
-                  <div className="mt-8 md:mt-0 relative z-20 mx-auto w-full md:w-[55%]">
-                    <div className="py-4 px-8 bg-whiteColor rounded-lg shadow-lg">
-                      <nav className="flex items-center gap-4">
-                        <Link to={path.flight} className="flex flex-col items-center">
-                          <div className="w-8 h-8">
-                            <img src={iconFlight} alt="icon" className="w-full h-full" />
-                          </div>
-                          <span className="mt-1 text-sm font-semibold text-blueColor">
-                            Chuyến bay
-                          </span>
-                        </Link>
-                        <Link to={path.hotel} className="flex flex-col items-center">
-                          <img src={iconHotel} alt="iconHotel" className="h-8 w-8" />
-                          <span className="mt-1 text-sm font-normal text-textColor">Khánh sạn</span>
-                        </Link>
-                        <Link to={path.ManageTicket} className="flex flex-col items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-8 w-8"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
-                            />
-                          </svg>
-
-                          <span className="mt-1 text-sm font-normal text-textColor">
-                            Đơn đặt chỗ
-                          </span>
-                        </Link>
-                      </nav>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 md:-mt-8 mx-auto w-full md:w-[90%]">
+                  <div className="mt-20 md:mt-12 mx-auto w-full md:w-[90%]">
                     <form
                       autoComplete="off"
                       onSubmit={handleSubmitSearch}
                       noValidate
-                      className="p-4 md:p-8 md:pt-12 bg-whiteColor rounded-lg shadow-md"
+                      className="p-4 md:p-8 bg-whiteColor rounded-lg shadow-md"
                     >
                       {/* loại chuyến bay */}
                       <div className="flex items-center gap-4">
@@ -734,13 +716,13 @@ export default function Flight() {
 
                       <div className="mt-2 md:mt-4 grid grid-cols-4 items-center gap-2 md:gap-x-2 md:gap-y-4">
                         <div className="col-span-4 lg:col-span-2">
-                          <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center justify-between flex-wrap md:flex-nowrap gap-2">
                             {/* Khứ hồi hoặc 1 chiều */}
                             <div
                               className={
                                 flightType === "roundTrip"
-                                  ? "w-[70%] flex justify-start gap-1 md:gap-2"
-                                  : "w-[70%] flex justify-start"
+                                  ? "w-full md:w-[70%] flex justify-start gap-1 md:gap-2"
+                                  : "w-full md:w-[70%] flex justify-start"
                               }
                             >
                               {/* date ngày đi*/}
@@ -774,7 +756,7 @@ export default function Flight() {
 
                             {/* hành khách */}
                             <div
-                              className={`w-[30%] py-3 border-2 rounded-md flex items-center justify-center ${errors.adults?.message ? "border-red-500 bg-red-100" : "border-gray-300"}`}
+                              className={`w-full md:w-[30%] py-3 border-2 rounded-md flex items-center justify-center ${errors.adults?.message ? "border-red-500 bg-red-100" : "border-gray-300"}`}
                             >
                               <PopoverShadcn>
                                 <PopoverTrigger>

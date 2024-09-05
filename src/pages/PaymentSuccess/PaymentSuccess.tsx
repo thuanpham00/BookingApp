@@ -11,7 +11,7 @@ import { TypeFlightManageResponse, TypeFlightOrderResponse } from "src/types/fli
 import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 
-export default function Payment() {
+export default function PaymentSuccess() {
   const { setListCart, listCart, setListPurchased, listPurchased } = useContext(AppContext)
   const { showHeader } = useScrollHeader(200)
   const paramsUrl = useQueryParam()

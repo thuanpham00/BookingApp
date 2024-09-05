@@ -21,19 +21,6 @@ type TypeInitialState = {
   setFlightType: React.Dispatch<React.SetStateAction<string>>
   showPassenger: number
   setShowPassenger: React.Dispatch<React.SetStateAction<number>>
-
-  cityCode: string
-  setCityCode: React.Dispatch<React.SetStateAction<string>>
-  radius: string
-  setRadius: React.Dispatch<React.SetStateAction<string>>
-  ratings: string
-  setRatings: React.Dispatch<React.SetStateAction<string>>
-  adultsHotel: number
-  setAdultsHotel: React.Dispatch<React.SetStateAction<number>>
-  checkInDate: Date | null
-  setCheckInDate: React.Dispatch<React.SetStateAction<Date | null>>
-  checkOutDate: Date | null
-  setCheckOutDate: React.Dispatch<React.SetStateAction<Date | null>>
 }
 
 const initialState: TypeInitialState = {
@@ -57,21 +44,7 @@ const initialState: TypeInitialState = {
   flightType: "oneWay",
   setFlightType: () => null,
   showPassenger: 0,
-  setShowPassenger: () => null,
-
-  // quản lý state lưu trữ của form Hotel
-  cityCode: "",
-  setCityCode: () => null,
-  radius: "",
-  setRadius: () => null,
-  ratings: "3",
-  setRatings: () => null,
-  adultsHotel: 0,
-  setAdultsHotel: () => null,
-  checkInDate: null,
-  setCheckInDate: () => null,
-  checkOutDate: null,
-  setCheckOutDate: () => null
+  setShowPassenger: () => null
 }
 
 export const FlightContext = createContext<TypeInitialState>(initialState)
@@ -89,14 +62,6 @@ export default function FlightProvider({ children }: { children: React.ReactNode
 
   const [flightType, setFlightType] = useState(initialState.flightType)
   const [showPassenger, setShowPassenger] = useState(initialState.showPassenger)
-
-  // hotel
-  const [cityCode, setCityCode] = useState(initialState.cityCode)
-  const [radius, setRadius] = useState(initialState.radius)
-  const [ratings, setRatings] = useState(initialState.ratings)
-  const [adultsHotel, setAdultsHotel] = useState(initialState.adultsHotel)
-  const [checkInDate, setCheckInDate] = useState(initialState.checkInDate)
-  const [checkOutDate, setCheckOutDate] = useState(initialState.checkOutDate)
 
   return (
     <FlightContext.Provider
@@ -121,21 +86,7 @@ export default function FlightProvider({ children }: { children: React.ReactNode
         flightType,
         setFlightType,
         showPassenger,
-        setShowPassenger,
-
-        // hotel
-        cityCode,
-        setCityCode,
-        radius,
-        setRadius,
-        ratings,
-        setRatings,
-        adultsHotel,
-        setAdultsHotel,
-        checkInDate,
-        setCheckInDate,
-        checkOutDate,
-        setCheckOutDate
+        setShowPassenger
       }}
     >
       {children}

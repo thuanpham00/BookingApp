@@ -11,17 +11,13 @@ const Flight = lazy(() => import("src/pages/Flight"))
 const FlightSearch = lazy(() => import("src/pages/FlightSearch"))
 const FlightOrder = lazy(() => import("src/pages/FlightOrder"))
 const FlightPayment = lazy(() => import("src/pages/FlightPayment"))
-const PaymentComplete = lazy(() => import("src/pages/BillPayment"))
+const PaymentSuccess = lazy(() => import("src/pages/PaymentSuccess"))
 const Cart = lazy(() => import("src/pages/Cart"))
 const NotFound = lazy(() => import("src/pages/NotFound"))
 const ManageOrderCancel = lazy(() => import("src/pages/Manage/Pages/ManageOrderCancel"))
 const ManageOrderSuccess = lazy(() => import("src/pages/Manage/Pages/ManageOrderSuccess"))
 const ManageUser = lazy(() => import("src/pages/Manage/Pages/ManageUser"))
-const Hotel = lazy(() => import("src/pages/Hotel"))
-const HotelSearch = lazy(() => import("src/pages/HotelSearch"))
-const HotelDetail = lazy(() => import("src/pages/HotelDetail"))
-const HotelOrder = lazy(() => import("src/pages/HotelOrder"))
-const HotelPayment = lazy(() => import("src/pages/HotelPayment"))
+
 /**
  * Khi url thay đổi thì các component nào dùng các hook như
  * useRoutes, useParams, useSearchParams,...
@@ -71,14 +67,6 @@ export default function useRouterElement() {
               <Flight />
             </Suspense>
           )
-        },
-        {
-          path: path.hotel,
-          element: (
-            <Suspense>
-              <Hotel />
-            </Suspense>
-          )
         }
       ]
     },
@@ -91,22 +79,6 @@ export default function useRouterElement() {
           element: (
             <Suspense>
               <FlightSearch />
-            </Suspense>
-          )
-        },
-        {
-          path: path.hotelSearch, // trạm tìm khách sạn
-          element: (
-            <Suspense>
-              <HotelSearch />
-            </Suspense>
-          )
-        },
-        {
-          path: path.hotelDetail, // 404 page
-          element: (
-            <Suspense>
-              <HotelDetail />
             </Suspense>
           )
         },
@@ -138,14 +110,6 @@ export default function useRouterElement() {
               )
             },
             {
-              path: path.hotelOrder, // tới trạm tạo đơn
-              element: (
-                <Suspense>
-                  <HotelOrder />
-                </Suspense>
-              )
-            },
-            {
               path: path.flightPayment, // tới trạm thanh toán
               element: (
                 <Suspense>
@@ -154,18 +118,10 @@ export default function useRouterElement() {
               )
             },
             {
-              path: path.hotelPayment, // tới trạm thanh toán
+              path: path.PaymentSuccess, // thanh toán thành công
               element: (
                 <Suspense>
-                  <HotelPayment />
-                </Suspense>
-              )
-            },
-            {
-              path: path.billPayment, // thanh toán thành công
-              element: (
-                <Suspense>
-                  <PaymentComplete />
+                  <PaymentSuccess />
                 </Suspense>
               )
             },

@@ -234,7 +234,7 @@ export default function FlightPayment() {
 
                 <div className="flex justify-between p-4 bg-blue-200">
                   <div className="flex items-center gap-2">
-                    <input type="radio" checked={true} />
+                    <input type="radio" checked={true} readOnly />
                     <div>
                       <span className="text-sm text-blueColor">THANH TOÁN ĐIỆN TỬ</span>
                       <span className="block text-xs text-blueColor">

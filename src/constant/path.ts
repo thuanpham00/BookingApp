@@ -12,7 +12,7 @@ export const path = {
   CancelTicket: "/manage/cancel",
   ManageUser: "/manage/user",
 
-  billPayment: "/bill",
+  PaymentSuccess: "/bill",
 
   hotel: "/hotel",
   hotelSearch: "/hotel/search",
