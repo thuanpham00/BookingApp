@@ -21,8 +21,6 @@ export default function PaymentSuccess() {
   const idFlight = data?.data.id
 
   localStorage.removeItem("flightPriceData")
-  localStorage.removeItem("hotelPriceData")
-  localStorage.removeItem("hotelItem")
 
   const getFlightOrderManageQuery = useQuery({
     queryKey: ["flightOrderManage", idFlight],

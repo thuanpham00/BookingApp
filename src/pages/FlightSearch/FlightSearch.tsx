@@ -114,6 +114,7 @@ export default function FlightSearch() {
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
+      // giá trị mặc định cho các trường input trong form
       adults: Number(queryConfig.adults),
       children: Number(queryConfig.children),
       infants: Number(queryConfig.infants),

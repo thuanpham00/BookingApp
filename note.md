@@ -99,3 +99,7 @@ Trong những trường hợp này, bạn cần sử dụng Controller để k�
 #### Đã fix lỗi 404 page khi deploy vercel (file vercel.json)
 
 #### đã optimize giảm kích thước file build production
+
+### File
+.ts: Khi không có JSX, chỉ chứa logic hoặc dữ liệu.
+.tsx: Khi có JSX, thường dùng trong các component React để hiển thị UI.

@@ -8,7 +8,6 @@ import { AppContext } from "src/context/useContext"
 import Popover from "../Popover"
 import { getNameFromEmail } from "src/utils/utils"
 import { clearLS } from "src/utils/auth"
-import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
 import {
   Sheet,
   SheetContent,
@@ -17,7 +16,6 @@ import {
   SheetTitle,
   SheetTrigger
 } from "../ui/sheet"
-import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 
 export default function Header2() {
   const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, listCart } =
@@ -151,35 +149,10 @@ export default function Header2() {
                   </SheetTitle>
                   <SheetDescription>
                     <div className="border-t border-t-gray-300 py-2">
-                      <span className="text-left block text-base text-gray-500 px-3 pb-2">
-                        Khám phá thế giới
-                      </span>
                       <nav className="px-3">
                         <Link
-                          to={path.flight}
-                          className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500 mb-2"
-                        >
-                          <div className="w-8 h-8">
-                            <img src={iconFlight} alt="icon" className="w-full h-full" />
-                          </div>
-                          <span className="text-base font-medium hover:underline block">
-                            Chuyến bay
-                          </span>
-                        </Link>
-
-                        <Link
-                          to={path.hotel}
-                          className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500 mb-2"
-                        >
-                          <img src={iconHotel} alt="iconHotel" className="h-8 w-8" />
-                          <span className="text-base font-medium hover:underline block">
-                            Khách sạn
-                          </span>
-                        </Link>
-
-                        <Link
                           to={path.ManageTicket}
-                          className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500"
+                          className="flex items-center md:gap-2 text-textColor duration-200 hover:text-gray-500"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +160,7 @@ export default function Header2() {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="h-8 w-8"
+                            className="h-0 w-0 md:h-8 md:w-8"
                           >
                             <path
                               strokeLinecap="round"
@@ -195,7 +168,7 @@ export default function Header2() {
                               d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
                             />
                           </svg>
-                          <span className="text-base font-medium hover:underline block">
+                          <span className="text-base text-textColor font-medium hover:underline block">
                             Đơn đặt chỗ
                           </span>
                         </Link>
@@ -227,7 +200,7 @@ export default function Header2() {
                             </div>
                           }
                         >
-                          <div className="flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-base">
+                          <div className="flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-base font-medium">
                             <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
                             Ngôn ngữ
                           </div>
@@ -242,7 +215,7 @@ export default function Header2() {
                       <div className="px-3">
                         <Link
                           to={path.ManageUser}
-                          className="block text-left text-textColor text-base mb-2 hover:underline"
+                          className="block text-left text-textColor font-medium text-base mb-2 hover:underline"
                         >
                           Thông tin cá nhân
                         </Link>
@@ -321,13 +294,13 @@ export default function Header2() {
                 <div className="flex items-center gap-4">
                   <Link
                     to={path.register}
-                    className="duration-200 hover:underline rounded-sm text-sm text-textColor font-medium hover:text-textColor/80"
+                    className="duration-200 hover:underline text-sm text-textColor font-medium hover:text-textColor/80"
                   >
                     Đăng ký
                   </Link>
                   <Link
                     to={path.login}
-                    className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 rounded-sm text-sm font-medium hover:text-whiteColor/80"
+                    className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 text-sm font-medium hover:text-whiteColor/80 rounded-full"
                   >
                     Đăng nhập
                   </Link>

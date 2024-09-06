@@ -41,7 +41,6 @@ import {
   SheetTrigger
 } from "src/components/ui/sheet"
 import useFormHandler from "src/hooks/useFormHandler"
-import iconHotel from "src/img/Hotel/hotel-svgrepo-com.svg"
 import { FlightContext } from "src/context/useContextFlight"
 import { TypeAirportCodeList as TypeAirportCodeListType } from "src/types/flight.type"
 import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
@@ -230,6 +229,8 @@ export default function Flight() {
     })
   })
 
+  console.log(showPassenger)
+
   return (
     // khắc phục lệch layout
     <div className="h-[3180px] md:h-[2600px] bg-[#fff]">
@@ -259,7 +260,7 @@ export default function Flight() {
                       <div className="hidden lg:block w-10 h-10">
                         <img src={logo} alt="Logo" className="w-full h-full object-contain" />
                       </div>
-                      <div className="text-xl text-whiteColor font-semibold">Booking.</div>
+                      <div className="text-xl text-textColor font-semibold">Booking.</div>
                     </div>
                     <div className="flex items-center gap-4">
                       <Link
@@ -378,35 +379,10 @@ export default function Flight() {
                             </SheetTitle>
                             <SheetDescription>
                               <div className="border-t border-t-gray-300 py-2">
-                                <span className="text-left block text-base text-gray-500 px-3 pb-2">
-                                  Khám phá thế giới
-                                </span>
                                 <nav className="px-3">
                                   <Link
-                                    to={path.flight}
-                                    className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500 mb-2"
-                                  >
-                                    <div className="w-8 h-8">
-                                      <img src={iconFlight} alt="icon" className="w-full h-full" />
-                                    </div>
-                                    <span className="text-base font-medium hover:underline block">
-                                      Chuyến bay
-                                    </span>
-                                  </Link>
-
-                                  <Link
-                                    to={path.hotel}
-                                    className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500 mb-2"
-                                  >
-                                    <img src={iconHotel} alt="iconHotel" className="h-8 w-8" />
-                                    <span className="text-base font-medium hover:underline block">
-                                      Khách sạn
-                                    </span>
-                                  </Link>
-
-                                  <Link
                                     to={path.ManageTicket}
-                                    className="flex items-center gap-2 text-textColor duration-200 hover:text-gray-500"
+                                    className="flex items-center md:gap-2 text-textColor duration-200 hover:text-gray-500"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -414,7 +390,7 @@ export default function Flight() {
                                       viewBox="0 0 24 24"
                                       strokeWidth={1.5}
                                       stroke="currentColor"
-                                      className="h-8 w-8"
+                                      className="h-0 w-0 md:h-8 md:w-8"
                                     >
                                       <path
                                         strokeLinecap="round"
@@ -458,7 +434,7 @@ export default function Flight() {
                                       </div>
                                     }
                                   >
-                                    <div className="flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-base">
+                                    <div className="flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-base font-medium">
                                       <img
                                         src={coVN}
                                         alt="Cờ Việt Nam"
@@ -477,7 +453,7 @@ export default function Flight() {
                                 <div className="px-3">
                                   <Link
                                     to={path.ManageUser}
-                                    className="block text-left text-textColor text-base mb-2 hover:underline"
+                                    className="block text-left text-textColor font-medium text-base mb-2 hover:underline"
                                   >
                                     Thông tin cá nhân
                                   </Link>
@@ -556,13 +532,13 @@ export default function Flight() {
                           <div className="hidden md:flex items-center gap-4">
                             <Link
                               to={path.register}
-                              className="duration-200 hover:underline rounded-sm text-sm text-[#000]/80 font-medium hover:text-whiteColor/80"
+                              className="duration-200 hover:underline text-sm text-textColor font-medium hover:text-textColor/80"
                             >
                               Đăng ký
                             </Link>
                             <Link
                               to={path.login}
-                              className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 rounded-sm text-sm font-medium hover:text-whiteColor/80"
+                              className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 text-sm font-medium hover:text-whiteColor/80 rounded-full"
                             >
                               Đăng nhập
                             </Link>

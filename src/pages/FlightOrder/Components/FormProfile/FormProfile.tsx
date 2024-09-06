@@ -137,7 +137,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           />
         </div>
       </div>
-      <div className="mt-2 grid grid-cols-6 items-center gap-x-4 gap-y-4 flex-wrap">
+      <div className="mt-2 grid grid-cols-6 items-center gap-4 flex-wrap">
         <div className="col-span-6 md:col-span-6">
           <span className="mb-[2px] text-sm block">Giới tính</span>
           <div className="flex items-start">
