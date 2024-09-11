@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import omit from "lodash/omit"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import Button from "src/components/Button"
 import { path } from "src/constant/path"
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function AsideFilterFlight({ queryConfig }: Props) {
+  const { t } = useTranslation("flight")
   // nhận vào props -> cập nhật ...queryConfig -> fetch lại api -> render list mới
   const navigate = useNavigate()
 
@@ -107,14 +109,14 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
     <div className="bg-[#fff] shadow-md px-4 rounded">
       <div className="pt-6 pb-4">
         <div className="flex items-center justify-between">
-          <div className="text-lg text-textColor font-semibold">Bộ lọc phổ biến</div>
+          <div className="text-lg text-textColor font-semibold">{t("flight.filter")}</div>
 
           <button
             onClick={handleDeleteFilter}
             type="button"
             className="text-base text-textColor hover:underline hover:text-gray-500"
           >
-            Xóa bộ lọc
+            {t("flight.deleteFilter")}
           </button>
         </div>
         <div className="mt-4 flex items-center gap-2">
@@ -126,13 +128,15 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
             onChange={handleNonStop}
           />
           <label htmlFor="nonStop" className="text-base text-textColor font-medium">
-            Bay trực tiếp
+            {t("flight.flightNonStop")}
           </label>
         </div>
       </div>
 
       <div className="py-4">
-        <div className="text-left text-lg text-textColor font-semibold">Chọn hãng hàng không</div>
+        <div className="text-left text-lg text-textColor font-semibold">
+          {t("flight.selectAirlines")}
+        </div>
         <div className="mt-2 flex items-center gap-2">
           <input
             type="checkbox"
@@ -237,7 +241,9 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
       </div>
 
       <div className="py-4">
-        <div className="text-left text-lg text-textColor font-semibold">Giá chuyến bay</div>
+        <div className="text-left text-lg text-textColor font-semibold">
+          {t("flight.priceFlight")}
+        </div>
         <div className="mt-4 flex items-center gap-2">
           <div className="w-full relative">
             <input
@@ -278,7 +284,7 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
           </div>
         </div>
 
-        <Button nameButton="Áp dụng" onClick={handleMaxPrice} />
+        <Button nameButton={t("flight.apply")} onClick={handleMaxPrice} />
       </div>
     </div>
   )

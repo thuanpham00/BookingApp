@@ -10,6 +10,7 @@ import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
 import { TypeFlightManageResponse } from "src/types/flight.type"
 import { useState } from "react"
 import ticket from "src/img/Flight/ticket-flight.png"
+import { useTranslation } from "react-i18next"
 
 interface Props {
   item: TypeFlightManageResponse
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function ManageItem({ item, children }: Props) {
+  const { t } = useTranslation("manage")
   const [showFlightDetail, setShowFlightDetail] = useState(false)
 
   const handleDetailFlight = () => {
@@ -40,7 +42,7 @@ export default function ManageItem({ item, children }: Props) {
         <div>
           <div className="flex items-center justify-between">
             <span className="p-2 bg-[#edf0f9] text-xs rounded-md">
-              {item.data.flightOffers[0].type === "flight-offer" ? "Chuyến bay" : "Khác"}
+              {item.data.flightOffers[0].type === "flight-offer" ? `${t("manage.flight")}` : "Khác"}
             </span>
             <div className="flex items-center gap-2">
               <div className="text-base text-textColor font-semibold">
@@ -139,7 +141,7 @@ export default function ManageItem({ item, children }: Props) {
                       {item2.segments[0].numberOfStops === 0 && item2.segments.length === 1 ? (
                         <div className="flex items-center gap-2 text-center text-gray-500 text-sm">
                           <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                          <span>Bay trực tiếp</span>
+                          <span>{t("manage.nonStop")}</span>
                         </div>
                       ) : (
                         ""
@@ -150,7 +152,7 @@ export default function ManageItem({ item, children }: Props) {
               ))}
             </div>
             <div className="text-left md:text-right text-sm">
-              <span>Thông tin liên lạc:</span>
+              <span>{t("manage.info")}:</span>
               <span className="ml-1">{item.data.contacts[0].addresseeName.firstName}</span>
               <div>
                 <span className="block text-sm font-normal text-gray-500">
@@ -170,14 +172,14 @@ export default function ManageItem({ item, children }: Props) {
             <div className="text-base lg:text-lg font-semibold">
               {formatCurrency(Number(item.data.flightOffers[0].price.total))}đ
             </div>
-            <span className="text-sm text-gray-500">Bao gồm thuế và phí</span>
+            <span className="text-sm text-gray-500">{t("manage.fee")}</span>
           </div>
           <div className="flex items-center gap-2 mt-2">
             <button
               onClick={handleDetailFlight}
               className="text-blueColor text-sm hover:underline hover:text-blueColor/80 duration-200"
             >
-              {showFlightDetail ? "Ẩn" : "Chi tiết"}
+              {showFlightDetail ? `${t("manage.hidden")}` : `${t("manage.detail")}`}
             </button>
             {children}
           </div>
@@ -233,13 +235,13 @@ export default function ManageItem({ item, children }: Props) {
           ))}
           <div className="pt-2 flex items-center flex-wrap gap-2">
             <span className="flex gap-1">
-              <span className="text-sm">Hành lý:</span>
+              <span className="text-sm">{t("manage.baggage")}:</span>
               <span className="text-sm font-semibold">
                 {item.data.flightOffers[0].travelerPricings[0].travelerType}
               </span>
             </span>
             <span className="flex gap-1">
-              <span className="text-sm">Số lượng:</span>
+              <span className="text-sm">{t("manage.quantity")}:</span>
               <span className="text-sm font-semibold">
                 {item.data.flightOffers[0].travelerPricings[0].fareDetailsBySegment[0]
                   .includedCheckedBags.quantity ||
@@ -247,7 +249,7 @@ export default function ManageItem({ item, children }: Props) {
               </span>
             </span>
             <span className="flex gap-1">
-              <span className="text-sm">Cabin:</span>
+              <span className="text-sm">{t("manage.cabin")}:</span>
               <span className="text-sm font-semibold">
                 {item.data.flightOffers[0].travelerPricings[0].fareDetailsBySegment[0].cabin}
               </span>
@@ -262,9 +264,9 @@ export default function ManageItem({ item, children }: Props) {
 
           <div className="mt-2">
             <span className="text-sm font-medium mb-2 block">
-              Số lượng hành khách: {item.data.travelers.length}
+              {t("manage.quantityTraveler")}: {item.data.travelers.length}
             </span>
-            <span className="block text-sm font-medium">Thông tin hành khách:</span>
+            <span className="block text-sm font-medium">{t("manage.infoTraveler")}:</span>
             <div className="text-sm">
               {item.data.travelers.map((traveler, index) => (
                 <div key={index} className="flex items-center gap-2 my-2">

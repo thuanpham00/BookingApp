@@ -1,0 +1,15 @@
+{
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "loginGoogle": "Đăng nhập với Google",
+    "inputUsername": "Nhập tên",
+    "inputEmail": "Nhập email",
+    "inputPassword": "Nhập mật khẩu",
+    "noAccount": "Bạn chưa có tài khoản?",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "userName": "Tên đăng nhập",
+    "haveAccount": "Bạn đã có tài khoản?"
+  }
+}

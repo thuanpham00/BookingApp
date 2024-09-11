@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next"
 import { NavLink } from "react-router-dom"
 import { path } from "src/constant/path"
 import tickerOfferFlight from "src/img/Flight/air-ticket-offer_4.webp"
 
 export default function SideNavManage() {
+  const { t } = useTranslation("manage")
+
   return (
     <div>
       <div className="w-full rounded-lg bg-white px-2 py-4 shadow-md">
@@ -26,7 +29,7 @@ export default function SideNavManage() {
               d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
             />
           </svg>
-          <span className="text-base font-medium">Đơn đặt chỗ của tôi</span>
+          <span className="text-base font-medium">{t("manage.manageSuccess")}</span>
         </NavLink>
 
         <NavLink
@@ -50,7 +53,7 @@ export default function SideNavManage() {
             />
           </svg>
 
-          <span className="text-base font-medium">Đơn đã hủy</span>
+          <span className="text-base font-medium">{t("manage.manageCancel")}</span>
         </NavLink>
 
         <NavLink
@@ -74,7 +77,7 @@ export default function SideNavManage() {
             />
           </svg>
 
-          <span className="text-base font-medium">Hồ sơ</span>
+          <span className="text-base font-medium">{t("manage.manageUser")}</span>
         </NavLink>
       </div>
 

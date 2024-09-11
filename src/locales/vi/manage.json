@@ -1,0 +1,42 @@
+{
+  "manage": {
+    "manageTicket": "Quản lý thông tin",
+    "manageCancel": "Đơn đã huỷ",
+    "manageSuccess": "Đơn đặt chỗ của tôi",
+    "manageUser": "Hồ sơ",
+    "titleTicketCancel": "Đơn đã hủy",
+    "titleTicketSuccess": "Đơn đã mua của Quý khách",
+    "inputSearchFilter": "Tìm kiếm theo mã sân bay hoặc ngày đi",
+
+    "flight": "Chuyến bay",
+    "nonStop": "Bay trực tiếp",
+    "info": "Thông tin liên lạc",
+    "fee": "Bao gồm thuế và phí",
+    "detail": "Chi tiết",
+    "hidden": "Ẩn",
+    "delete": "Hủy vé",
+    "titleCancel": "Quý khách có muốn hủy vé hoặc đơn hàng này không?",
+    "noCancel": "Không, quay lại",
+    "yesCancel": "Có, loại bỏ nó",
+
+    "baggage": "Hành lý",
+    "quantity": "Số lượng",
+    "cabin": "Khoang",
+    "quantityTraveler": "Số lượng hành khách",
+    "infoTraveler": "Thông tin hành khách",
+
+    "noTicket": "Quý khách không có đơn hàng nào sắp tới",
+    "descNoTicket": "Hãy mua vé chuyến bay cho chuyến đi tiếp theo",
+    "searchFlight": "Tìm kiếm chuyến bay",
+
+    "myAccount": "Tài khoản của tôi",
+    "update": "Cập nhật",
+
+    "inputUsername": "Nhập tên",
+    "inputEmail": "Nhập email",
+    "inputPassword": "Nhập mật khẩu",
+    "userName": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu"
+  }
+}

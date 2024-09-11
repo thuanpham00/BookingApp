@@ -39,6 +39,7 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import { toast } from "react-toastify"
 import { setCartToLS } from "src/utils/auth"
+import { useTranslation } from "react-i18next"
 
 interface Props {
   item: TypeFlightItemResponse
@@ -46,6 +47,8 @@ interface Props {
 }
 
 function FlightItemInner({ item, list }: Props) {
+  const { t } = useTranslation(["flight", "manage"])
+
   const navigate = useNavigate()
   const { setListCart, listCart } = useContext(AppContext)
   const [showFlightDetail, setShowFlightDetail] = useState(false)
@@ -165,7 +168,7 @@ function FlightItemInner({ item, list }: Props) {
                   <div className="w-24 h-1 bg-blueColor absolute left-1/2 -translate-x-1/2"></div>
                   <div className="text-sm mt-1 text-center">
                     {flight.numberOfStops === 0 && item.itineraries[0].segments.length === 1
-                      ? "Bay trực tiếp"
+                      ? `${t("flight.flightNonStop")}`
                       : ""}
                   </div>
                 </div>
@@ -186,7 +189,7 @@ function FlightItemInner({ item, list }: Props) {
                     <img src={luggage} alt="luggage" className="mt-1 h-3 w-3" />
 
                     <div>
-                      <span className="text-sm">Đã bao gồm hành lý:</span>
+                      <span className="text-sm">{t("flight.includeBaggage")}:</span>
                       <div className="flex gap-1 justify-center text-sm">
                         <span> 1 x </span>
                         <div className="flex items-center gap-[2px]">
@@ -214,28 +217,28 @@ function FlightItemInner({ item, list }: Props) {
               onClick={handleDetailFlight}
               className="text-blueColor text-sm hover:underline hover:text-blueColor/80 duration-200"
             >
-              {showFlightDetail ? "Ẩn" : "Chi tiết"}
+              {showFlightDetail ? `${t("flight.hidden")}` : `${t("flight.detail")}`}
             </button>
             <div className="flex gap-2 items-center">
               <div className="flex flex-col items-end">
                 <span className="text-base lg:text-lg font-semibold">
                   {exchangePrice(item.travelerPricings[0].price.total)}đ
                 </span>
-                <span className="text-gray-500 text-sm">Giá vé dành cho người lớn</span>
+                <span className="text-gray-500 text-sm">{t("flight.ticketPriceAdult")}</span>
               </div>
 
               <AlertDialog>
                 <AlertDialogTrigger>
                   <Button
                     onClick={() => handleClickPriceItem(item.id)}
-                    nameButton="Giá chi tiết"
+                    nameButton={t("flight.priceDetail")}
                     className="px-3 py-2 bg-[#e5eef4] w-full text-blueColor text-sm rounded-full hover:bg-blueColor duration-200 font-semibold border border-blueColor hover:text-whiteColor"
                   />
                 </AlertDialogTrigger>
                 <AlertDialogContent className="block max-w-[400px] md:max-w-[700px] lg:max-w-[1000px] h-[700px] md:h-[550px] overflow-y-auto">
                   <AlertDialogTitle className="flex items-center justify-between gap-2 shadow-md px-6 py-2">
                     <div className="flex items-center gap-2 text-sm md:text-base">
-                      CÓ NHIỀU LỰA CHỌN GIÁ CẢ HƠN cho chuyến đi của bạn.
+                      {t("flight.priceDesc1")}
                       <img src={icon2} alt="icon2" className="hidden md:block w-32 h-7" />
                     </div>
                     <AlertDialogCancel className="border-none shadow-none p-0">
@@ -258,10 +261,7 @@ function FlightItemInner({ item, list }: Props) {
                   <AlertDialogDescription className="px-6 py-3">
                     <div className="flex items-center gap-2 bg-orange-200 p-1">
                       <img src={icon} alt="icon" className="w-5 h-5" />
-                      <span className="text-textColor">
-                        Xin lưu ý rằng một số chuyến bay trong hành trình của bạn chỉ có giá vé hành
-                        lý xách tay. Vui lòng kiểm tra trước khi đặt vé.
-                      </span>
+                      <span className="text-textColor">{t("flight.priceDesc2")}</span>
                     </div>
                   </AlertDialogDescription>
 
@@ -310,11 +310,12 @@ function FlightItemInner({ item, list }: Props) {
                                 <div>{getDateFromAPI(detailPrice.segments[0].departure.at)}</div>
                                 <div className="w-1 h-1 bg-textColor rounded-full"></div>
                                 <div className="text-base font-medium">
-                                  Khởi hành {getHourFromAPI(detailPrice.segments[0].departure.at)}
+                                  {t("flight.depart")}{" "}
+                                  {getHourFromAPI(detailPrice.segments[0].departure.at)}
                                 </div>
                                 <div className="w-2 h-[1px] bg-textColor"></div>
                                 <div className="text-base font-medium">
-                                  Đến nơi{" "}
+                                  {t("flight.arrive")}{" "}
                                   {getHourFromAPI(
                                     detailPrice.segments[detailPrice.segments.length - 1].arrival.at
                                   )}
@@ -497,12 +498,12 @@ function FlightItemInner({ item, list }: Props) {
                         <div className="flex items-center justify-end gap-2">
                           <Button
                             onClick={handleAddToCart}
-                            nameButton="Thêm vào giỏ hàng"
+                            nameButton={t("flight.addCart")}
                             className="capitalize py-2 px-4 text-blueColor w-full border border-gray-300 text-sm rounded-full bg-transparent hover:bg-gray-100 hover:border-blueColor duration-200"
                           />
                           <Button
                             onClick={handleNavigatePage}
-                            nameButton="Đặt vé ngay!"
+                            nameButton={t("flight.booking")}
                             className="uppercase py-2 px-4 bg-blueColor w-full text-whiteColor text-sm rounded-full bg-tra hover:bg-blueColor/80 duration-200"
                           />
                         </div>
@@ -588,18 +589,18 @@ function FlightItemInner({ item, list }: Props) {
           ))}
           <div className="px-5 pb-2 flex items-center flex-wrap gap-2">
             <span className="flex gap-1">
-              <span className="text-sm">Hành lý:</span>
+              <span className="text-sm">{t("flight.baggage")}:</span>
               <span className="text-sm font-semibold">{item.travelerPricings[0].travelerType}</span>
             </span>
             <span className="flex gap-1">
-              <span className="text-sm">Số lượng:</span>
+              <span className="text-sm">{t("flight.quantity")}:</span>
               <span className="text-sm font-semibold">
                 {item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity ||
                   `${item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.weight}kg`}
               </span>
             </span>
             <span className="flex gap-1">
-              <span className="text-sm">Cabin:</span>
+              <span className="text-sm">{t("flight.cabin")}:</span>
               <span className="text-sm font-semibold">
                 {item.travelerPricings[0].fareDetailsBySegment[0].cabin}
               </span>
@@ -612,7 +613,7 @@ function FlightItemInner({ item, list }: Props) {
             </span>
           </div>
           <div className="px-5 pb-2 flex items-center gap-2">
-            <span className="text-sm">Ngày cuối cùng có thể đặt vé:</span>
+            <span className="text-sm">{t("flight.lastDateTicket")}:</span>
             <span className="text-sm font-semibold">{item.lastTicketingDate}</span>
           </div>
         </div>

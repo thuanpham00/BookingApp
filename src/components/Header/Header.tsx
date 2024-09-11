@@ -17,8 +17,14 @@ import {
   SheetTrigger
 } from "src/components/ui/sheet"
 import useScrollHeader from "src/hooks/useScrollHeader"
+import { useTranslation } from "react-i18next"
+import { locales } from "src/i18n/i18n"
+import { changeLanguage } from "i18next"
 
 export default function Header() {
+  // xử lý ngôn ngữ
+  const { i18n, t } = useTranslation("flight") // sử dụng đổi ngôn ngữ
+  const currentLanguage = locales[i18n.language as keyof typeof locales]
   // xử lý header
   const { showHeader } = useScrollHeader(100)
   const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, listCart } =
@@ -62,27 +68,40 @@ export default function Header() {
                   d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
                 />
               </svg>
-              <span className="text-base font-medium hover:underline block">Đơn đặt chỗ</span>
+              <span className="text-base font-medium hover:underline block">
+                {t("flight.ticketPurchase")}
+              </span>
             </Link>
 
             <Popover
               className="sticky top-0 left-0 z-30"
               renderPopover={
                 <div className="shadow-lg flex flex-col">
-                  <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
+                  <button
+                    onClick={() => changeLanguage("vi")}
+                    className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300"
+                  >
                     <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
-                    Vietnamese
+                    Tiếng việt
                   </button>
 
-                  <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300 border-t-0">
+                  <button
+                    onClick={() => changeLanguage("en")}
+                    className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300 border-t-0"
+                  >
                     <img src={coMy} alt="Cờ Mỹ" className="h-6 w-6 object-contain" />
                     English
                   </button>
                 </div>
               }
             >
-              <div className="hidden md:flex gap-1 items-center duration-200 hover:text-gray-500 text-textColor rounded-sm text-sm">
-                <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
+              <div className="hidden md:flex gap-1 items-center text-textColor rounded-sm text-sm duration-200 hover:text-textColor/80">
+                <img
+                  src={currentLanguage === "English" ? coMy : coVN}
+                  alt="Cờ Việt Nam"
+                  className="h-6 w-6 object-contain"
+                />
+                <span className="text-sm md:text-base">{currentLanguage}</span>
               </div>
             </Popover>
 
@@ -249,14 +268,14 @@ export default function Header() {
                         to={path.ManageUser}
                         className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300"
                       >
-                        Tài khoản của tôi
+                        {t("flight.myAccount")}
                       </Link>
 
                       <button
                         onClick={handleLogOut}
                         className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2 border border-gray-300 border-t-0"
                       >
-                        Đăng xuất
+                        {t("flight.logOut")}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -301,13 +320,13 @@ export default function Header() {
                     to={path.register}
                     className="duration-200 hover:underline text-sm text-textColor font-medium hover:text-textColor/80"
                   >
-                    Đăng ký
+                    {t("flight.register")}
                   </Link>
                   <Link
                     to={path.login}
                     className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 text-sm font-medium hover:text-whiteColor/80 rounded-full"
                   >
-                    Đăng nhập
+                    {t("flight.login")}
                   </Link>
                 </div>
               )}

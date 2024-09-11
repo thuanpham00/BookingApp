@@ -1,0 +1,38 @@
+{
+  "manage": {
+    "manageTicket": "Manage Info",
+    "manageCancel": "Cancelled Bookings",
+    "manageSuccess": "My Bookings",
+    "manageUser": "Profile",
+    "titleTicketCancel": "Cancelled Bookings",
+    "titleTicketSuccess": "Your Purchased Bookings",
+    "inputSearchFilter": "Search by Airport Code or Departure Date",
+
+    "flight": "Flight",
+    "nonStop": "non-stop",
+    "info": "Contact Information",
+    "fee": "Includes Taxes and Fees",
+    "detail": "Details",
+    "hidden": "Hidden",
+    "delete": "Cancel Ticket",
+    "titleCancel": "Do you want to cancel this ticket or order?",
+    "noCancel": "No, go back",
+    "yesCancel": "Yes, remove it",
+
+    "baggage": "Baggage",
+    "quantity": "Quantity",
+    "cabin": "Cabin",
+    "quantityTraveler": "Number of passengers",
+    "infoTraveler": "Passenger information",
+
+    "myAccount": "My account",
+    "update": "Update",
+
+    "inputUsername": "Enter name",
+    "inputEmail": "Enter email",
+    "inputPassword": "Enter password",
+    "userName": "User name",
+    "password": "Password",
+    "confirmPassword": "Confirm password"
+  }
+}

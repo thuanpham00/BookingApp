@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useContext, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { flightApi } from "src/apis/flight.api"
 import { path } from "src/constant/path"
@@ -12,6 +13,7 @@ import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 
 export default function PaymentSuccess() {
+  const { t } = useTranslation("flight")
   const { setListCart, listCart, setListPurchased, listPurchased } = useContext(AppContext)
   const { showHeader } = useScrollHeader(200)
   const paramsUrl = useQueryParam()
@@ -56,8 +58,8 @@ export default function PaymentSuccess() {
   return (
     <div>
       <Helmet>
-        <title>Đặt vé thành công</title>
-        <meta name="description" content="Thanh toán chuyến bay - Booking." />
+        <title>{t("flight.bookingFlight")}</title>
+        <meta name="description" content={`${t("flight.bookingFlight")} - Booking.`} />
       </Helmet>
 
       <div className="relative z-10">
@@ -69,7 +71,7 @@ export default function PaymentSuccess() {
               <div className="col-span-12 md:col-span-5">
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl text-whiteColor font-semibold">
-                    Đã hoàn tất đặt vé của bạn
+                    {t("flight.doneBuyFlight2")}
                   </h1>
                   <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                     <svg
@@ -127,9 +129,9 @@ export default function PaymentSuccess() {
                   </div>
                 </div>
                 <div className="w-full flex items-center justify-between">
-                  <div className="text-white text-sm">Thông tin hành khách</div>
-                  <div className="text-white text-sm">Chi tiết thanh toán</div>
-                  <div className="text-white text-sm">Đã xác nhận đặt vé!</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight1")}</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight2")}</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight3")}!</div>
                 </div>
               </div>
             </div>
@@ -156,7 +158,9 @@ export default function PaymentSuccess() {
                     />
                   </svg>
                 </div>
-                <h2 className="my-2 text-base text-textColor font-medium">Thanh toán thành công</h2>
+                <h2 className="my-2 text-base text-textColor font-medium">
+                  {t("flight.paymentSuccess")}
+                </h2>
                 <div className="text-center font-semibold text-xl text-blueColor">
                   -
                   {formatCurrency(
@@ -170,23 +174,25 @@ export default function PaymentSuccess() {
 
                 <div className="w-full">
                   <div className="text-base flex items-center justify-between mb-1">
-                    <span className="text-gray-500">Mã giao dịch:</span>
+                    <span className="text-gray-500">{t("flight.codeBill")}:</span>
                     <span className="text-textColor">{paramsUrl.vnp_TxnRef}</span>
                   </div>
                   <div className="text-base flex items-center justify-between mb-1">
-                    <span className="text-gray-500">Loại giao dịch:</span>
+                    <span className="text-gray-500">{t("flight.typeBill")}:</span>
                     <span className="text-textColor">{paramsUrl.vnp_CardType}</span>
                   </div>
                   <div className="text-base flex items-center justify-between mb-1">
-                    <span className="text-gray-500">Ngân hàng giao dịch:</span>
+                    <span className="text-gray-500">{t("flight.nameBank")}:</span>
                     <span className="text-textColor">{paramsUrl.vnp_BankCode}</span>
                   </div>
                   <div className="text-base flex items-center justify-between mb-1">
-                    <span className="text-gray-500">Diễn giải:</span>
+                    <span className="text-gray-500">{t("flight.describe")}:</span>
                     <span className="text-textColor">{paramsUrl.vnp_OrderInfo}</span>
                   </div>
                   <div className="text-base flex items-center justify-between mb-1">
-                    <span className="text-textColor font-medium">Tổng số tiền (đ):</span>
+                    <span className="text-textColor font-medium">
+                      {t("flight.totalPrice")} (đ):
+                    </span>
                     <span className="text-blueColor font-semibold">
                       {formatCurrency(
                         Number(paramsUrl.vnp_Amount.slice(0, paramsUrl.vnp_Amount.length - 2))
@@ -200,7 +206,7 @@ export default function PaymentSuccess() {
                   to={path.flight}
                   className="mt-4 w-full bg-blueColor p-2 text-center text-white rounded-full hover:opacity-75 duration-200 flex items-center justify-center gap-2"
                 >
-                  Trở về
+                  {t("flight.back")}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

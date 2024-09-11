@@ -1,13 +1,16 @@
+import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
 export default function Footer() {
+  const { t } = useTranslation("footer")
+
   return (
     <footer className="w-full absolute bottom-0 bg-[#022d5c] py-8">
       <div className="container">
         <div className="flex items-center justify-between pb-4 border-b text-whiteColor border-b-[#4e6c8d]">
           <h2 className="font-semibold text-xl">Booking</h2>
           <div className="flex items-center gap-8">
-            <span className="font-semibold text-xl">Kết nối với chúng tôi</span>
+            <span className="font-semibold text-xl">{t("footer.connect")}</span>
             <div className="flex gap-2">
               <Link
                 to="https://www.facebook.com/domaybatduoctao912"
@@ -59,7 +62,7 @@ export default function Footer() {
         <div className="py-4 grid grid-cols-4 md:grid-cols-12 gap-4 flex-wrap border-b border-b-[#4e6c8d]">
           <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
-              ĐƯỜNG DẪN NHANH
+              {t("footer.text-col1-1")}
             </h3>
             <ul className="mt-4">
               <li className="mb-2">
@@ -67,7 +70,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Hãng hàng không nổi tiếng
+                  {t("footer.text-col1-2")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -75,7 +78,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Đường bay phổ biến
+                  {t("footer.text-col1-3")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -83,7 +86,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Các điểm đến hàng đầu ở Hoa Kỳ
+                  {t("footer.text-col1-4")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -91,7 +94,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Các điểm đến quốc tế hàng đầu
+                  {t("footer.text-col1-5")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -99,7 +102,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Thư mục trang web
+                  {t("footer.text-col1-6")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -107,7 +110,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Giữ liên lạc
+                  {t("footer.text-col1-7")}
                 </Link>
               </li>
             </ul>
@@ -123,7 +126,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Chuyến bay giá rẻ
+                  {t("footer.text-col2-1")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -131,7 +134,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Khách sạn giá rẻ
+                  {t("footer.text-col2-2")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -139,7 +142,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Cho thuê ô tô
+                  {t("footer.text-col2-3")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -147,7 +150,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Gói kỳ nghỉ
+                  {t("footer.text-col2-4")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -155,7 +158,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Du lịch theo nhóm
+                  {t("footer.text-col2-5")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -163,79 +166,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Tiết kiệm và kiếm $
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="col-span-2 md:col-span-3">
-            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
-              CÔNG CỤ DU LỊCH
-            </h3>
-            <ul className="mt-4">
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Thẻ quà tặng
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Kiểm tra đặt chỗ của tôi
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Hỗ trợ khách hàng
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Đăng ký trực tuyến
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Phí hành lý hàng không
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Kiểm tra tình trạng chuyến bay
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Blog du lịch
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="#"
-                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
-                >
-                  Hướng dẫn viên địa phương
+                  {t("footer.text-col2-6")}
                 </Link>
               </li>
             </ul>
@@ -243,7 +174,7 @@ export default function Footer() {
 
           <div className="col-span-2 md:col-span-3">
             <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
-              GIỚI THIỆU
+              {t("footer.text-col3-1")}
             </h3>
             <ul className="mt-4">
               <li className="mb-2">
@@ -251,7 +182,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Về chúng tôi
+                  {t("footer.text-col3-2")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -259,7 +190,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Phòng báo chí
+                  {t("footer.text-col3-3")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -267,7 +198,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Nghề nghiệp
+                  {t("footer.text-col3-4")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -275,7 +206,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Chương trình liên kết
+                  {t("footer.text-col3-5")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -283,7 +214,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Lời chứng thực của khách hàng
+                  {t("footer.text-col3-6")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -291,7 +222,7 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Quảng cáo với chúng tôi
+                  {t("footer.text-col3-7")}
                 </Link>
               </li>
               <li className="mb-2">
@@ -299,7 +230,79 @@ export default function Footer() {
                   to="#"
                   className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
                 >
-                  Bản tin
+                  {t("footer.text-col3-8")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col3-9")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-span-2 md:col-span-3">
+            <h3 className="text-sm hover:underline duration-200 cursor-pointer text-whiteColor">
+              {t("footer.text-col4-1")}
+            </h3>
+            <ul className="mt-4">
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-2")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-3")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-4")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-5")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-6")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-7")}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="#"
+                  className="font-normal text-sm hover:underline duration-200 cursor-pointer text-whiteColor/80"
+                >
+                  {t("footer.text-col4-8")}
                 </Link>
               </li>
             </ul>

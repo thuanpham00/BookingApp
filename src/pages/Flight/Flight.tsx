@@ -44,6 +44,9 @@ import useFormHandler from "src/hooks/useFormHandler"
 import { FlightContext } from "src/context/useContextFlight"
 import { TypeAirportCodeList as TypeAirportCodeListType } from "src/types/flight.type"
 import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
+import { useTranslation } from "react-i18next"
+import { locales } from "src/i18n/i18n"
+import { changeLanguage } from "i18next"
 
 export type FormData = Pick<
   schemaType,
@@ -78,6 +81,10 @@ const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 p
 
 // component chỉ re-render khi props hoặc state thay đổi
 export default function Flight() {
+  // xử lý ngôn ngữ
+  const { i18n, t } = useTranslation("flight") // sử dụng đổi ngôn ngữ
+  const currentLanguage = locales[i18n.language as keyof typeof locales]
+
   const { isAuthenticated, setIsAuthenticated, isProfile, setIsProfile, listCart } =
     useContext(AppContext)
 
@@ -229,18 +236,16 @@ export default function Flight() {
     })
   })
 
-  console.log(showPassenger)
-
   return (
     // khắc phục lệch layout
-    <div className="h-[3180px] md:h-[2600px] bg-[#fff]">
+    <div className="h-[2850px] md:h-[2600px] lg:h-[2550px] bg-[#fff]">
       {loading ? (
         <Skeleton className="flex flex-col justify-center items-center absolute left-1/2 top-[10%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
         <Fragment>
           <Helmet>
-            <title>Chuyến bay</title>
-            <meta name="description" content="Chuyến bay - Booking." />
+            <title>{t("flight.flight")}</title>
+            <meta name="description" content={`${t("flight.flight")} - Booking.`} />
           </Helmet>
 
           <div className="w-full h-[600px]">
@@ -282,7 +287,7 @@ export default function Flight() {
                           />
                         </svg>
                         <span className="text-base font-medium hover:underline block">
-                          Đơn đặt chỗ
+                          {t("flight.ticketPurchase")}
                         </span>
                       </Link>
 
@@ -290,24 +295,35 @@ export default function Flight() {
                         className="sticky top-0 left-0 z-30"
                         renderPopover={
                           <div className="shadow-lg flex flex-col">
-                            <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300">
+                            <button
+                              onClick={() => changeLanguage("vi")}
+                              className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300"
+                            >
                               <img
                                 src={coVN}
                                 alt="Cờ Việt Nam"
                                 className="h-6 w-6 object-contain"
                               />
-                              Vietnamese
+                              Tiếng việt
                             </button>
 
-                            <button className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200">
+                            <button
+                              onClick={() => changeLanguage("en")}
+                              className="text-sm flex items-center gap-2 text-left min-w-[120px] p-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200"
+                            >
                               <img src={coMy} alt="Cờ Mỹ" className="h-6 w-6 object-contain" />
                               English
                             </button>
                           </div>
                         }
                       >
-                        <div className="hidden md:flex gap-1 items-center text-whiteColor rounded-sm text-sm duration-200 hover:text-gray-300">
-                          <img src={coVN} alt="Cờ Việt Nam" className="h-6 w-6 object-contain" />
+                        <div className="hidden md:flex gap-1 items-center text-textColor rounded-sm text-sm duration-200 hover:text-textColor/80">
+                          <img
+                            src={currentLanguage === "English" ? coMy : coVN}
+                            alt="Cờ Việt Nam"
+                            className="h-6 w-6 object-contain"
+                          />
+                          <span className="text-sm md:text-base">{currentLanguage}</span>
                         </div>
                       </Popover>
 
@@ -482,14 +498,14 @@ export default function Flight() {
                                   to={path.ManageUser}
                                   className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 border border-gray-300"
                                 >
-                                  Tài khoản của tôi
+                                  {t("flight.myAccount")}
                                 </Link>
 
                                 <button
                                   onClick={handleLogOut}
                                   className="text-sm text-left min-w-[120px] px-4 py-3 bg-[#edf2f4] text-textColor hover:bg-gray-300 duration-200 flex items-center gap-2 border border-gray-300 border-t-0"
                                 >
-                                  Đăng xuất
+                                  {t("flight.logOut")}
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
@@ -534,13 +550,13 @@ export default function Flight() {
                               to={path.register}
                               className="duration-200 hover:underline text-sm text-textColor font-medium hover:text-textColor/80"
                             >
-                              Đăng ký
+                              {t("flight.register")}
                             </Link>
                             <Link
                               to={path.login}
                               className="py-2 px-3 bg-blueColor text-whiteColor duration-200 hover:bg-blueColor/80 text-sm font-medium hover:text-whiteColor/80 rounded-full"
                             >
-                              Đăng nhập
+                              {t("flight.login")}
                             </Link>
                           </div>
                         )}
@@ -549,7 +565,7 @@ export default function Flight() {
                   </div>
 
                   <h1 className="hidden md:block text-whiteColor md:text-xl lg:text-3xl font-semibold text-center my-2 lg:mt-16">
-                    Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn.
+                    {t("flight.logan")}
                   </h1>
 
                   <div className="mt-20 md:mt-12 mx-auto w-full md:w-[90%]">
@@ -574,7 +590,7 @@ export default function Flight() {
                             htmlFor="oneWay"
                             className="text-base text-textColor font-semibold"
                           >
-                            Một chiều
+                            {t("flight.oneWay")}
                           </label>
                         </div>
                         <div className="flex items-center gap-1">
@@ -590,7 +606,7 @@ export default function Flight() {
                             htmlFor="roundTrip"
                             className="text-base text-textColor font-semibold"
                           >
-                            Khứ hồi
+                            {t("flight.roundTrip")}
                           </label>
                         </div>
                       </div>
@@ -605,7 +621,7 @@ export default function Flight() {
                               className="w-10 h-10 flex-shrink-0"
                             />
                           }
-                          placeholder="Bay từ"
+                          placeholder={t("flight.searchTextTitle")}
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                           ref={inputRef}
                           value={searchText}
@@ -615,7 +631,7 @@ export default function Flight() {
                           register={register}
                           name="originLocationCode"
                           error={errors.originLocationCode?.message}
-                          desc="Từ"
+                          desc={t("flight.searchTextDesc")}
                         >
                           <AirportCodeList
                             listAirport={filterTypeAirportCodeList_1}
@@ -647,7 +663,7 @@ export default function Flight() {
                               />
                             </svg>
                           }
-                          placeholder="Bay đến"
+                          placeholder={t("flight.searchTextTitle2")}
                           classNameList={`z-20 absolute top-20 left-0 w-full ${showListAirport2 ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                           ref={inputRef2}
                           value={searchText2}
@@ -657,7 +673,7 @@ export default function Flight() {
                           register={register}
                           name="destinationLocationCode"
                           error={errors.destinationLocationCode?.message}
-                          desc="Đến"
+                          desc={t("flight.searchTextDesc2")}
                         >
                           <AirportCodeList
                             listAirport={filterTypeAirportCodeList_2}
@@ -704,7 +720,7 @@ export default function Flight() {
                               {/* date ngày đi*/}
                               <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
                                 <SelectDate
-                                  text="Ngày đi"
+                                  text={t("flight.dateTitle")}
                                   control={control}
                                   setDate={setDate}
                                   date={date}
@@ -719,7 +735,7 @@ export default function Flight() {
                                 className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}
                               >
                                 <SelectDate
-                                  text="Ngày về"
+                                  text={t("flight.dateTitle2")}
                                   control={control}
                                   setDate={setDate2}
                                   date={date2}
@@ -761,7 +777,7 @@ export default function Flight() {
                                     />
 
                                     <span className="text-base text-textColor font-semibold">
-                                      Khách
+                                      {t("flight.traveler")}
                                     </span>
 
                                     {errors.adults?.message && (
@@ -844,7 +860,7 @@ export default function Flight() {
                                     {travelClass
                                       ? travelClassList.find((item) => item.value === travelClass)
                                           ?.value
-                                      : "Chọn hạng vé"}
+                                      : `${t("flight.travelClass")}`}
                                     {errors.travelClass?.message && (
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -898,7 +914,7 @@ export default function Flight() {
                               // disable={flightOffersSearchMutation.isPending}
                               classNameWrapper="w-[50%] relative"
                               type="submit"
-                              nameButton="Tìm kiếm"
+                              nameButton={t("flight.search")}
                               className="px-8 py-4 bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold"
                             />
                           </div>
@@ -918,10 +934,10 @@ export default function Flight() {
                   <img src={banner3} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
                     <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Điểm đến tốt nhất?
+                      {t("flight.title1")}
                     </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Khám phá những điểm đến tuyệt vời nhất với chúng tôi.
+                      {t("flight.desc1")}
                     </span>
                   </div>
                 </div>
@@ -931,10 +947,10 @@ export default function Flight() {
                   <img src={banner2} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
                     <h2 className="text-base lg:text-lg text-textColor font-semibold">
-                      Đa dạng ngôn ngữ trên trang web
+                      {t("flight.title2")}
                     </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Thay đổi ngôn ngữ
+                      {t("flight.desc2")}
                     </span>
                   </div>
                 </div>
@@ -943,9 +959,11 @@ export default function Flight() {
                 <div className="flex items-center gap-4">
                   <img src={banner1} alt="" className="flex-shrink-0 w-14 h-14" />
                   <div className="flex-grow">
-                    <h2 className="text-base lg:text-lg text-textColor font-semibold">Booking.</h2>
+                    <h2 className="text-base lg:text-lg text-textColor font-semibold">
+                      {t("flight.title3")}
+                    </h2>
                     <span className="block md:text-xs lg:text-sm text-blueColor">
-                      Hoàn tất việc đăng ký trên web của bạn khi Booking. với các bước dễ dàng
+                      {t("flight.desc3")}
                     </span>
                   </div>
                 </div>
@@ -961,26 +979,24 @@ export default function Flight() {
               </div>
             </div>
 
-            <div className="mt-8 pb-8 relative">
-              <div className="w-full h-[400px]">
-                <img
-                  src={bannerFlight}
-                  alt="bannerFlight"
-                  className="w-full h-full object-cover brightness-50 rounded-sm"
-                />
-              </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
+            <div className="mt-20 md:mt-8 relative w-full h-[200px] md:h-[400px]">
+              <img
+                src={bannerFlight}
+                alt="bannerFlight"
+                className="w-0 h-0 md:w-full md:h-full object-cover brightness-50 rounded-sm"
+              />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm max-w-[400px] w-full">
                 <h3 className="text-lg lg:text-2xl text-center font-semibold text-textColor">
-                  Đối tác hàng không
+                  {t("flight.partner")}
                 </h3>
                 <div className="mt-0 md:mt-4 grid grid-cols-8 items-center gap-2 flex-wrap">
                   {bannerAirLineList.map((item, index) => (
                     <div key={index}>
-                      <div className="col-span-1">
+                      <div className="col-span-4 md:col-span-1">
                         <img
                           src={item}
                           alt={item}
-                          className="w-10 h-10 md:w-10 md:h-8 lg:w-16 lg:h-18 object-contain"
+                          className="w-14 h-14 md:w-10 md:h-8 lg:w-16 lg:h-18 object-contain"
                         />
                       </div>
                     </div>
@@ -989,18 +1005,16 @@ export default function Flight() {
               </div>
             </div>
 
-            <div className="pt-0 mt:py-8 relative">
-              <div className="w-full h-[400px]">
-                <img
-                  src={bannerFlight2}
-                  alt="bannerFlight"
-                  className="w-full h-full object-cover brightness-50 rounded-sm"
-                />
-              </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 rounded-sm shadow-sm">
+            <div className="mt-20 md:mt-8 relative w-full h-[200px] md:h-[400px]">
+              <img
+                src={bannerFlight2}
+                alt="bannerFlight"
+                className="w-0 h-0 md:w-full md:h-full object-cover brightness-50 rounded-sm"
+              />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white p-4 w-[200px] md:w-[400px] rounded-sm">
                 <div className="flex flex-col items-center gap-2">
                   <h3 className="text-lg lg:text-2xl font-semibold text-textColor">
-                    Đối tác thanh toán
+                    {t("flight.payment")}
                   </h3>
                   <div className="md:w-20 md:h-20 lg:w-32 lg:h-32">
                     <img src={paymentImg} alt="payment" className="w-full h-full object-contain" />

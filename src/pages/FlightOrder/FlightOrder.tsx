@@ -34,6 +34,7 @@ import { path } from "src/constant/path"
 import useFormHandler from "src/hooks/useFormHandler"
 import PriceTraveler from "src/components/PriceTraveler"
 import usePriceTraveller from "src/hooks/usePriceTraveller"
+import { useTranslation } from "react-i18next"
 
 export type FormData = Pick<
   schemaType,
@@ -44,6 +45,8 @@ const schemaFormData = schema.pick(["codeNumber", "numberPhone", "email", "userN
 export const FetchDataListNational = () => Promise.resolve(countryCodePhone)
 
 export default function FlightOrder() {
+  const { t } = useTranslation("flight")
+
   const navigate = useNavigate()
   // xử lý header
   const { showHeader } = useScrollHeader(200)
@@ -210,8 +213,8 @@ export default function FlightOrder() {
   return (
     <div>
       <Helmet>
-        <title>Đặt vé chuyến bay</title>
-        <meta name="description" content="Đặt vé chuyến bay - Booking." />
+        <title>{t("flight.bookingFlight")}</title>
+        <meta name="description" content={`${t("flight.bookingFlight")} - Booking.`} />
       </Helmet>
 
       <div className="relative z-10">
@@ -242,7 +245,9 @@ export default function FlightOrder() {
                       />
                     </svg>
                   </button>
-                  <h1 className="text-xl text-whiteColor font-semibold">Hoàn tất đặt vé của bạn</h1>
+                  <h1 className="text-xl text-whiteColor font-semibold">
+                    {t("flight.doneBuyFlight")}
+                  </h1>
                 </div>
               </div>
               <div className="hidden col-span-7 items-center md:flex flex-col">
@@ -283,9 +288,9 @@ export default function FlightOrder() {
                   </div>
                 </div>
                 <div className="w-full flex items-center justify-between">
-                  <div className="text-white text-sm">Thông tin hành khách</div>
-                  <div className="text-white text-sm">Chi tiết thanh toán</div>
-                  <div className="text-white text-sm">Đã xác nhận đặt vé!</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight1")}</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight2")}</div>
+                  <div className="text-white text-sm">{t("flight.spanFlight3")}!</div>
                 </div>
               </div>
             </div>
@@ -338,7 +343,7 @@ export default function FlightOrder() {
                         </h2>
                       </div>
                       <div className="text-white p-1 bg-red-600 text-xs font-normal">
-                        KHÔNG HOÀN TIỀN
+                        {t("flight.noRefund")}
                       </div>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
@@ -471,7 +476,7 @@ export default function FlightOrder() {
                                 data.data.flightOffers[0].travelerPricings[0]
                                   .fareDetailsBySegment[0].includedCheckedBags.weightUnit
                               }{" "}
-                              / Người lớn
+                              / {t("flight.adult")}
                             </span>
                           </div>
                         </div>
@@ -482,7 +487,7 @@ export default function FlightOrder() {
 
                 <div className="my-4">
                   <h2 className="text-lg text-textColor font-semibold my-2 ml-1">
-                    Thông tin hành khách
+                    {t("flight.spanFlight1")}
                   </h2>
 
                   {data?.data.flightOffers[0].travelerPricings.find(
@@ -490,8 +495,8 @@ export default function FlightOrder() {
                   ) && (
                     <div>
                       <div className="mt-2 bg-white p-4 shadow-md rounded-lg my-2">
-                        <strong>Xin hãy cẩn thận:</strong> Thông tin hành khách phải trùng khớp với
-                        hộ chiếu hoặc giấy tờ tùy thân có ảnh của quý khách
+                        <strong>{t("flight.spanFlight4")}:</strong>
+                        {t("flight.spanFlight5")}
                       </div>
 
                       <div className="mt-2">
@@ -566,23 +571,24 @@ export default function FlightOrder() {
                     <form onSubmit={onSubmit} className="bg-white shadow-md rounded-lg">
                       <div className="py-4 border-b border-b-gray-300">
                         <span className="px-6 text-base font-medium block">
-                          Thông tin liên hệ (nhận vé/phiếu thanh toán)
+                          {t("flight.spanFlight6")}
                         </span>
                         <span className="px-6 text-sm block text-gray-500">
-                          Vé Điện tử của quý khách sẽ được gửi đến đây
+                          {t("flight.spanFlight7")}
                         </span>
                       </div>
                       <div className="p-6 grid grid-cols-6 items-center gap-4 flex-wrap pb-0">
                         <div className="col-span-6 md:col-span-3">
                           <span className="mb-[2px] text-sm block">
-                            Tên Đệm & Tên (vd: Minh Thuan) <span className="text-red-500">*</span>
+                            {t("flight.name")} (vd: Minh Thuan){" "}
+                            <span className="text-red-500">*</span>
                           </span>
                           <Input
                             className="flex flex-col items-start"
                             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
                             type="text"
                             autoComplete="on"
-                            placeholder="Tên"
+                            placeholder={t("flight.name")}
                             name="userName2"
                             register={register}
                             messageError={errors.userName2?.message}
@@ -591,14 +597,14 @@ export default function FlightOrder() {
                         </div>
                         <div className="col-span-6 md:col-span-3">
                           <span className="mb-[2px] text-sm block">
-                            Họ (vd: Pham) <span className="text-red-500">*</span>
+                            {t("flight.surname")} (vd: Pham) <span className="text-red-500">*</span>
                           </span>
                           <Input
                             className="flex flex-col items-start"
                             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
                             type="text"
                             autoComplete="on"
-                            placeholder="Họ"
+                            placeholder={t("flight.surname")}
                             name="lastName2"
                             register={register}
                             messageError={errors.lastName2?.message}
@@ -607,7 +613,9 @@ export default function FlightOrder() {
                         </div>
                         <div className="col-span-6 md:col-span-3 flex">
                           <div className="w-[40%]">
-                            <span className="mb-[2px] text-sm block">Mã quốc gia</span>
+                            <span className="mb-[2px] text-sm block">
+                              {t("flight.countryCode")}
+                            </span>
                             <InputSearchV2
                               autoComplete="on"
                               placeholder="+84"
@@ -631,13 +639,15 @@ export default function FlightOrder() {
                             </InputSearchV2>
                           </div>
                           <div className="w-[60%]">
-                            <span className="mb-[2px] text-sm block">Số điện thoại</span>
+                            <span className="mb-[2px] text-sm block">
+                              {t("flight.numberPhone")}
+                            </span>
                             <Input
                               className="flex flex-col items-start"
                               classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded-tr rounded-br border text-base border-gray-400"
                               type="text"
                               autoComplete="on"
-                              placeholder="Số điện thoại"
+                              placeholder={t("flight.numberPhone")}
                               name="numberPhone"
                               register={register}
                               messageError={errors.numberPhone?.message}
@@ -665,7 +675,7 @@ export default function FlightOrder() {
                           type="submit"
                           disable={flightCreateOrderMutation.isPending}
                           classNameWrapper="flex justify-end relative"
-                          nameButton="Tiếp tục"
+                          nameButton={t("flight.continue")}
                           className="py-3 bg-blueColor px-12 text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200 "
                           classNameLoading="absolute top-2 right-[14%]"
                         />
@@ -680,7 +690,9 @@ export default function FlightOrder() {
 
                 <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
                   <div className="overflow-y-auto h-[200px]">
-                    <h2 className="text-base text-textColor font-semibold">Điều kiện đặt chỗ</h2>
+                    <h2 className="text-base text-textColor font-semibold">
+                      {t("flight.price.bookingCondition")}
+                    </h2>
                     <div>
                       <div className="mt-3 flex items-center gap-2">
                         <img src={icon2} alt="icon" className="w-5 h-5" />
@@ -692,14 +704,13 @@ export default function FlightOrder() {
                               data?.data.flightOffers[0].itineraries[0].segments.length - 1
                             ].arrival.iataCode
                           }
-                          : Yêu cầu Visa quá cảnh
+                          : {t("flight.price.bookingCondition2")}
                         </h3>
                       </div>
                       <div className="flex items-center gap-2 mt-2 ml-2">
                         <div className="h-1 w-1 rounded-full bg-textColor"></div>
                         <span className="text-sm text-gray-600 max-w-[350px]">
-                          Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế hoạch
-                          cho chuyến đi của mình.
+                          {t("flight.price.bookingCondition3")}
                         </span>
                       </div>
                     </div>
@@ -722,14 +733,13 @@ export default function FlightOrder() {
                                 data.data.flightOffers[0].itineraries[0].segments.length - 1
                               ].arrival.iataCode
                             }
-                            : Yêu cầu Visa quá cảnh
+                            : {t("flight.price.bookingCondition2")}
                           </h3>
                         </div>
                         <div className="flex items-center gap-2 mt-2 ml-2">
                           <div className="h-1 w-1 rounded-full bg-textColor"></div>
                           <span className="text-sm text-gray-600 max-w-[350px]">
-                            Vui lòng kiểm tra các yêu cầu về Quá cảnh/Visa trước khi bạn lên kế
-                            hoạch cho chuyến đi của mình.
+                            {t("flight.price.bookingCondition3")}
                           </span>
                         </div>
                       </div>
@@ -739,72 +749,13 @@ export default function FlightOrder() {
                       <div className="flex items-center gap-2">
                         <img src={icon2} alt="icon" className="w-5 h-5" />
                         <h3 className="text-base text-textColor font-semibold">
-                          Chính sách vắng mặt
+                          {t("flight.price.bookingCondition4")}
                         </h3>
                       </div>
                       <div className="flex items-center gap-2 ml-2">
                         <div className="h-1 w-1 rounded-full bg-textColor"></div>
                         <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Nếu hành khách không bắt đầu hành trình tiếp theo, toàn bộ mã đặt chỗ
-                          (PNR) sẽ bị hủy tự động bởi hãng hàng không. Booking. không thể kiểm soát
-                          hoặc cung cấp đặt chỗ thay thế trong trường hợp này. Hình phạt hủy chuyến
-                          sẽ áp dụng theo quy định của hãng hàng không.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-3">
-                      <div className="mt-2 flex items-center gap-2">
-                        <img src={icon2} alt="icon" className="w-5 h-5" />
-                        <h3 className="text-base text-textColor font-semibold">Vui lòng ghi chú</h3>
-                      </div>
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Hành khách đi bằng visa du lịch/thăm thân cần vé khứ hồi đã xác nhận.
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Mang theo bằng chứng chỗ ở và đủ tiền chi trả ở nước đến.
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Tuân thủ quy định kích thước hành lý của hãng hàng không, nếu không sẽ
-                          phải trả thêm phí hoặc bị từ chối lên máy bay.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-3">
-                      <div className="mt-2 flex items-center gap-2">
-                        <img src={icon2} alt="icon" className="w-5 h-5" />
-                        <h3 className="text-base text-textColor font-semibold">Yêu cầu Visa</h3>
-                      </div>
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Hộ chiếu còn hạn ít nhất 6 tháng từ ngày khởi hành.
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Xuất trình bản sao cứng của visa nước ngoài tại quầy nhập cảnh.
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 ml-2">
-                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
-                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Booking. không chịu trách nhiệm về thông tin visa. Kiểm tra chi tiết trước
-                          khi đặt vé.
+                          {t("flight.price.bookingCondition5")}
                         </span>
                       </div>
                     </div>
@@ -813,14 +764,71 @@ export default function FlightOrder() {
                       <div className="mt-2 flex items-center gap-2">
                         <img src={icon2} alt="icon" className="w-5 h-5" />
                         <h3 className="text-base text-textColor font-semibold">
-                          Lưu ý về nguyên tắc
+                          {t("flight.price.bookingCondition6")}
                         </h3>
                       </div>
                       <div className="flex items-center gap-2 ml-2">
                         <div className="h-1 w-1 rounded-full bg-textColor"></div>
                         <span className="text-sm text-gray-600 w-full  max-w-[900px]">
-                          Du khách tự chịu trách nhiệm đảm bảo đủ điều kiện nhập cảnh/quá cảnh. Kiểm
-                          tra quy định du lịch trước khi đặt vé và bắt đầu hành trình.
+                          {t("flight.price.bookingCondition7")}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition8")}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition9")}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          {t("flight.price.bookingCondition10")}a
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition11")}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition12")}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition13")}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="mt-2 flex items-center gap-2">
+                        <img src={icon2} alt="icon" className="w-5 h-5" />
+                        <h3 className="text-base text-textColor font-semibold">
+                          {t("flight.price.bookingCondition14")}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
+                        <div className="h-1 w-1 rounded-full bg-textColor"></div>
+                        <span className="text-sm text-gray-600 w-full  max-w-[900px]">
+                          {t("flight.price.bookingCondition15")}
                         </span>
                       </div>
                     </div>

@@ -1,0 +1,25 @@
+{
+  "cart": {
+    "cart": "Giỏ hàng",
+    "cartNull": "Giỏ hàng của quý khách chẳng có gì bên trong",
+    "cartDesc": "Hãy mua vé chuyến bay cho chuyến đi tiếp theo",
+    "cartSearch": "Tìm kiếm chuyến bay",
+
+    "cartTraveler": "Giỏ hàng của Quý khách",
+    "typeFlight": "Chuyến bay",
+    "delete": "Xóa",
+    "popUpTitle": "Quý khách có chắc chắn là muốn loại bỏ cái này khỏi giỏ hàng không?",
+    "popupCancel": "Không, quay lại",
+    "popupAgree": "Có, loại bỏ nó",
+
+    "nonStop": "Bay trực tiếp",
+    "hours": "giờ",
+    "minutes": "phút",
+
+    "fee": "Bao gồm thuế và phí",
+    "traveler": "Hành khách",
+    "price": "Tổng giá",
+    "flight": "1 món hàng, bao gồm thuế và phí",
+    "continue": "Tiếp tục"
+  }
+}

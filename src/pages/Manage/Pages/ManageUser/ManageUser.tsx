@@ -4,6 +4,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import Button from "src/components/Button"
 import Input from "src/components/Input"
@@ -15,6 +16,8 @@ const schemaForm = schema.pick(["userName", "email", "password", "confirmPasswor
 type FormData = Pick<schemaType, "userName" | "email" | "password" | "confirmPassword">
 
 export default function ManageUser() {
+  const { t } = useTranslation("manage")
+
   const {
     formState: { errors },
     handleSubmit,
@@ -77,23 +80,22 @@ export default function ManageUser() {
   return (
     <div>
       <Helmet>
-        <title>Tài khoản của tôi</title>
-        <meta name="description" content="Tài khoản của tôi - Booking." />
+        <title>{t("manage.manageTicket")}</title>
+        <meta name="description" content={`${t("manage.manageTicket")} - Booking.`} />
       </Helmet>
 
       <div>
-        <h1 className="text-xl text-textColor font-medium">Tài khoản của tôi</h1>
-        <h2 className="mt-4 text-lg text-textColor font-normal">Thông tin tài khoản</h2>
+        <h1 className="text-xl text-textColor font-medium">{t("manage.myAccount")}</h1>
 
         <form onSubmit={onSubmit} className="mt-5" noValidate>
           <Input
             className="mt-2"
             classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
-            nameInput="Tên đăng nhập"
+            nameInput={t("manage.userName")}
             type="text"
             name="userName" // name phải khớp trong schema
             autoComplete="on"
-            placeholder="Nhập tên"
+            placeholder={t("manage.inputUsername")}
             messageError={errors.userName?.message}
             register={register}
           />
@@ -104,14 +106,14 @@ export default function ManageUser() {
             type="email"
             name="email"
             autoComplete="on"
-            placeholder="Nhập email"
+            placeholder={t("authKey.inputEmail")}
             messageError={errors.email?.message}
             register={register}
           />
           <Input
             className="mt-1 relative"
             classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
-            nameInput="Mật khẩu"
+            nameInput={t("manage.password")}
             type="password"
             name="password"
             autoComplete="on"
@@ -122,7 +124,7 @@ export default function ManageUser() {
           <Input
             className="mt-1 relative"
             classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
-            nameInput="Xác nhận mật khẩu"
+            nameInput={t("manage.confirmPassword")}
             type="password"
             name="confirmPassword"
             autoComplete="on"
@@ -132,7 +134,7 @@ export default function ManageUser() {
           />
           <Button
             type="submit"
-            nameButton="Cập nhật"
+            nameButton={t("manage.update")}
             disable={loading}
             loading={loading}
             className="mt-2 py-3 bg-blueColor w-[200px] block ml-auto text-whiteColor text-lg rounded-sm hover:bg-blueColor/80 duration-200"

@@ -38,6 +38,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "src/
 import useFormHandler from "src/hooks/useFormHandler"
 import { FlightContext } from "src/context/useContextFlight"
 import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
+import { useTranslation } from "react-i18next"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -68,6 +69,7 @@ export type FormData = Pick<
 // flow: Tìm chuyến bay ở Flight -> navigate tới FlightSearch (render list chuyến bay) -> chọn chuyến bay thích hợp (item of list chuyến bay) -> navigate tới FlightOrder (điền thông tin) -> navigate tới FlightPayment (thanh toán với vnPay) -> Payment
 
 export default function FlightSearch() {
+  const { t } = useTranslation("flight")
   // state management
   const {
     searchText,
@@ -256,8 +258,8 @@ export default function FlightSearch() {
   return (
     <div>
       <Helmet>
-        <title>Tìm kiếm chuyến bay</title>
-        <meta name="description" content="Tìm kiếm chuyến bay - Booking." />
+        <title>{t("flight.searchFlight")}</title>
+        <meta name="description" content={`${t("flight.searchFlight")} - Booking.`} />
       </Helmet>
 
       <div
@@ -333,7 +335,7 @@ export default function FlightSearch() {
                     iconChild={
                       <img src={iconFlight} alt="icon flight" className="w-10 h-10 flex-shrink-0" />
                     }
-                    placeholder="Bay từ"
+                    placeholder={t("flight.searchTextTitle")}
                     classNameList={`z-50 absolute top-16 left-0 w-full md:w-[400px] ${showListAirport ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-auto rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                     classNameBlock="py-2 px-2 rounded-md flex items-center bg-gray-300 text-textColor"
                     classNameError="py-2 px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
@@ -346,7 +348,7 @@ export default function FlightSearch() {
                     register={register}
                     name="originLocationCode"
                     error={errors.originLocationCode?.message}
-                    desc="Từ"
+                    desc={t("flight.searchTextDesc")}
                     classNameDesc="pl-2 text-textColor"
                   >
                     <AirportCodeList
@@ -378,7 +380,7 @@ export default function FlightSearch() {
                         />
                       </svg>
                     }
-                    placeholder="Bay đến"
+                    placeholder={t("flight.searchTextTitle2")}
                     classNameList={`z-50 absolute top-16 left-0 w-full md:w-[400px] ${showListAirport2 ? "h-[300px]" : "h-0"} bg-whiteColor overflow-y-auto overflow-x-auto rounded-sm shadow-sm transition-all duration-200 ease-linear`}
                     classNameBlock="py-2 px-2 rounded-md flex items-center bg-gray-300 text-textColor"
                     classNameError="py-2 px-3 border border-red-500 bg-red-100 rounded-md flex items-center"
@@ -391,7 +393,7 @@ export default function FlightSearch() {
                     register={register}
                     name="destinationLocationCode"
                     error={errors.destinationLocationCode?.message}
-                    desc="Đến"
+                    desc={t("flight.searchTextDesc2")}
                     classNameDesc="pl-2 text-textColor"
                   >
                     <AirportCodeList
@@ -427,37 +429,35 @@ export default function FlightSearch() {
               </div>
 
               <div className="col-span-6 md:col-span-2 lg:col-span-3">
-                <div className="flex justify-between items-center gap-2">
-                  {/* Khứ hồi hoặc 1 chiều */}
-                  <div className="w-full flex items-center gap-2">
-                    {/* date ngày đi*/}
-                    <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
-                      <SelectDate
-                        text="Ngày đi"
-                        control={control}
-                        setDate={setDate}
-                        date={date}
-                        name="departureDate"
-                        errors={errors.departureDate?.message as string}
-                        convertToYYYYMMDD={convertToYYYYMMDD}
-                        className="py-[14px] bg-gray-300 rounded-md flex items-center w-full justify-center"
-                        classNameError="py-[14px] border border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
-                      />
-                    </div>
+                {/* Khứ hồi hoặc 1 chiều */}
+                <div className="w-full flex items-center gap-2">
+                  {/* date ngày đi*/}
+                  <div className={flightType === "roundTrip" ? "w-[50%]" : "w-[100%]"}>
+                    <SelectDate
+                      text={t("flight.dateTitle")}
+                      control={control}
+                      setDate={setDate}
+                      date={date}
+                      name="departureDate"
+                      errors={errors.departureDate?.message as string}
+                      convertToYYYYMMDD={convertToYYYYMMDD}
+                      className="py-[14px] bg-gray-300 rounded-md flex items-center w-full justify-center"
+                      classNameError="py-[14px] border border-red-500 bg-red-100 rounded-md flex items-center w-full justify-center"
+                    />
+                  </div>
 
-                    {/* date ngày về */}
-                    <div className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}>
-                      <SelectDate
-                        text="Ngày về"
-                        control={control}
-                        setDate={setDate2}
-                        date={date2}
-                        name="returnDate"
-                        errors={errors.returnDate?.message as string}
-                        convertToYYYYMMDD={convertToYYYYMMDD}
-                        className="py-[14px] bg-gray-300 rounded-md flex items-center w-full justify-center"
-                      />
-                    </div>
+                  {/* date ngày về */}
+                  <div className={flightType === "roundTrip" ? "w-[50%]" : "hidden w-[0%]"}>
+                    <SelectDate
+                      text={t("flight.dateTitle2")}
+                      control={control}
+                      setDate={setDate2}
+                      date={date2}
+                      name="returnDate"
+                      errors={errors.returnDate?.message as string}
+                      convertToYYYYMMDD={convertToYYYYMMDD}
+                      className="py-[14px] bg-gray-300 rounded-md flex items-center w-full justify-center"
+                    />
                   </div>
                 </div>
               </div>
@@ -495,7 +495,9 @@ export default function FlightSearch() {
                               readOnly
                             />
 
-                            <span className="text-base text-textColor font-semibold">Khách</span>
+                            <span className="text-base text-textColor font-semibold">
+                              {t("flight.traveler")}
+                            </span>
 
                             {showPassenger === 0 && (
                               <svg
@@ -573,7 +575,7 @@ export default function FlightSearch() {
                         >
                           {travelClass
                             ? travelClassList.find((item) => item.value === travelClass)?.value
-                            : "Chọn hạng vé"}
+                            : `${t("flight.travelClass")}`}
                           {errors.travelClass?.message && (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -630,8 +632,8 @@ export default function FlightSearch() {
                   disable={flightOffersSearchQuery.isPending}
                   classNameWrapper="w-full flex-1 relative"
                   type="submit"
-                  nameButton="Tìm kiếm"
-                  className="px-8 py-[20px] lg:py-[8px] bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
+                  nameButton={t("flight.search")}
+                  className="py-[20px] lg:py-[8px] lg:min-h-[60px] text-center bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 font-semibold border-blueColor"
                 />
               </div>
             </form>
@@ -690,11 +692,11 @@ export default function FlightSearch() {
                         </Sheet>
 
                         <h1 className="text-lg lg:text-2xl text-textColor font-semibold ">
-                          Chuyến bay từ
+                          {t("flight.flightFrom")}
                           {"  "}
                           {getCountry(airportCodes, searchText)}
                           {" - "}
-                          {searchText} đến
+                          {searchText} {t("flight.flightTo")}
                           {"  "}
                           {getCountry(airportCodes, searchText2)}
                           {" - "}

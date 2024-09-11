@@ -25,8 +25,12 @@ import {
 } from "src/components/ui/alert-dialog"
 import { setCartToLS } from "src/utils/auth"
 import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
+import { useTranslation } from "react-i18next"
 
 export default function Cart() {
+  // xử lý ngôn ngữ
+  const { t } = useTranslation("cart")
+
   const navigate = useNavigate()
   const { listCart, setListCart } = useContext(AppContext)
   const [checked, setChecked] = useState<string>("")
@@ -69,8 +73,8 @@ export default function Cart() {
   return (
     <div>
       <Helmet>
-        <title>Giò hàng</title>
-        <meta name="description" content="Giỏ hàng chuyến bay - Booking." />
+        <title>{t("cart.cart")}</title>
+        <meta name="description" content={`${t("cart.cart")} - Booking.`} />
       </Helmet>
 
       <div className="container">
@@ -84,16 +88,14 @@ export default function Cart() {
                 alt="baggage"
               />
               <h1 className="mt-8 text-center text-textColor font-semibold text-lg lg:text-2xl">
-                Giỏ hàng của quý khách chẳng có gì bên trong
+                {t("cart.cartNull")}
               </h1>
-              <h2 className="text-base mt-4 text-textColor text-center">
-                Hãy mua vé chuyến bay cho chuyến đi tiếp theo
-              </h2>
+              <h2 className="text-base mt-4 text-textColor text-center">{t("cart.cartDesc")}</h2>
               <Link
                 to={path.flight}
                 className="w-full bg-blueColor p-4 mt-4 text-center text-whiteColor shadow-md rounded-full hover:opacity-75 duration-200"
               >
-                Tìm kiếm chuyến bay
+                {t("cart.cartSearch")}
               </Link>
             </div>
           </div>
@@ -138,7 +140,7 @@ export default function Cart() {
                   />
                 </svg>
                 <h1 className="text-xl text-textColor font-medium">
-                  Giỏ hàng của Quý khách ({listCart.length})
+                  {t("cart.cartTraveler")} ({listCart.length})
                 </h1>
               </div>
 
@@ -160,7 +162,7 @@ export default function Cart() {
                       <div className="flex items-center justify-between">
                         <span className="p-2 bg-[#edf0f9] text-xs rounded-md">
                           {cartItem.data.flightOffers[0].type === "flight-offer"
-                            ? "Chuyến bay"
+                            ? `${t("cart.typeFlight")}`
                             : "Khác"}
                         </span>
 
@@ -181,24 +183,24 @@ export default function Cart() {
                                   d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                                 />
                               </svg>
-                              Xóa
+                              {t("cart.delete")}
                             </button>
                           </AlertDialogTrigger>
                           <AlertDialogContent className="p-4 w-[400px] max-h-[150px]">
                             <AlertDialogHeader>
                               <AlertDialogTitle className="text-base text-center font-medium">
-                                Quý khách có chắc chắn là muốn loại bỏ cái này khỏi giỏ hàng không??
+                                {t("cart.popUpTitle")}
                               </AlertDialogTitle>
                             </AlertDialogHeader>
                             <AlertDialogFooter className="w-full">
                               <AlertDialogCancel className="w-[50%] border-blueColor border">
-                                Không, quay lại
+                                {t("cart.popupCancel")}
                               </AlertDialogCancel>
                               <AlertDialogAction
                                 className="w-[50%] bg-blueColor"
                                 onClick={() => handleDeleteItemCart(index)}
                               >
-                                Có, loại bỏ nó
+                                {t("cart.popupAgree")}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -303,7 +305,7 @@ export default function Cart() {
                                 item.segments.length === 1 ? (
                                   <div className="flex items-center gap-2 text-center text-gray-500 text-sm">
                                     <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                                    <span>Bay trực tiếp</span>
+                                    <span>{t("cart.nonStop")}</span>
                                   </div>
                                 ) : (
                                   ""
@@ -321,14 +323,15 @@ export default function Cart() {
                               id={String(index)}
                             />
                             <label htmlFor={String(index)}>
-                              {cartItem.data.flightOffers[0].travelerPricings.length} x Hành khách
+                              {cartItem.data.flightOffers[0].travelerPricings.length} x{" "}
+                              {t("cart.traveler")}
                             </label>
                           </div>
                           <div className="text-right">
                             <div className="text-base lg:text-lg font-semibold">
                               {formatCurrency(Number(cartItem.data.flightOffers[0].price.total))}đ
                             </div>
-                            <span className="text-sm text-gray-500">Bao gồm thuế và phí</span>
+                            <span className="text-sm text-gray-500">{t("cart.fee")}</span>
                           </div>
                         </div>
                       </div>
@@ -343,8 +346,8 @@ export default function Cart() {
                 <div className="bg-[#fff] border border-gray-300 p-4 shadow-md rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-lg">Tổng giá</div>
-                      <div className="text-sm text-gray-500">1 món hàng, bao gồm thuế và phí</div>
+                      <div className="text-lg">{t("cart.price")}</div>
+                      <div className="text-sm text-gray-500">{t("cart.flight")}</div>
                     </div>
                     <div className="text-base lg:text-xl font-medium text-red-500">
                       {flightPrice
@@ -355,7 +358,7 @@ export default function Cart() {
                   </div>
                   <Button
                     onClick={handleNavigatePage}
-                    nameButton="Tiếp tục"
+                    nameButton={t("cart.continue")}
                     className="rounded-full mt-4 py-2 bg-blueColor w-full text-whiteColor text-base hover:bg-blueColor/80 duration-200"
                   />
                 </div>

@@ -1,0 +1,15 @@
+{
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "loginGoogle": "Login with Google",
+    "inputUsername": "Enter name",
+    "inputEmail": "Enter email",
+    "inputPassword": "Enter password",
+    "noAccount": "Don't have an account yet?",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "userName": "User name",
+    "haveAccount": "Do you already have an account?"
+  }
+}

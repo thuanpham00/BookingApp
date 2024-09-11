@@ -1,0 +1,25 @@
+{
+  "cart": {
+    "cart": "Cart",
+    "cartNull": "Your shopping cart is empty",
+    "cartDesc": "Please purchase a flight for your next trip",
+    "cartSearch": "Search for flights",
+
+    "cartTraveler": "Your Cart",
+    "typeFlight": "Flight",
+    "delete": "Delete",
+    "popUpTitle": "Are you sure you want to remove this from your cart?",
+    "popupCancel": "No, go back",
+    "popupAgree": "Yes, remove it",
+
+    "nonStop": "non-stop",
+    "hours": "hours",
+    "minutes": "minutes",
+
+    "fee": "Includes taxes and fees",
+    "traveler": "Passenger",
+    "price": "Total price",
+    "flight": "1 item, including taxes and fees",
+    "continue": "Continue"
+  }
+}

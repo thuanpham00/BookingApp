@@ -23,6 +23,7 @@ import bg7 from "../../img/Hotel/imgHotelRandom/hotel6.webp"
 import bg8 from "../../img/Hotel/imgHotelRandom/hotel4.webp"
 import bg9 from "../../img/Flight/thumb-website-Vi-VNPAY-1280x720.webp"
 import bg10 from "../../img/Flight/delay-chuyen-bay.jpg"
+import { useTranslation } from "react-i18next"
 
 export const backgroundList = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10]
 
@@ -31,6 +32,8 @@ const schemaForm = schema.pick(["email", "password"])
 type FormData = Pick<schemaType, "email" | "password">
 
 export default function Login() {
+  const { t } = useTranslation("auth")
+
   const {
     formState: { errors },
     handleSubmit,
@@ -85,8 +88,8 @@ export default function Login() {
   return (
     <div>
       <Helmet>
-        <title>Đăng nhập</title>
-        <meta name="description" content="Đăng nhập - Amadeus Booking" />
+        <title>{t("auth.login")}</title>
+        <meta name="description" content={`${"auth.login"} - Amadeus Booking`} />
       </Helmet>
 
       <div className="w-full custom-calc-height-2 relative">
@@ -99,7 +102,9 @@ export default function Login() {
             />
             <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] custom-calc-height bg-white relative">
               <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="text-textColor text-2xl font-semibold text-center">Đăng nhập</div>
+                <div className="text-textColor text-2xl font-semibold text-center">
+                  {t("auth.login")}
+                </div>
                 <button
                   onClick={loginGoogle}
                   className="mt-4 w-[90%] mx-auto flex items-center justify-center gap-2 rounded-full border border-[#4e6c8d] py-2"
@@ -112,7 +117,9 @@ export default function Login() {
                       backgroundRepeat: "no-repeat"
                     }}
                   ></div>
-                  <span className="text-base text-textColor font-medium">Đăng nhập với Google</span>
+                  <span className="text-base text-textColor font-medium">
+                    {t("auth.loginGoogle")}
+                  </span>
                 </button>
 
                 <form onSubmit={onSubmit} className="mt-5" noValidate>
@@ -122,23 +129,23 @@ export default function Login() {
                     type="email"
                     name="email"
                     autoComplete="on"
-                    placeholder="Nhập email"
+                    placeholder={t("auth.inputEmail")}
                     messageError={errors.email?.message}
                     register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
                   />
                   <Input
                     className="mt-1 relative"
-                    nameInput="Mật khẩu"
+                    nameInput={t("auth.password")}
                     type="password"
                     name="password"
                     autoComplete="on"
-                    placeholder="Nhập mật khẩu"
+                    placeholder={t("auth.inputPassword")}
                     messageError={errors.password?.message}
                     register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
                   />
                   <Button
                     type="submit"
-                    nameButton="Đăng nhập"
+                    nameButton={t("auth.login")}
                     disable={loading}
                     loading={loading}
                   />
@@ -146,12 +153,12 @@ export default function Login() {
                 <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
                 <div className="flex justify-center items-center gap-1">
-                  <span className="text-base">Bạn chưa có tài khoản?</span>
+                  <span className="text-base">{t("auth.noAccount")}</span>
                   <Link
                     to={path.register}
                     className=" text-textColor font-semibold text-base underline"
                   >
-                    Đăng ký
+                    {t("auth.register")}
                   </Link>
                 </div>
               </div>

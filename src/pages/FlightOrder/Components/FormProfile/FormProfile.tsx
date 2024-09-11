@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 import { yupResolver } from "@hookform/resolvers/yup"
 import schema, { schemaType } from "src/utils/rules"
 import useFormHandler from "src/hooks/useFormHandler"
+import { useTranslation } from "react-i18next"
 
 const FetchDataListNational = () => Promise.resolve(listNationality)
 
@@ -35,6 +36,7 @@ const schemaFormData = schema.pick([
 ])
 
 export default function FormProfile({ addOnTraveller, typeTraveler, index }: Props) {
+  const { t } = useTranslation("flight")
   const [nationalList, setNationalList] = useState<TypeCountryListCodeNumber>([])
   const [showListNationality, setShowListNationality] = useState<boolean>(false)
   const [nationalProfile, setNationalProfile] = useState("")
@@ -121,7 +123,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
     <form onSubmit={handleSubmitForm} className="w-full">
       <div className="flex items-center justify-between">
         <div className="text-base text-textColor font-medium">
-          Hành khách {index + 1}: {typeTraveler}
+          {t("flight.travelerForm")} {index + 1}: {typeTraveler}
         </div>
         <div className="flex items-center justify-end gap-2">
           <button
@@ -129,24 +131,24 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
             onClick={handleResetForm}
             type="button"
           >
-            Xóa
+            {t("flight.delete")}
           </button>
           <Button
-            nameButton="Lưu"
+            nameButton={t("flight.save")}
             className=" py-2 px-4 bg-blueColor  text-whiteColor text-sm rounded-sm hover:bg-blueColor/80 duration-200"
           />
         </div>
       </div>
       <div className="mt-2 grid grid-cols-6 items-center gap-4 flex-wrap">
         <div className="col-span-6 md:col-span-6">
-          <span className="mb-[2px] text-sm block">Giới tính</span>
+          <span className="mb-[2px] text-sm block">{t("flight.gender")}</span>
           <div className="flex items-start">
             <div
               className={`border border-gray-400 py-2 px-6 rounded-tl rounded-bl ${watch("gender") === "MALE" ? "bg-blue-100 text-blue-600" : "bg-white"}`}
             >
               <input type="checkbox" {...register("gender")} hidden value="MALE" />
               <button className="cursor-pointer" onClick={() => setValue("gender", "MALE")}>
-                Nam
+                {t("flight.male")}
               </button>
             </div>
             <div
@@ -154,19 +156,21 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
             >
               <input type="checkbox" {...register("gender")} hidden value="FEMALE" />
               <button className="cursor-pointer" onClick={() => setValue("gender", "FEMALE")}>
-                Nữ
+                {t("flight.female")}
               </button>
             </div>
           </div>
         </div>
         <div className="col-span-6 md:col-span-3">
-          <span className="mb-[2px] text-sm block truncate">Tên đệm và Tên (vd: MINH THUAN)</span>
+          <span className="mb-[2px] text-sm block truncate">
+            {t("flight.name")} (vd: MINH THUAN)
+          </span>
           <Input
             className="flex flex-col items-start"
             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
             type="text"
             autoComplete="on"
-            placeholder="Tên & tên đệm"
+            placeholder={t("flight.name")}
             name="userName"
             register={register}
             messageError={errors.userName?.message}
@@ -174,13 +178,13 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           />
         </div>
         <div className="col-span-6 md:col-span-3">
-          <span className="mb-[2px] text-sm block">Họ (vd: PHAM)</span>
+          <span className="mb-[2px] text-sm block">{t("flight.surname")} (vd: PHAM)</span>
           <Input
             className="flex flex-col items-start"
             classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
             type="text"
             autoComplete="on"
-            placeholder="Họ"
+            placeholder={t("flight.surname")}
             name="lastName"
             register={register}
             messageError={errors.lastName?.message}
@@ -188,7 +192,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           />
         </div>
         <div className="col-span-6 md:col-span-3">
-          <span className="mb-[2px] text-sm block">Ngày sinh (YYYY/MM/dd)</span>
+          <span className="mb-[2px] text-sm block">{t("flight.birthDay")} (YYYY/MM/dd)</span>
           <div className="flex items-center flex-wrap">
             <Input
               className="flex-1 flex flex-col items-start"
@@ -226,10 +230,10 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           </div>
         </div>
         <div className="col-span-6 md:col-span-3">
-          <span className="mb-[2px] text-sm block">Quốc tịch</span>
+          <span className="mb-[2px] text-sm block">{t("flight.nationality")}</span>
           <InputSearchV2
             autoComplete="on"
-            placeholder="Quốc tịch"
+            placeholder={t("flight.nationality")}
             classNameList="z-20 absolute top-10 left-0 h-[200px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
             classNameBlock="relative flex items-center"
             classNameInput="w-full px-2 py-[5px] outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded border border-gray-400"
