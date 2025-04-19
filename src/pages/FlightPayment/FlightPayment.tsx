@@ -235,7 +235,7 @@ export default function FlightPayment() {
                   <Button
                     onClick={handleSubmitPayment}
                     nameButton={t("flight.paymentButton")}
-                    className="px-4 py-4 rounded-md bg-blueColor w-full text-whiteColor text-base hover:bg-blueColor/80 duration-200 flex items-center justify-center"
+                    className="px-3 py-2 rounded-md bg-blueColor w-full text-whiteColor text-base hover:bg-blueColor/80 duration-200 flex items-center justify-center"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

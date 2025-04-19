@@ -137,7 +137,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           </button>
           <Button
             nameButton={t("flight.save")}
-            className=" py-2 px-4 bg-blueColor  text-whiteColor text-sm rounded-sm hover:bg-blueColor/80 duration-200"
+            className=" py-2 px-4 bg-blueColor text-whiteColor text-sm rounded-md hover:bg-blueColor/80 duration-200"
           />
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           </span>
           <Input
             className="flex flex-col items-start"
-            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
+            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-[#dadada]"
             type="text"
             autoComplete="on"
             placeholder={t("flight.name")}
@@ -183,7 +183,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           <span className="mb-[2px] text-sm block">{t("flight.surname")} (vd: PHAM)</span>
           <Input
             className="flex flex-col items-start"
-            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400"
+            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-[#dadada]"
             type="text"
             autoComplete="on"
             placeholder={t("flight.surname")}
@@ -198,7 +198,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           <div className="flex items-center flex-wrap">
             <Input
               className="flex-1 flex flex-col items-start"
-              classNameInput="rounded-tl rounded-bl w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              classNameInput="rounded-tl rounded-bl w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-[#dadada]"
               type="text"
               autoComplete="on"
               placeholder="1990"
@@ -209,7 +209,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
             />
             <Input
               className="flex-1 flex flex-col items-start"
-              classNameInput="w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              classNameInput="w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-[#dadada]"
               type="text"
               autoComplete="on"
               placeholder="01"
@@ -220,7 +220,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
             />
             <Input
               className="flex-1 flex flex-col items-start"
-              classNameInput="rounded-tr rounded-br w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-gray-400"
+              classNameInput="rounded-tr rounded-br w-full p-2 outline-none bg-white font-normal focus:border-blueColor border border-[#dadada]"
               type="text"
               autoComplete="on"
               placeholder="01"
@@ -238,7 +238,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
             placeholder={t("flight.nationality")}
             classNameList="z-20 absolute top-10 left-0 h-[200px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
             classNameBlock="relative flex items-center"
-            classNameInput="w-full px-2 py-[5px] outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded border border-gray-400"
+            classNameInput="w-full px-2 py-[5px] outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded border border-[#dadada]"
             ref={inputRef2}
             value={nationalProfile}
             showList={showListNationality}

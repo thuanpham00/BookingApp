@@ -589,7 +589,7 @@ export default function FlightOrder() {
                           </span>
                           <Input
                             className="flex flex-col items-start"
-                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-[#dadada] text-base"
                             type="text"
                             autoComplete="on"
                             placeholder={t("flight.name")}
@@ -605,7 +605,7 @@ export default function FlightOrder() {
                           </span>
                           <Input
                             className="flex flex-col items-start"
-                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-[#dadada] text-base"
                             type="text"
                             autoComplete="on"
                             placeholder={t("flight.surname")}
@@ -622,10 +622,10 @@ export default function FlightOrder() {
                             </span>
                             <InputSearchV2
                               autoComplete="on"
-                              placeholder="+84"
+                              placeholder="84"
                               classNameList="z-20 absolute top-10 left-0 h-[200px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
                               classNameBlock="relative flex items-center"
-                              classNameInput="w-full p-2 outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded-tl rounded-bl border border-gray-400"
+                              classNameInput="w-full p-2 outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded-tl rounded-bl border border-[#dadada]"
                               ref={inputRef}
                               value={codeNumber}
                               showList={showListCodeNumber}
@@ -648,7 +648,7 @@ export default function FlightOrder() {
                             </span>
                             <Input
                               className="flex flex-col items-start"
-                              classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded-tr rounded-br border text-base border-gray-400"
+                              classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded-tr rounded-br border text-base border-[#dadada]"
                               type="text"
                               autoComplete="on"
                               placeholder={t("flight.numberPhone")}
@@ -663,7 +663,7 @@ export default function FlightOrder() {
                           <span className="mb-[2px] text-sm block">Email</span>
                           <Input
                             className="flex flex-col items-start"
-                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-gray-400 text-base"
+                            classNameInput="w-full p-2 outline-none bg-transparent border font-normal focus:border-blueColor bg-white rounded border border-[#dadada] text-base"
                             type="text"
                             autoComplete="on"
                             placeholder="Email"
@@ -680,7 +680,7 @@ export default function FlightOrder() {
                           disable={flightCreateOrderMutation.isPending}
                           classNameWrapper="flex justify-end relative"
                           nameButton={t("flight.continue")}
-                          className="py-3 bg-blueColor px-12 text-whiteColor text-base rounded-sm hover:bg-blueColor/80 duration-200 "
+                          className="py-2 bg-blueColor px-6 text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200 "
                           classNameLoading="absolute top-2 right-[14%]"
                         />
                       </div>

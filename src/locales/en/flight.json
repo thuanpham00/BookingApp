@@ -1,7 +1,7 @@
 {
   "flight": {
     "flight": "Flight",
-    "ticketPurchase": "Ticket Manager",
+    "ticketPurchase": "My Ticket",
     "myAccount": "My account",
     "logOut": "Logout",
     "logan": "From Southeast Asia To The World, At Your Fingertips.",
@@ -78,7 +78,7 @@
     "name": "Middle Name and First Name",
     "surname": "Surname",
     "birthDay": "Date of birth",
-    "countryCode": "country code",
+    "countryCode": "Country code",
     "numberPhone": "Number phone",
     "nationality": "Nationality",
     "spanFlight6": "Contact information (receive ticket/voucher)",
