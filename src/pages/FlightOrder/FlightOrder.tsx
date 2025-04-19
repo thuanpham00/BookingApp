@@ -124,6 +124,7 @@ export default function FlightOrder() {
     handleSubmit,
     register,
     setValue,
+    trigger,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schemaFormData)
@@ -133,6 +134,7 @@ export default function FlightOrder() {
     codeNumberList,
     codeNumber,
     setValue,
+    trigger,
     setCodeNumber,
     setShowListCodeNumber
   )

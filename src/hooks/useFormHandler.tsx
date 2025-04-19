@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo } from "react"
-import { UseFormSetValue } from "react-hook-form"
+import { UseFormSetValue, UseFormTrigger } from "react-hook-form"
 import { getCodeAirport } from "src/utils/utils"
 
 export type InputAirport =
@@ -14,6 +14,7 @@ export default function useFormHandler(
   list?: any,
   inputSearch?: string,
   setValue?: UseFormSetValue<any>,
+  trigger?: UseFormTrigger<any>,
   setInputSearch?: (value: React.SetStateAction<string>) => void,
   setShowList?: (value: React.SetStateAction<boolean>) => void
 ) {
@@ -24,6 +25,7 @@ export default function useFormHandler(
       inputName === "cityCode"
     ) {
       setValue && setValue(inputName, getCodeAirport(value) as string) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
+      trigger && trigger(inputName)
       if (setInputSearch && setShowList) {
         setInputSearch(getCodeAirport(value) as string) // nếu dùng mỗi thằng này thì nó ko dc quản lý bởi useForm // luôn ""
         setShowList(false)

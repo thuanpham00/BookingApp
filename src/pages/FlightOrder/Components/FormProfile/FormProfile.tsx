@@ -48,6 +48,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
     register,
     formState: { errors },
     reset,
+    trigger,
     watch // theo dõi giá trị của 1 trường input
   } = useForm<FormData>({
     resolver: yupResolver(schemaFormData),
@@ -82,6 +83,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
     nationalList,
     nationalProfile,
     setValue,
+    trigger,
     setNationalProfile,
     setShowListNationality
   )
@@ -114,7 +116,6 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
     console.log("Traveller:", infoTraveller)
     toast.success("Lưu thông tin hành khách thành công")
   })
-
 
   const handleResetForm = () => {
     reset()

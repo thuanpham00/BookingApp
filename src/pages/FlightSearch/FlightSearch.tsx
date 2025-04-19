@@ -113,6 +113,7 @@ export default function FlightSearch() {
     register,
     setValue,
     control,
+    trigger,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
@@ -157,21 +158,32 @@ export default function FlightSearch() {
     airportCodeList,
     searchText,
     setValue,
+    trigger,
     setSearchText,
     setShowListAirport
   )
 
   const { filterList: filterTypeAirportCodeList_2, handleItemClick: handleItemClick2 } =
-    useFormHandler(airportCodeList, searchText2, setValue, setSearchText2, setShowListAirport2)
+    useFormHandler(
+      airportCodeList,
+      searchText2,
+      setValue,
+      trigger,
+      setSearchText2,
+      setShowListAirport2
+    )
 
   const handleChangeQuantity = (nameQuantity: InputController) => (value: number) => {
     setValue(nameQuantity, value) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
     if (nameQuantity === "adults") {
       setNumberAdults(value)
+      trigger("adults")
     } else if (nameQuantity === "children") {
       setNumberChildren(value)
+      trigger("children")
     } else if (nameQuantity === "infants") {
       setNumberInfants(value)
+      trigger("infants")
     }
   }
 
@@ -651,13 +663,25 @@ export default function FlightSearch() {
                       <AsideFilterFlight queryConfig={queryConfig} />
 
                       <div className="my-6 w-full">
-                        <img src={banner} alt="banner" className="w-full h-full object-cover" />
+                        <img
+                          src={banner}
+                          alt="banner"
+                          className="w-full h-full rounded-md object-cover"
+                        />
                       </div>
                       <div className="my-6 w-full">
-                        <img src={banner2} alt="banner" className="w-full h-full object-cover" />
+                        <img
+                          src={banner2}
+                          alt="banner"
+                          className="w-full h-full rounded-md object-cover"
+                        />
                       </div>
                       <div className="my-6 w-full">
-                        <img src={banner3} alt="banner" className="w-full h-full object-cover" />
+                        <img
+                          src={banner3}
+                          alt="banner"
+                          className="w-full h-full rounded-md object-cover"
+                        />
                       </div>
                     </div>
 

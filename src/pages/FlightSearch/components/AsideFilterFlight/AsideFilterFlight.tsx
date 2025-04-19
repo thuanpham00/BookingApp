@@ -284,7 +284,11 @@ export default function AsideFilterFlight({ queryConfig }: Props) {
           </div>
         </div>
 
-        <Button nameButton={t("flight.apply")} onClick={handleMaxPrice} />
+        <Button
+          className="mt-2 py-3 bg-blueColor w-full text-whiteColor text-base rounded-md hover:bg-blueColor/80 duration-200"
+          nameButton={t("flight.apply")}
+          onClick={handleMaxPrice}
+        />
       </div>
     </div>
   )

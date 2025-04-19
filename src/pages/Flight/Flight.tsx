@@ -134,6 +134,7 @@ export default function Flight() {
     register,
     setValue,
     control,
+    trigger,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schemaFormData)
@@ -174,20 +175,31 @@ export default function Flight() {
     airportCodeList,
     searchText,
     setValue,
+    trigger,
     setSearchText,
     setShowListAirport
   )
 
   const { filterList: filterTypeAirportCodeList_2, handleItemClick: handleItemClick2 } =
-    useFormHandler(airportCodeList, searchText2, setValue, setSearchText2, setShowListAirport2)
+    useFormHandler(
+      airportCodeList,
+      searchText2,
+      setValue,
+      trigger,
+      setSearchText2,
+      setShowListAirport2
+    )
 
   const handleChangeQuantity = (nameQuantity: InputController) => (value: number) => {
     setValue(nameQuantity, value) // đảm bảo giá trị của input được quản lý bởi react-hook-form // // cập nhật giá trị của một trường dữ liệu
     if (nameQuantity === "adults") {
+      trigger("adults")
       setNumberAdults(value)
     } else if (nameQuantity === "children") {
+      trigger("children")
       setNumberChildren(value)
     } else if (nameQuantity === "infants") {
+      trigger("infants")
       setNumberInfants(value)
     }
   }
@@ -626,8 +638,8 @@ export default function Flight() {
                           showList={showListAirport}
                           handleChangeValue={(event) => setSearchText(event.target.value)} // state context (state global)
                           handleFocus={() => setShowListAirport(true)}
-                          register={register}
                           name="originLocationCode"
+                          register={register}
                           error={errors.originLocationCode?.message}
                           desc={t("flight.searchTextDesc")}
                         >
