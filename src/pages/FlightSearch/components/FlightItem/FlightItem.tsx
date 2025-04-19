@@ -56,6 +56,7 @@ function FlightItemInner({ item, list }: Props) {
 
   const handleDetailFlight = () => {
     setShowFlightDetail((prev) => !prev)
+    console.log(showFlightDetail)
   }
 
   const flightOffersPriceMutation = useMutation({
@@ -226,7 +227,7 @@ function FlightItemInner({ item, list }: Props) {
           <div className="flex items-center justify-between gap-2">
             <button
               onClick={handleDetailFlight}
-              className="text-blueColor text-sm hover:underline hover:text-blueColor/80 duration-200"
+              className="relative z-100 text-blueColor text-sm hover:underline hover:text-blueColor/80 duration-200"
             >
               {showFlightDetail ? `${t("flight.hidden")}` : `${t("flight.detail")}`}
             </button>

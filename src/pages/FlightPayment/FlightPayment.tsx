@@ -23,7 +23,7 @@ export default function FlightPayment() {
 
   const handleSubmitPayment = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/create_payment_url", {
+      const response = await axios.post("https://api-bookingapp.onrender.com/create_payment_url", {
         amount: data.data.flightOffers[0].price.total, // số tiền
         orderDescription: "Thanh toán đơn hàng", // mô tả đơn hàng
         orderType: "billpayment", // loại đơn hàng
