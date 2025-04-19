@@ -95,10 +95,17 @@ function FlightItemInner({ item, list }: Props) {
       setListCart((prev) => {
         const findItem = listCart.find(
           (item) =>
+            // So sánh thời gian khởi hành và đến
             item.data.flightOffers[0].itineraries[0].segments[0].departure.at ===
               flightPrice.data.flightOffers[0].itineraries[0].segments[0].departure.at &&
             item.data.flightOffers[0].itineraries[0].segments[0].arrival.at ===
-              flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at
+              flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at &&
+            // so sánh hãng bay
+            item.data.flightOffers[0].itineraries[0].segments[0].carrierCode ===
+              flightPrice.data.flightOffers[0].itineraries[0].segments[0].carrierCode &&
+            // So sánh giá mỗi hành khách
+            item.data.flightOffers[0].travelerPricings[0].price.total ===
+              flightPrice.data.flightOffers[0].travelerPricings[0].price.total
         ) // trả về true false
         if (findItem) {
           toast.error("Chuyến bay này đã có trong giỏ hàng", {

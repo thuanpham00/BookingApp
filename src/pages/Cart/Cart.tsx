@@ -168,13 +168,13 @@ export default function Cart() {
 
                         <AlertDialog>
                           <AlertDialogTrigger aria-label="buttonDelete">
-                            <button className="text-sm hover:underline duration-200 flex items-center justify-center gap-1 text-gray-500">
+                            <button className="text-sm hover:underline duration-200 flex items-center justify-center gap-1 text-red-500">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
-                                stroke="currentColor"
+                                stroke="red"
                                 className="h-4 w-4"
                               >
                                 <path
@@ -359,7 +359,7 @@ export default function Cart() {
                   <Button
                     onClick={handleNavigatePage}
                     nameButton={t("cart.continue")}
-                    className="rounded-full mt-4 py-2 bg-blueColor w-full text-whiteColor text-base hover:bg-blueColor/80 duration-200"
+                    className="rounded-lg mt-4 py-2 bg-blueColor w-full text-whiteColor text-base hover:bg-blueColor/80 duration-200"
                   />
                 </div>
               </div>

@@ -8,7 +8,7 @@ export default function SideNavManage() {
 
   return (
     <div>
-      <div className="w-full rounded-lg bg-white px-2 py-4 shadow-md">
+      <div className="w-full rounded-lg bg-white px-2 py-4 shadow">
         <NavLink
           to={path.ManageTicket}
           className={({ isActive }) =>
@@ -85,7 +85,7 @@ export default function SideNavManage() {
         <img
           src={tickerOfferFlight}
           alt="tickerOfferFlight"
-          className="w-full h-full object-contain"
+          className="w-full h-full rounded-lg object-contain"
         />
       </div>
     </div>

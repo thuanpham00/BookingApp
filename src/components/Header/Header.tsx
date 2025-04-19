@@ -294,7 +294,7 @@ export default function Header() {
                     </div>
                   }
                 >
-                  <div className="py-[6px] px-3 border-2 border-textColor rounded-full duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
+                  <div className="py-[6px] px-3 border border-textColor rounded-full duration-200 hover:bg-[#ddd]/80 flex items-center gap-1 text-textColor font-semibold text-sm">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

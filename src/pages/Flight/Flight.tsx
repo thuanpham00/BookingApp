@@ -522,7 +522,7 @@ export default function Flight() {
                               </div>
                             }
                           >
-                            <div className="py-[6px] px-3 border-2 border-[#000] rounded-full duration-200 hover:bg-[#ddd]/20 flex items-center gap-1 text-[#000]/80 font-medium text-sm">
+                            <div className="py-[6px] px-3 border border-[#000] rounded-full duration-200 hover:bg-[#ddd]/20 flex items-center gap-1 text-[#000]/80 font-medium text-sm">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
