@@ -8,8 +8,6 @@ import banner3 from "../../img/Flight/banner3.webp"
 import logo from "../../img/favicon/FaviconFlight.webp"
 import paymentImg from "../../img/Home/payment/pm1.jpg"
 import iconFlight from "../../img/svg/flight-svgrepo-com.svg"
-import ticketBanner from "src/img/Flight/air-ticket-offer.webp"
-import ticketBanner2 from "src/img/Flight/air-ticket-offer_2.webp"
 import bannerFlight from "src/img/Flight/vja330-1685604407424.webp"
 import bannerFlight2 from "src/img/Flight/thumb-website-Vi-VNPAY-1280x720.webp"
 import { Controller, useForm } from "react-hook-form"
@@ -238,7 +236,7 @@ export default function Flight() {
 
   return (
     // khắc phục lệch layout
-    <div className="h-[2850px] md:h-[2600px] lg:h-[2550px] bg-[#fff]">
+    <div className="h-[1850px] md:h-[2600px] lg:h-[2100px] bg-[#fff]">
       {loading ? (
         <Skeleton className="flex flex-col justify-center items-center absolute left-1/2 top-[10%] -translate-x-1/2 -translate-y-1/2" />
       ) : (
@@ -967,15 +965,6 @@ export default function Flight() {
                     </span>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 items-center flex-wrap gap-4">
-              <div className="col-span-2 md:col-span-1 h-[450px]">
-                <img src={ticketBanner} alt="banner" className="w-full h-full object-cover" />
-              </div>
-              <div className="col-span-2 md:col-span-1 h-[450px]">
-                <img src={ticketBanner2} alt="banner" className="w-full h-full object-cover" />
               </div>
             </div>
 

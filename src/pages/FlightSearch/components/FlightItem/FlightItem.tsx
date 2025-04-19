@@ -50,7 +50,7 @@ function FlightItemInner({ item, list }: Props) {
   const { t } = useTranslation(["flight", "manage"])
 
   const navigate = useNavigate()
-  const { setListCart, listCart } = useContext(AppContext)
+  const { setListCart, listCart, isAuthenticated } = useContext(AppContext)
   const [showFlightDetail, setShowFlightDetail] = useState(false)
   const [showPriceDetail, setShowPriceDetail] = useState(false)
 
@@ -90,22 +90,33 @@ function FlightItemInner({ item, list }: Props) {
   }
 
   const handleAddToCart = () => {
-    setListCart((prev) => {
-      const findItem = listCart.find(
-        (item) =>
-          item.data.flightOffers[0].itineraries[0].segments[0].departure.at ===
-            flightPrice.data.flightOffers[0].itineraries[0].segments[0].departure.at &&
-          item.data.flightOffers[0].itineraries[0].segments[0].arrival.at ===
-            flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at
-      ) // trả về true false
-      if (findItem) {
-        toast.error("Chuyến bay này đã có trong giỏ hàng")
-        return [...prev]
-      } else {
-        toast.success("Thêm vào giỏ hàng thành công!!!")
-        return [...prev, flightPrice]
-      }
-    })
+    if (isAuthenticated) {
+      setListCart((prev) => {
+        const findItem = listCart.find(
+          (item) =>
+            item.data.flightOffers[0].itineraries[0].segments[0].departure.at ===
+              flightPrice.data.flightOffers[0].itineraries[0].segments[0].departure.at &&
+            item.data.flightOffers[0].itineraries[0].segments[0].arrival.at ===
+              flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at
+        ) // trả về true false
+        if (findItem) {
+          toast.error("Chuyến bay này đã có trong giỏ hàng", {
+            autoClose: 1500
+          })
+          return [...prev]
+        } else {
+          toast.success("Thêm vào giỏ hàng thành công!!!", {
+            autoClose: 1500
+          })
+          return [...prev, flightPrice]
+        }
+      })
+    } else {
+      navigate("/login")
+      toast.error("Vui lòng đăng nhập!", {
+        autoClose: 1500
+      })
+    }
   }
   // trường hợp thêm 2 lần 1 chuyến bay vào thì từ chối -> so sánh id
   // vậy nếu cả 2 cùng id trong list nhưng khác chuyến bay

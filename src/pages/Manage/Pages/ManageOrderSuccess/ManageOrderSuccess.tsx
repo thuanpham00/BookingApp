@@ -41,7 +41,9 @@ export default function ManageOrderSuccess() {
   const handleDeleteItemCart = (id: string) => {
     deleteFlightTicketMutation.mutate(id, {
       onSuccess: () => {
-        toast.success("Hủy đơn hàng thành công")
+        toast.success("Hủy đơn hàng thành công", {
+          autoClose: 1500
+        })
         const itemDeleted = data.find((item) => item.data.id === id)
         if (itemDeleted) {
           setListCancel((prev) => [...prev, itemDeleted])

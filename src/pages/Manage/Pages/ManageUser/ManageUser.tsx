@@ -87,10 +87,10 @@ export default function ManageUser() {
       <div>
         <h1 className="text-xl text-textColor font-medium">{t("manage.myAccount")}</h1>
 
-        <form onSubmit={onSubmit} className="mt-5" noValidate>
+        <form onSubmit={onSubmit} className="mt-5 p-4 bg-white rounded-md" noValidate>
           <Input
             className="mt-2"
-            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
+            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-[#f2f2f2] font-medium focus:border-gray-600 rounded-md"
             nameInput={t("manage.userName")}
             type="text"
             name="userName" // name phải khớp trong schema
@@ -101,18 +101,18 @@ export default function ManageUser() {
           />
           <Input
             className="mt-1"
-            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600 cursor-not-allowed"
+            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-[#f2f2f2] font-medium focus:border-gray-600 cursor-not-allowed"
             nameInput="Email"
             type="email"
             name="email"
             autoComplete="on"
-            placeholder={t("authKey.inputEmail")}
+            placeholder={t("manage.inputEmail")}
             messageError={errors.email?.message}
             register={register}
           />
           <Input
             className="mt-1 relative"
-            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
+            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-[#f2f2f2] font-medium focus:border-gray-600 rounded-md"
             nameInput={t("manage.password")}
             type="password"
             name="password"
@@ -123,7 +123,7 @@ export default function ManageUser() {
           />
           <Input
             className="mt-1 relative"
-            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-white font-medium focus:border-gray-600"
+            classNameInput="mt-1 w-full py-3 px-2 outline-none bg-[#f2f2f2] font-medium focus:border-gray-600 rounded-md"
             nameInput={t("manage.confirmPassword")}
             type="password"
             name="confirmPassword"
@@ -137,7 +137,7 @@ export default function ManageUser() {
             nameButton={t("manage.update")}
             disable={loading}
             loading={loading}
-            className="mt-2 py-3 bg-blueColor w-[200px] block ml-auto text-whiteColor text-lg rounded-sm hover:bg-blueColor/80 duration-200"
+            className="mt-2 py-2 bg-blueColor w-[150px] block ml-auto text-whiteColor text-base hover:bg-blueColor/80 duration-200 rounded-md"
             classNameLoading="absolute top-[12px] right-36"
           />
         </form>

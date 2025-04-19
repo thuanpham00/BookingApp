@@ -27,7 +27,7 @@ export default function Pagination({
         <button
           key={index}
           onClick={() => handleChangePage(index)}
-          className={`py-2 px-3 text-whiteColor hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
+          className={`py-2 px-3 text-whiteColor rounded-md hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
         >
           {index + 1}
         </button>
@@ -39,14 +39,14 @@ export default function Pagination({
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={() => handleChangePage(currentPage - 2)}
-          className="bg-gray-300 p-2 text-textColor hover:opacity-50 duration-200"
+          className="bg-gray-300 p-2 text-textColor hover:opacity-50 duration-200 rounded-md"
         >
           Trước
         </button>
         {listPage}
         <button
           onClick={() => handleChangePage(currentPage)}
-          className="bg-gray-300 p-2 text-textColor hover:opacity-50 duration-200"
+          className="bg-gray-300 p-2 text-textColor hover:opacity-50 duration-200 rounded-md"
         >
           Sau
         </button>

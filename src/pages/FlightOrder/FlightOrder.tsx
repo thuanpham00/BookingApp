@@ -145,9 +145,13 @@ export default function FlightOrder() {
 
   const onSubmit = handleSubmit((dataForm) => {
     if (travellers.length === 0) {
-      toast.error("Vui lòng điền đầy đủ thông tin")
+      toast.error("Vui lòng điền đầy đủ thông tin", {
+        autoClose: 1500
+      })
     } else {
-      const loadingToastId = toast.loading("Vui lòng chờ trong giây lát!!!")
+      const loadingToastId = toast.loading("Vui lòng chờ trong giây lát!!!", {
+        autoClose: 1500
+      })
       const createOrder: FlightCreateOrder = {
         data: {
           type: "flight-order",
@@ -195,20 +199,20 @@ export default function FlightOrder() {
         }
       }
       flightCreateOrderMutation.mutate(createOrder, {
-        onSuccess: () => {
+        onSuccess: (res) => {
           toast.dismiss(loadingToastId)
-          toast.success("Tạo đơn thành công!")
+          toast.success("Tạo đơn thành công!", {
+            autoClose: 1500
+          })
+          console.log(res.data)
+          localStorage.setItem("detailPaymentData", JSON.stringify(res.data))
+          navigate(path.flightPayment)
         }
       })
     }
   })
 
-  useEffect(() => {
-    if (flightCreateOrderMutation.data?.data) {
-      localStorage.setItem("detailPaymentData", JSON.stringify(flightCreateOrderMutation.data.data))
-      navigate(path.flightPayment)
-    }
-  }, [flightCreateOrderMutation.data?.data, navigate])
+  console.log(flightCreateOrderMutation.data?.data)
 
   return (
     <div>
