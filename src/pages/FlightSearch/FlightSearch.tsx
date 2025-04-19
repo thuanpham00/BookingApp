@@ -250,7 +250,7 @@ export default function FlightSearch() {
   const startIndex = (currentPage - 1) * totalItem
   const endIndex = startIndex + totalItem
   const currentList = flightList?.data.slice(startIndex, endIndex)
-
+  console.log(currentPage)
   const handleChangePage = (numberPage: number) => {
     setCurrentPage(numberPage)
   }

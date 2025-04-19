@@ -198,7 +198,6 @@ export default function FlightOrder() {
         onSuccess: () => {
           toast.dismiss(loadingToastId)
           toast.success("Tạo đơn thành công!")
-          navigate(path.flightPayment)
         }
       })
     }
@@ -207,8 +206,9 @@ export default function FlightOrder() {
   useEffect(() => {
     if (flightCreateOrderMutation.data?.data) {
       localStorage.setItem("detailPaymentData", JSON.stringify(flightCreateOrderMutation.data.data))
+      navigate(path.flightPayment)
     }
-  }, [flightCreateOrderMutation.data?.data])
+  }, [flightCreateOrderMutation.data?.data, navigate])
 
   return (
     <div>

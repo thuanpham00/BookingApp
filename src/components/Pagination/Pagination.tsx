@@ -24,19 +24,18 @@ export default function Pagination({
     .fill(0)
     .map((_, index) => {
       return (
-        <div key={index} className="flex items-center">
-          <button
-            onClick={() => handleChangePage(index)}
-            className={`py-2 px-3 text-whiteColor hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
-          >
-            {index + 1}
-          </button>
-        </div>
+        <button
+          key={index}
+          onClick={() => handleChangePage(index)}
+          className={`py-2 px-3 text-whiteColor hover:opacity-50 duration-200 ${currentPage === index + 1 ? "bg-blueColor" : "bg-gray-500"}`}
+        >
+          {index + 1}
+        </button>
       )
     })
 
   return (
-    <div className="pt-5">
+    <div className="pt-5 relative z-1000">
       <div className="flex items-center justify-center gap-4">
         <button
           onClick={() => handleChangePage(currentPage - 2)}
