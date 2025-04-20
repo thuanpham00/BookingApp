@@ -45,6 +45,7 @@ import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 import { useTranslation } from "react-i18next"
 import { locales } from "src/i18n/i18n"
 import { changeLanguage } from "i18next"
+import { toast } from "react-toastify"
 
 export type FormData = Pick<
   schemaType,
@@ -236,15 +237,25 @@ export default function Flight() {
     return baseConfig
   }
 
-  const handleSubmitSearch = handleSubmit((data) => {
-    // truyền các data mà form quản lý vào biến này để submit gọi api
+  const handleSubmitSearch = handleSubmit(
+    (data) => {
+      // truyền các data mà form quản lý vào biến này để submit gọi api
 
-    const config = createConfig(data)
-    navigate({
-      pathname: path.flightSearch,
-      search: createSearchParams(config).toString() // tạo tham số truy vấn "?"
-    })
-  })
+      const config = createConfig(data)
+      navigate({
+        pathname: path.flightSearch,
+        search: createSearchParams(config).toString() // tạo tham số truy vấn "?"
+      })
+    },
+    (error) => {
+      if (error.departureDate) {
+        toast.error(error.departureDate?.message, { autoClose: 1500 })
+      }
+      if (error.returnDate) {
+        toast.error(error.returnDate?.message, { autoClose: 1500 })
+      }
+    }
+  )
 
   return (
     // khắc phục lệch layout

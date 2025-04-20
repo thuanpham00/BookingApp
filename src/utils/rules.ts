@@ -27,8 +27,37 @@ const schema = yup
       .oneOf([yup.ref("password")], "Password không khớp"),
     originLocationCode: yup.string().required(),
     destinationLocationCode: yup.string().required(),
-    departureDate: yup.string().required(),
-    returnDate: yup.string(),
+    departureDate: yup
+      .string()
+      .required("Vui lòng chọn ngày khởi hành")
+      .test({
+        name: "Hãy chọn một ngày trong tương lai",
+        message: "Hãy chọn một ngày trong tương lai",
+        test: function (value) {
+          const currentDate = new Date()
+          const departureDate = new Date(value as string)
+          if (departureDate < currentDate) {
+            return this.createError({ message: "Hãy chọn một ngày trong tương lai" })
+          }
+          const returnDate = this.parent.returnDate ? new Date(this.parent.returnDate) : null
+          if (returnDate && returnDate < departureDate) {
+            return this.createError({ message: "Ngày trở về không được trước ngày khởi hành" })
+          }
+          return true
+        }
+      }),
+    returnDate: yup.string().test({
+      name: "Hãy chọn một ngày trong tương lai",
+      message: "Hãy chọn một ngày trong tương lai",
+      test: function (value) {
+        const currentDate = new Date()
+        const returnDate2 = new Date(value as string)
+        if (returnDate2 < currentDate) {
+          return this.createError({ message: "Hãy chọn một ngày trong tương lai" })
+        }
+        return true
+      }
+    }),
     travelClass: yup.string().required(),
     adults: yup.number().required(),
     children: yup.number(),

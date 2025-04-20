@@ -39,6 +39,7 @@ import useFormHandler from "src/hooks/useFormHandler"
 import { FlightContext } from "src/context/useContextFlight"
 import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -219,42 +220,52 @@ export default function FlightSearch() {
   const flightList = flightOffersSearchQuery?.data?.data as TypeFlightListResponse
 
   // xử lý navigate form
-  const handleSubmitSearch = handleSubmit((data) => {
-    // nếu chuyến bay roundTrip -> có returnDate
-    // ngược lại oneWay -> không có returnDate -> loại bỏ đi (omit)
-    // do clone lại tất cả ...queryConfig nên nó sẽ dính input cũ trước đó (returnDate) cần dùng omit loại đi -> submit
-    const config =
-      flightType === "roundTrip"
-        ? {
-            ...queryConfig,
-            originLocationCode: data.originLocationCode,
-            destinationLocationCode: data.destinationLocationCode,
-            departureDate: data.departureDate,
-            returnDate: data.returnDate as string,
-            adults: String(data.adults),
-            children: String(data.children),
-            infants: String(data.infants),
-            travelClass: data.travelClass
-          }
-        : omit(
-            {
+  const handleSubmitSearch = handleSubmit(
+    (data) => {
+      // nếu chuyến bay roundTrip -> có returnDate
+      // ngược lại oneWay -> không có returnDate -> loại bỏ đi (omit)
+      // do clone lại tất cả ...queryConfig nên nó sẽ dính input cũ trước đó (returnDate) cần dùng omit loại đi -> submit
+      const config =
+        flightType === "roundTrip"
+          ? {
               ...queryConfig,
               originLocationCode: data.originLocationCode,
               destinationLocationCode: data.destinationLocationCode,
               departureDate: data.departureDate,
+              returnDate: data.returnDate as string,
               adults: String(data.adults),
               children: String(data.children),
               infants: String(data.infants),
               travelClass: data.travelClass
-            },
-            ["returnDate"]
-          )
+            }
+          : omit(
+              {
+                ...queryConfig,
+                originLocationCode: data.originLocationCode,
+                destinationLocationCode: data.destinationLocationCode,
+                departureDate: data.departureDate,
+                adults: String(data.adults),
+                children: String(data.children),
+                infants: String(data.infants),
+                travelClass: data.travelClass
+              },
+              ["returnDate"]
+            )
 
-    navigate({
-      pathname: path.flightSearch,
-      search: createSearchParams(config).toString()
-    }) // navigate đi -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
-  })
+      navigate({
+        pathname: path.flightSearch,
+        search: createSearchParams(config).toString()
+      }) // navigate đi -> cập nhật ...queryConfig -> fetch lại api -> render ra list mới
+    },
+    (error) => {
+      if (error.departureDate) {
+        toast.error(error.departureDate?.message, { autoClose: 1500 })
+      }
+      if (error.returnDate) {
+        toast.error(error.returnDate?.message, { autoClose: 1500 })
+      }
+    }
+  )
 
   // phân trang
   const [currentPage, setCurrentPage] = useState(1)
