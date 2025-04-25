@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async"
 import { TypeFlightManageResponse } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem/ManageItem"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,36 +37,25 @@ export default function ManageOrderSuccess() {
     }
   })
 
-  const [flag, setFlag] = useState(false)
   const handleDeleteItemCart = (id: string) => {
     deleteFlightTicketMutation.mutate(id, {
       onSuccess: () => {
-        toast.success("Hủy đơn hàng thành công", {
+        toast.success("Hủy vé thành công", {
           autoClose: 1500
         })
         const itemDeleted = data.find((item) => item.data.id === id)
         if (itemDeleted) {
-          setListCancel((prev) => [...prev, itemDeleted])
+          const newListCancel = [...listCancel, itemDeleted]
+          setListCancel(newListCancel)
+          setCancelListToLS(newListCancel)
 
-          setListPurchased((prevPurchased) => prevPurchased.filter((item) => item.data.id !== id))
-
-          setFlag(true)
+          const newListPurchase = listPurchased.filter((item) => item.data.id !== id)
+          setListPurchased(newListPurchase)
+          setPurchaseListToLS(newListPurchase)
         }
       }
     })
   }
-
-  useEffect(() => {
-    setPurchaseListToLS(listPurchased)
-  }, [listPurchased])
-
-  useEffect(() => {
-    if (flag) {
-      // nếu có delete thì nó mới chạy hàm này
-      setCancelListToLS(listCancel)
-      setFlag(false)
-    }
-  }, [flag, listCancel])
 
   return (
     <div>

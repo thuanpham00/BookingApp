@@ -145,76 +145,89 @@ export default function FlightOrder() {
     }
   })
 
-  const onSubmit = handleSubmit((dataForm) => {
+  const onSubmit = handleSubmit(async (dataForm) => {
     if (travellers.length === 0) {
       toast.error("Vui lòng điền đầy đủ thông tin", {
         autoClose: 1500
       })
-    } else {
-      const loadingToastId = toast.loading("Vui lòng chờ trong giây lát!!!", {
-        autoClose: 1500
-      })
-      const createOrder: FlightCreateOrder = {
-        data: {
-          type: "flight-order",
-          flightOffers: [data.data.flightOffers[0]],
-          travelers: travellers.map((item, index) => ({ ...item, id: index + 1 })),
-          remarks: {
-            // ghi chú
-            general: [
-              {
-                subType: "GENERAL_MISCELLANEOUS",
-                text: "ONLINE BOOKING FROM INCREIBLE VIAJES"
-              }
-            ]
-          },
-          ticketingAgreement: {
-            // tùy chọn của thỏa thuận vé và thời gian trì hoãn
-            option: "DELAY_TO_CANCEL",
-            delay: "6D"
-          },
-          // Thông tin liên hệ:
-          contacts: [
+      return
+    }
+
+    const createOrder: FlightCreateOrder = {
+      data: {
+        type: "flight-order",
+        flightOffers: [data.data.flightOffers[0]],
+        travelers: travellers.map((item, index) => ({ ...item, id: index + 1 })),
+        remarks: {
+          // ghi chú
+          general: [
             {
-              addresseeName: {
-                firstName: dataForm.userName2,
-                lastName: dataForm.lastName2
-              },
-              companyName: "INCREIBLE VIAJES",
-              purpose: "STANDARD",
-              phones: [
-                {
-                  deviceType: "MOBILE",
-                  countryCallingCode: dataForm.codeNumber,
-                  number: dataForm.numberPhone
-                }
-              ],
-              emailAddress: dataForm.email,
-              address: {
-                lines: ["Calle Prado, 16"],
-                postalCode: "28014",
-                cityName: "HCM",
-                countryCode: "VN"
-              }
+              subType: "GENERAL_MISCELLANEOUS",
+              text: "ONLINE BOOKING FROM INCREIBLE VIAJES"
             }
           ]
-        }
+        },
+        ticketingAgreement: {
+          // tùy chọn của thỏa thuận vé và thời gian trì hoãn
+          option: "DELAY_TO_CANCEL",
+          delay: "6D"
+        },
+        // Thông tin liên hệ:
+        contacts: [
+          {
+            addresseeName: {
+              firstName: dataForm.userName2,
+              lastName: dataForm.lastName2
+            },
+            companyName: "INCREIBLE VIAJES",
+            purpose: "STANDARD",
+            phones: [
+              {
+                deviceType: "MOBILE",
+                countryCallingCode: dataForm.codeNumber,
+                number: dataForm.numberPhone
+              }
+            ],
+            emailAddress: dataForm.email,
+            address: {
+              lines: ["Calle Prado, 16"],
+              postalCode: "28014",
+              cityName: "HCM",
+              countryCode: "VN"
+            }
+          }
+        ]
       }
-      flightCreateOrderMutation.mutate(createOrder, {
-        onSuccess: (res) => {
-          toast.dismiss(loadingToastId)
-          toast.success("Tạo đơn thành công!", {
-            autoClose: 1500
-          })
-          console.log(res.data)
-          localStorage.setItem("detailPaymentData", JSON.stringify(res.data))
-          navigate(path.flightPayment)
-        }
-      })
+    }
+
+    const loadingToastId = toast.loading("Vui lòng chờ trong giây lát!!!", {
+      autoClose: 1500
+    })
+
+    let flag: boolean = true
+    await flightCreateOrderMutation.mutateAsync(createOrder, {
+      onSuccess: (res) => {
+        toast.dismiss(loadingToastId)
+        flag = true
+        localStorage.setItem("detailPaymentData", JSON.stringify(res.data))
+        navigate(path.flightPayment)
+      },
+      onError: () => {
+        toast.dismiss(loadingToastId)
+        flag = false
+        toast.error(
+          "Không thể hoàn thành yêu cầu đặt vé cho chặng bay này. Vui lòng kiểm tra lại lựa chọn hành trình hoặc thử đặt lại sau!",
+          {
+            autoClose: 3000
+          }
+        )
+      }
+    })
+
+    if (flag) {
+      toast.success("Tạo đơn thành công!", { autoClose: 1500 })
     }
   })
-
-  console.log(flightCreateOrderMutation.data?.data)
 
   return (
     <div>

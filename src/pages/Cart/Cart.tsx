@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { AppContext } from "src/context/useContext"
 import {
@@ -26,6 +26,7 @@ import {
 import { setCartToLS } from "src/utils/auth"
 import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
 
 export default function Cart() {
   // xử lý ngôn ngữ
@@ -40,6 +41,7 @@ export default function Cart() {
   const handleBackPage = () => {
     navigate(-1)
   }
+
   const handleCheckedItem = (index: string) => {
     const findItem = listCart.find((item, indexArr) => {
       if (String(indexArr) === index) {
@@ -59,16 +61,15 @@ export default function Cart() {
 
   const handleDeleteItemCart = useCallback(
     (index: number) => {
-      setListCart(listCart.filter((_, indexArr) => indexArr !== index)) // [1,2,3,4] -> (2,1) -> [1,2,4]
+      const newListCard = listCart.filter((_, indexArr) => indexArr !== index) // [1,2,3,4] -> (2,1) -> [1,2,4]
+      setListCart(newListCard)
+      setCartToLS(newListCard)
+      toast.success("Xóa chuyến bay thành công!", {
+        autoClose: 1500
+      })
     },
     [listCart, setListCart]
   )
-
-  useEffect(() => {
-    if (listCart) {
-      setCartToLS(listCart)
-    }
-  }, [listCart])
 
   return (
     <div>

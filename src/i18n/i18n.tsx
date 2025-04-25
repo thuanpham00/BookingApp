@@ -39,7 +39,7 @@ export const defaultNS = "flight" // giúp ko có truyền namespace thì lấy 
 // eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en", // ngôn ngữ mặc định
+  lng: "vi", // ngôn ngữ mặc định
   ns: ["flight", "footer", "cart", "auth", "manage"],
   defaultNS,
   fallbackLng: "vi", // khi gặp lỗi nó mặc định ngôn ngữ

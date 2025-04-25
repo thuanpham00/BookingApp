@@ -65,7 +65,7 @@ export default function SelectDate({
               <div ref={field.ref}>
                 <Calendar
                   mode="single"
-                  selected={date as Date}
+                  selected={field.value}
                   onSelect={(date) => {
                     setDate(date as Date)
                     field.onChange(convertToYYYYMMDD(date as Date)) // cập nhật trường dữ liệu

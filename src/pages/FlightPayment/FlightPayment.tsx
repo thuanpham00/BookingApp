@@ -8,6 +8,15 @@ import Button from "src/components/Button"
 import axios from "axios"
 import PriceTraveler from "src/components/PriceTraveler"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
+
+/**
+ * Ngân hàng	NCB
+   Số thẻ	9704198526191432198
+   Tên chủ thẻ	NGUYEN VAN A
+   Ngày phát hành	07/15
+   Mật khẩu OTP	123456
+*/
 
 export default function FlightPayment() {
   const { t } = useTranslation("flight")
@@ -22,6 +31,7 @@ export default function FlightPayment() {
   const data = JSON.parse(dataLS) as TypeFlightOrderResponse
 
   const handleSubmitPayment = async () => {
+    const toastId = toast.loading("Đang xử lý thanh toán. Vui lòng chờ trong giây lát...")
     try {
       const response = await axios.post("https://api-bookingapp.onrender.com/create_payment_url", {
         amount: data.data.flightOffers[0].price.total, // số tiền
@@ -29,7 +39,7 @@ export default function FlightPayment() {
         orderType: "billpayment", // loại đơn hàng
         language: "vn" // ngôn ngữ
       })
-
+      toast.dismiss(toastId)
       window.location.href = response.data.url
     } catch (error) {
       console.error("Error creating payment URL:", error)

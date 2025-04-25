@@ -8,7 +8,7 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import useQueryParam from "src/hooks/useQueryParam"
 import useScrollHeader from "src/hooks/useScrollHeader"
-import { TypeFlightManageResponse, TypeFlightOrderResponse } from "src/types/flight.type"
+import { TypeFlightOrderResponse } from "src/types/flight.type"
 import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 
@@ -24,17 +24,22 @@ export default function PaymentSuccess() {
 
   localStorage.removeItem("flightPriceData")
 
-  const getFlightOrderManageQuery = useQuery({
+  useQuery({
     queryKey: ["flightOrderManage", idFlight],
     queryFn: () => {
       const response = flightApi.flightManagement(idFlight).then((res) => {
-        setListCart(
-          listCart.filter(
-            (item) =>
-              item.data.flightOffers[0].itineraries[0].segments[0].departure.at !==
-              data.data.flightOffers[0].itineraries[0].segments[0].departure.at
-          )
+        console.log(res)
+        const newCard = listCart.filter(
+          (item) =>
+            item.data.flightOffers[0].itineraries[0].segments[0].arrival.at !==
+            data.data.flightOffers[0].itineraries[0].segments[0].arrival.at
         )
+
+        const newPurchasedList = [...listPurchased, res.data]
+
+        setListPurchased(newPurchasedList)
+        setListCart(newCard)
+
         return res
       })
       return response
@@ -42,13 +47,6 @@ export default function PaymentSuccess() {
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
-  const data2 = getFlightOrderManageQuery.data?.data as TypeFlightManageResponse
-
-  useEffect(() => {
-    if (data2) {
-      setListPurchased((prev) => [...prev, data2])
-    }
-  }, [data2, setListPurchased])
 
   useEffect(() => {
     setPurchaseListToLS(listPurchased)

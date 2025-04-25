@@ -237,10 +237,18 @@ export default function Flight() {
     return baseConfig
   }
 
+  useEffect(() => {
+    date && setValue("departureDate", convertToYYYYMMDD(date))
+    numberAdults && setValue("adults", numberAdults)
+    numberChildren && setValue("children", numberChildren)
+    numberInfants && setValue("infants", numberInfants)
+    travelClass && setValue("travelClass", travelClass)
+  }, [setValue, date, numberAdults, numberChildren, numberInfants, travelClass])
+
   const handleSubmitSearch = handleSubmit(
     (data) => {
       // truyền các data mà form quản lý vào biến này để submit gọi api
-
+      console.log(data)
       const config = createConfig(data)
       navigate({
         pathname: path.flightSearch,
