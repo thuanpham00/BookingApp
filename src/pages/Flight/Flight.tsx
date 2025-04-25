@@ -224,8 +224,8 @@ export default function Flight() {
       destinationLocationCode: data.destinationLocationCode,
       departureDate: data.departureDate,
       adults: String(data.adults),
-      children: String(data.children),
-      infants: String(data.infants),
+      children: String(data.children || 0),
+      infants: String(data.infants || 0),
       travelClass: data.travelClass
     }
     if (data.returnDate) {
@@ -248,7 +248,6 @@ export default function Flight() {
   const handleSubmitSearch = handleSubmit(
     (data) => {
       // truyền các data mà form quản lý vào biến này để submit gọi api
-      console.log(data)
       const config = createConfig(data)
       navigate({
         pathname: path.flightSearch,

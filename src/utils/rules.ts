@@ -44,7 +44,7 @@ const schema = yup
             return this.createError({ message: "Ngày trở về không được trước ngày khởi hành" })
           }
           return true
-        } 
+        }
       }),
     returnDate: yup.string().test({
       name: "Hãy chọn một ngày trong tương lai",
@@ -59,7 +59,7 @@ const schema = yup
       }
     }),
     travelClass: yup.string().required(),
-    adults: yup.number().required(),
+    adults: yup.number().required().min(1, "Có ít nhất 1 vé người lớn"),
     children: yup.number(),
     infants: yup.number(),
     flightType: yup.string(),
