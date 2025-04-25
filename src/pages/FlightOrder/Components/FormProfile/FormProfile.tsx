@@ -114,7 +114,9 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
     }
     addOnTraveller && addOnTraveller(infoTraveller)
     console.log("Traveller:", infoTraveller)
-    toast.success("Lưu thông tin hành khách thành công")
+    toast.success("Lưu thông tin hành khách thành công", {
+      autoClose: 1500
+    })
   })
 
   const handleResetForm = () => {
