@@ -10,6 +10,7 @@ import Button from "src/components/Button"
 import Input from "src/components/Input"
 import { auth, db } from "src/firebase"
 import schema, { schemaType } from "src/utils/rules"
+import { motion } from "framer-motion"
 
 const schemaForm = schema.pick(["userName", "email", "password", "confirmPassword"])
 
@@ -84,9 +85,8 @@ export default function ManageUser() {
         <meta name="description" content={`${t("manage.manageTicket")} - Booking.`} />
       </Helmet>
 
-      <div>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-xl text-textColor font-medium">{t("manage.myAccount")}</h1>
-
         <form onSubmit={onSubmit} className="mt-5 p-4 bg-white rounded-md" noValidate>
           <Input
             className="mt-2"
@@ -141,7 +141,7 @@ export default function ManageUser() {
             classNameLoading="absolute top-[12px] right-36"
           />
         </form>
-      </div>
+      </motion.div>
     </div>
   )
 }

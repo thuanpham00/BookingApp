@@ -40,6 +40,7 @@ import { FlightContext } from "src/context/useContextFlight"
 import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { motion } from "framer-motion"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -285,7 +286,9 @@ export default function FlightSearch() {
         <meta name="description" content={`${t("flight.searchFlight")} - Booking.`} />
       </Helmet>
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="relative z-10 h-[650px]"
         style={{
           backgroundImage: `url(${backGround})`,
@@ -739,10 +742,15 @@ export default function FlightSearch() {
                         </h1>
                       </div>
 
-                      {currentList.map((item) => (
-                        <div key={item.id}>
+                      {currentList.map((item, index) => (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          key={item.id}
+                        >
                           <FlightItem item={item} list={flightList} />
-                        </div>
+                        </motion.div>
                       ))}
 
                       <div className="my-4">
@@ -806,7 +814,7 @@ export default function FlightSearch() {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

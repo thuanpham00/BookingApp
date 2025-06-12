@@ -11,6 +11,7 @@ import useScrollHeader from "src/hooks/useScrollHeader"
 import { TypeFlightOrderResponse } from "src/types/flight.type"
 import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
+import { motion } from "framer-motion"
 
 export default function PaymentSuccess() {
   const { t } = useTranslation("flight")
@@ -60,7 +61,11 @@ export default function PaymentSuccess() {
         <meta name="description" content={`${t("flight.bookingFlight")} - Booking.`} />
       </Helmet>
 
-      <div className="relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10"
+      >
         <div
           className={`w-full bg-blueColor ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -224,7 +229,7 @@ export default function PaymentSuccess() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

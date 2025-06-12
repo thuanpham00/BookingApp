@@ -27,6 +27,7 @@ import { setCartToLS } from "src/utils/auth"
 import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { motion } from "framer-motion"
 
 export default function Cart() {
   // xử lý ngôn ngữ
@@ -78,7 +79,11 @@ export default function Cart() {
         <meta name="description" content={`${t("cart.cart")} - Booking.`} />
       </Helmet>
 
-      <div className="container">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="container"
+      >
         {listCart.length === 0 && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col items-center">
@@ -147,7 +152,13 @@ export default function Cart() {
 
               <div className="mt-2">
                 {listCart.map((cartItem, index) => (
-                  <div key={index} className="relative">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    key={index}
+                    className="relative"
+                  >
                     <div
                       style={{
                         backgroundImage: `url(${backgroundTicker})`,
@@ -337,7 +348,7 @@ export default function Cart() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -367,7 +378,7 @@ export default function Cart() {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

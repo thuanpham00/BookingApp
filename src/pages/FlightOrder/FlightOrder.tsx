@@ -35,6 +35,7 @@ import useFormHandler from "src/hooks/useFormHandler"
 import PriceTraveler from "src/components/PriceTraveler"
 import usePriceTraveller from "src/hooks/usePriceTraveller"
 import { useTranslation } from "react-i18next"
+import { motion } from "framer-motion"
 
 export type FormData = Pick<
   schemaType,
@@ -236,7 +237,11 @@ export default function FlightOrder() {
         <meta name="description" content={`${t("flight.bookingFlight")} - Booking.`} />
       </Helmet>
 
-      <div className="relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10"
+      >
         <div
           className={`w-full bg-blueColor ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2 shadow-xl" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -857,7 +862,7 @@ export default function FlightOrder() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -9,6 +9,7 @@ import axios from "axios"
 import PriceTraveler from "src/components/PriceTraveler"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { motion } from "framer-motion"
 
 /**
  * Ngân hàng	NCB
@@ -53,7 +54,11 @@ export default function FlightPayment() {
         <meta name="description" content={`${t("flight.bookingFlight")} - Booking.`} />
       </Helmet>
 
-      <div className="relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10"
+      >
         <div
           className={`w-full bg-blueColor ${showHeader ? "fixed top-0 left-1/2 -translate-x-1/2" : "absolute top-0 left-1/2 -translate-x-1/2"} z-50 transition-all ease-linear duration-1000`}
         >
@@ -418,7 +423,7 @@ export default function FlightPayment() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

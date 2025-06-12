@@ -21,6 +21,7 @@ import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
 import useFilterManage from "src/hooks/useFilterManage"
 import { useTranslation } from "react-i18next"
+import { motion } from "framer-motion"
 
 export default function ManageOrderSuccess() {
   const { t } = useTranslation("manage")
@@ -64,7 +65,7 @@ export default function ManageOrderSuccess() {
         <meta name="description" content={`${t("manage.manageTicket")} - Booking.`} />
       </Helmet>
 
-      <>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between bg-[#fff] rounded-lg p-4 border border-gray-300">
           <h1 className="text-xl text-textColor font-medium">
             {t("manage.titleTicketSuccess")} ({data?.length || 0})
@@ -98,7 +99,12 @@ export default function ManageOrderSuccess() {
         <div className="mt-4">
           {data?.length > 0 ? (
             filterList.map((item, index) => (
-              <div key={index}>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
                 <ManageItem item={item}>
                   <AlertDialog>
                     <AlertDialogTrigger
@@ -127,7 +133,7 @@ export default function ManageOrderSuccess() {
                     </AlertDialogContent>
                   </AlertDialog>
                 </ManageItem>
-              </div>
+              </motion.div>
             ))
           ) : (
             <div className="">
@@ -152,7 +158,7 @@ export default function ManageOrderSuccess() {
             </div>
           )}
         </div>
-      </>
+      </motion.div>
     </div>
   )
 }
