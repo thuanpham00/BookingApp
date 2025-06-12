@@ -79,7 +79,6 @@ const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 p
 // onClick vào ô input thì nó re-render vì
 // nó thực hiện onClick={handleFocus} và handleFocus nhân vào 1 hàm xử lý set state lại dẫn đến component re-render
 
-// component chỉ re-render khi props hoặc state thay đổi
 export default function Flight() {
   // xử lý ngôn ngữ
   const { i18n, t } = useTranslation("flight") // sử dụng đổi ngôn ngữ
