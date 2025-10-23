@@ -53,12 +53,7 @@ export default function PaymentSuccess() {
           uuid
         })
       } catch (err: any) {
-        if (axios.isAxiosError(err) && err.response?.status === 409) {
-          console.info("Purchase already exists, skipping.")
-        } else {
-          console.warn("Create purchase failed:", err)
-          // Không throw để không làm hỏng UI thành công thanh toán
-        }
+        console.warn("Create purchase failed:", err)
       }
 
       return res
