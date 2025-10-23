@@ -16,7 +16,7 @@ export default function Button({
   disable,
   loading,
   classNameWrapper = "relative",
-  classNameLoading = "absolute top-[18px] left-28",
+  classNameLoading = "absolute top-[18px] left-20",
   children,
   ...rest
 }: ButtonProps) {
