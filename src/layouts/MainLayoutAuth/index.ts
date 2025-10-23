@@ -1,3 +1,3 @@
-import MainLayout2 from "./MainLayout2"
+import MainLayoutAuth from "./MainLayoutAuth"
 
-export default MainLayout2
+export default MainLayoutAuth
