@@ -4,7 +4,9 @@ import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import MainLayout from "src/layouts/MainLayout"
 import MainLayout2 from "src/layouts/MainLayout2"
+import MainLayoutAuth from "src/layouts/MainLayoutAuth/MainLayoutAuth"
 import ManageLayout from "src/pages/Manage/Layout/ManageLayout"
+
 const Login = lazy(() => import("src/pages/Login"))
 const Register = lazy(() => import("src/pages/Register"))
 const Flight = lazy(() => import("src/pages/Flight"))
@@ -174,7 +176,7 @@ export default function useRouterElement() {
         {
           path: "",
           // sử dụng <Outlet/> bên trong component <RegisterLayout/> để truyền component con vào
-          element: <MainLayout2 />, // sử dụng chung // fix re-render
+          element: <MainLayoutAuth />, // sử dụng chung // fix re-render
           children: [
             {
               path: path.login,

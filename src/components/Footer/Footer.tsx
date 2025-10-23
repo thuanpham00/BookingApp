@@ -5,11 +5,11 @@ export default function Footer() {
   const { t } = useTranslation("footer")
 
   return (
-    <footer className="w-full absolute bottom-0 bg-[#022d5c] py-8">
+    <footer className="w-full bg-[#022d5c] py-8 mt-auto">
       <div className="container">
         <div className="flex items-center justify-between pb-4 border-b text-whiteColor border-b-[#4e6c8d]">
           <h2 className="font-semibold text-xl">Booking</h2>
-          <div className="flex items-center gap-8">
+          <div className="flex items-center flex-col md:flex-row gap-8">
             <span className="font-semibold text-xl">{t("footer.connect")}</span>
             <div className="flex gap-2">
               <Link

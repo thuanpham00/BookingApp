@@ -1,19 +1,49 @@
-import { useState } from "react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { TypeFlightManageResponse } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem"
 import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
 import useFilterManage from "src/hooks/useFilterManage"
 import { useTranslation } from "react-i18next"
 import { motion } from "framer-motion"
+import { Pagination } from "antd"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { AppContext } from "src/context/useContext"
+import axios from "axios"
+import { toast } from "react-toastify"
 
 export default function ManageOrderCancel() {
   const { t } = useTranslation("manage")
-  const dataLS = localStorage.getItem("listCancel") as string
-  const data = JSON.parse(dataLS) as TypeFlightManageResponse[]
+
+  const { uuid } = useContext(AppContext)
+
+  const { data: purchasedResponse } = useQuery({
+    queryKey: ["purchasedCancelTickets", uuid],
+    queryFn: async () => {
+      const res = await axios.get(`https://api-bookingapp.onrender.com/purchase-cancel/${uuid}`)
+      if (res.data.success) {
+        return res.data.data
+      } else {
+        toast.error("Không thể lấy danh sách vé đã hủy", { autoClose: 1500 })
+        return []
+      }
+    },
+    enabled: !!uuid,
+    staleTime: 2 * 60 * 1000, // 2 phút
+    placeholderData: keepPreviousData
+  })
+
+  const data = purchasedResponse?.map((item: any) => item.data) || []
+
   const [searchText, setSearchText] = useState("")
   const filterList = useFilterManage(data, searchText)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const paginatedList = filterList?.slice(startIndex, endIndex)
 
   return (
     <div>
@@ -27,7 +57,7 @@ export default function ManageOrderCancel() {
           <h1 className="text-xl text-textColor font-medium">
             {t("manage.titleTicketCancel")} ({data?.length || 0})
           </h1>
-          <div className="py-2 px-4 hidden md:flex items-center gap-2 bg-gray-200 w-[300px] rounded-full">
+          <div className="py-2 px-4 hidden md:flex items-center gap-2 bg-gray-200 w-[350px] rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -46,7 +76,7 @@ export default function ManageOrderCancel() {
             <input
               type="text"
               placeholder="Tìm kiếm theo mã sân bay hoặc ngày đi"
-              className="bg-transparent flex-grow outline-none"
+              className="bg-transparent flex-grow outline-none text-sm"
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
             />
@@ -55,16 +85,39 @@ export default function ManageOrderCancel() {
 
         <div className="mt-4">
           {data?.length > 0 ? (
-            filterList.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <ManageItem item={item} />
-              </motion.div>
-            ))
+            <>
+              {paginatedList.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <ManageItem item={item} />
+                </motion.div>
+              ))}
+
+              {filterList.length > pageSize && (
+                <div className="flex justify-center my-4">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={filterList.length}
+                    showSizeChanger
+                    pageSizeOptions={[5, 10, 20]}
+                    onChange={(page, size) => {
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth" // 🔥 mượt mà hơn nhiều
+                      })
+                      setCurrentPage(page)
+                      setPageSize(size)
+                    }}
+                    showTotal={(total, range) => `${range[0]}–${range[1]} / ${total}`}
+                  />
+                </div>
+              )}
+            </>
           ) : (
             <div className="">
               <div className="flex flex-col items-center">

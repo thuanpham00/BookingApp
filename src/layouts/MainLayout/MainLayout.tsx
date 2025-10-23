@@ -5,11 +5,12 @@ import Header from "src/components/Header"
 
 function MainLayoutInner() {
   return (
-    <div className="relative">
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
-      {/* fix lỗi CLS lệch layout (footer load trước nội dung load sau -> lệch) */}
     </div>
   )
 }

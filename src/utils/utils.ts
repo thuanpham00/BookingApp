@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError } from "axios"
 import { airlines, airportCodes } from "src/constant/flightSearch"
 import { countryItem, TypeAirportCodeItem } from "src/types/flight.type"
+import MD5 from "crypto-js/md5"
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -149,4 +151,10 @@ export function changeLanguageTraveller(name: string) {
 
 export function formatCurrency(current: number) {
   return new Intl.NumberFormat("de-DE").format(current)
+}
+
+export function generateFlightUuid(flightOffer: any) {
+  const seg = flightOffer.itineraries[0].segments[0]
+  const key = `${flightOffer.id}-${seg.departure.iataCode}-${seg.arrival.iataCode}-${seg.departure.at}-${seg.arrival.at}-${flightOffer.price.total}`
+  return MD5(key).toString() // ✅ tạo mã băm ổn định cho trình duyệt
 }

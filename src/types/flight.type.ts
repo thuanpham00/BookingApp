@@ -410,6 +410,7 @@ export type TypeFlightPriceItemResponse = {
   ]
   paymentCardRequired: false
 }
+
 export type TypeFlightPriceResponse = {
   data: {
     type: string // Loại dữ liệu, ví dụ "flight-offers-pricing"
@@ -423,6 +424,7 @@ export type TypeFlightPriceResponse = {
       }
     }
   }
+  uuid_ticket: string
 }
 
 // response của flight create order
@@ -580,6 +582,8 @@ export type TypeFlightOrderResponse = {
       }
     }
   }
+
+  uuid_ticket: string
 }
 
 // response của flight order management

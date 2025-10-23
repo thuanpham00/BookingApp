@@ -36,6 +36,7 @@ import PriceTraveler from "src/components/PriceTraveler"
 import usePriceTraveller from "src/hooks/usePriceTraveller"
 import { useTranslation } from "react-i18next"
 import { motion } from "framer-motion"
+import { ConfigProvider, Steps } from "antd"
 
 export type FormData = Pick<
   schemaType,
@@ -60,6 +61,8 @@ export default function FlightOrder() {
 
   const dataLS = localStorage.getItem("flightPriceData") as string
   const data = JSON.parse(dataLS) as TypeFlightPriceResponse
+  const uuid_ticket = data.uuid_ticket
+  console.log(data)
 
   useEffect(() => {
     FetchDataListNational().then((res) => {
@@ -73,46 +76,6 @@ export default function FlightOrder() {
   }
 
   const { quantityOfTraveller } = usePriceTraveller(data, undefined)
-
-  // cái này hay
-  // const handleCheckTraveller =
-  //   (type: string, index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     if (type === "adult") {
-  //       setCheckState(
-  //         produce((draft) => {
-  //           draft[index] = event.target.checked // đại diện checked previous
-  //         })
-  //       )
-  //     } else if (type === "child") {
-  //       setCheckState(
-  //         produce((draft) => {
-  //           draft[index] = event.target.checked // đại diện checked previous
-  //         })
-  //       )
-  //     } else if (type === "infant") {
-  //       setCheckState(
-  //         produce((draft) => {
-  //           draft[index] = event.target.checked // đại diện checked previous
-  //         })
-  //       )
-  //     }
-  //   }
-
-  // const handleAddTraveller = (type: string) => () => {
-  //   if (type === "adult") {
-  //     if (currentAdult < quantityOfTraveller.adult) {
-  //       setCurrentAdult((prev) => prev + 1)
-  //     }
-  //   } else if (type === "child") {
-  //     if (currentChild < quantityOfTraveller.child) {
-  //       setCurrentChild((prev) => prev + 1)
-  //     }
-  //   } else if (type === "infant") {
-  //     if (currentInfant < quantityOfTraveller.infant) {
-  //       setCurrentInfant((prev) => prev + 1)
-  //     }
-  //   }
-  // }
 
   // xử lý form
   const [travellers, setTravellers] = useState<TravellerType[]>([])
@@ -210,7 +173,12 @@ export default function FlightOrder() {
       onSuccess: (res) => {
         toast.dismiss(loadingToastId)
         flag = true
-        localStorage.setItem("detailPaymentData", JSON.stringify(res.data))
+
+        const responseWithUuid = {
+          ...res.data,
+          uuid_ticket
+        }
+        localStorage.setItem("detailPaymentData", JSON.stringify(responseWithUuid))
         navigate(path.flightPayment)
       },
       onError: () => {
@@ -275,47 +243,37 @@ export default function FlightOrder() {
                 </div>
               </div>
               <div className="hidden col-span-7 items-center md:flex flex-col">
-                <div className="w-[80%] flex items-center justify-between">
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
-                      1
-                    </div>
-                  </div>
-
-                  <div className="w-60 h-1 bg-gray-400"></div>
-
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs">
-                      2
-                    </div>
-                  </div>
-
-                  <div className="w-60 h-1 bg-gray-400"></div>
-
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full flex items-center justify-between">
-                  <div className="text-white text-sm">{t("flight.spanFlight1")}</div>
-                  <div className="text-white text-sm">{t("flight.spanFlight2")}</div>
-                  <div className="text-white text-sm">{t("flight.spanFlight3")}!</div>
-                </div>
+                <ConfigProvider
+                  theme={{
+                    components: {
+                      Steps: {
+                        colorPrimary: "#3b82f6", // Màu xanh chính cho icon + line
+                        colorPrimaryBorder: "#3b82f6", // Viền xanh
+                        colorText: "#fff", // Màu chữ trắng
+                        colorTextLabel: "#fff",
+                        colorTextDescription: "#fff",
+                        colorSplit: "#3b82f6", // Màu line giữa các step
+                        colorTextDisabled: "#000" // step chưa active cũng trắng
+                      }
+                    }
+                  }}
+                >
+                  <Steps
+                    size="small"
+                    current={0}
+                    items={[
+                      {
+                        title: t("flight.spanFlight1")
+                      },
+                      {
+                        title: t("flight.spanFlight2")
+                      },
+                      {
+                        title: t("flight.spanFlight3")
+                      }
+                    ]}
+                  />
+                </ConfigProvider>
               </div>
             </div>
           </div>
@@ -713,7 +671,7 @@ export default function FlightOrder() {
                 <PriceTraveler data={data} />
 
                 <div className="mt-4 bg-[#fff] p-4 shadow-md rounded-lg">
-                  <div className="overflow-y-auto h-[200px]">
+                  <div>
                     <h2 className="text-base text-textColor font-semibold">
                       {t("flight.price.bookingCondition")}
                     </h2>

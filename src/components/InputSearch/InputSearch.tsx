@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AnimatePresence, motion } from "framer-motion"
 import React, { InputHTMLAttributes, forwardRef } from "react"
 import { UseFormRegister } from "react-hook-form"
 
@@ -82,9 +83,20 @@ const InputSearch = forwardRef<HTMLDivElement, InputProps>(function InputProps(
           </div>
         </div>
       </div>
-      <div className={classNameList} ref={ref}>
-        {showList && children}
-      </div>
+      <AnimatePresence>
+        {showList && (
+          <motion.div
+            ref={ref}
+            className={classNameList}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 })

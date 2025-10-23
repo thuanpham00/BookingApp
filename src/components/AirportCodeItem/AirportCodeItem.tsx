@@ -16,6 +16,7 @@ export default function AirportCodeItem({ item, handleItemClick, inputName }: Pr
   return (
     <button
       onClick={handleChangeInput}
+      type="button"
       className="w-full border-b border-b-gray-300 py-3 px-2 flex items-center justify-between gap-2 cursor-pointer bg-whiteColor hover:bg-gray-300 duration-200"
     >
       <div className="text-xs lg:text-sm flex items-center gap-2">

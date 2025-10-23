@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
@@ -9,50 +9,48 @@ import { AppContext } from "src/context/useContext"
 import useQueryParam from "src/hooks/useQueryParam"
 import useScrollHeader from "src/hooks/useScrollHeader"
 import { TypeFlightOrderResponse } from "src/types/flight.type"
-import { setCartToLS, setPurchaseListToLS } from "src/utils/auth"
 import { formatCurrency } from "src/utils/utils"
 import { motion } from "framer-motion"
+import { ConfigProvider, Steps } from "antd"
+import axios from "axios"
 
 export default function PaymentSuccess() {
   const { t } = useTranslation("flight")
-  const { setListCart, listCart, setListPurchased, listPurchased } = useContext(AppContext)
+  const { uuid, refetchCartCount } = useContext(AppContext)
   const { showHeader } = useScrollHeader(200)
   const paramsUrl = useQueryParam()
 
   const dataLS = localStorage.getItem("detailPaymentData") as string
   const data = JSON.parse(dataLS) as TypeFlightOrderResponse
+  const uuid_ticket = data.uuid_ticket
   const idFlight = data?.data.id
 
   localStorage.removeItem("flightPriceData")
 
   useQuery({
     queryKey: ["flightOrderManage", idFlight],
-    queryFn: () => {
-      const response = flightApi.flightManagement(idFlight).then((res) => {
-        console.log(res)
-        const newCard = listCart.filter(
-          (item) =>
-            item.data.flightOffers[0].itineraries[0].segments[0].arrival.at !==
-            data.data.flightOffers[0].itineraries[0].segments[0].arrival.at
-        )
+    queryFn: async () => {
+      const res = await flightApi.flightManagement(idFlight)
 
-        const newPurchasedList = [...listPurchased, res.data]
-
-        setListPurchased(newPurchasedList)
-        setListCart(newCard)
-
-        return res
+      await axios.delete("https://api-bookingapp.onrender.com/cart", {
+        data: {
+          uuid,
+          uuid_ticket
+        }
       })
-      return response
+
+      refetchCartCount()
+
+      await axios.post("https://api-bookingapp.onrender.com/purchase", {
+        data: { ...res.data, uuid_ticket },
+        uuid: uuid
+      })
+
+      return res
     },
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })
-
-  useEffect(() => {
-    setPurchaseListToLS(listPurchased)
-    setCartToLS(listCart)
-  }, [listCart, listPurchased])
 
   return (
     <div>
@@ -94,48 +92,38 @@ export default function PaymentSuccess() {
                   </div>
                 </div>
               </div>
-              <div className="hidden col-span-6 col-start-7 items-center md:flex flex-col">
-                <div className="w-[80%] flex items-center justify-between">
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
-                      1
-                    </div>
-                  </div>
-
-                  <div className="w-52 h-1 bg-blue-500"></div>
-
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
-                      2
-                    </div>
-                  </div>
-
-                  <div className="w-52 h-1 bg-blue-500"></div>
-
-                  <div>
-                    <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="white"
-                        className="w-3 h-3"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full flex items-center justify-between">
-                  <div className="text-white text-sm">{t("flight.spanFlight1")}</div>
-                  <div className="text-white text-sm">{t("flight.spanFlight2")}</div>
-                  <div className="text-white text-sm">{t("flight.spanFlight3")}!</div>
-                </div>
+              <div className="hidden col-span-7 items-center md:flex flex-col">
+                <ConfigProvider
+                  theme={{
+                    components: {
+                      Steps: {
+                        colorPrimary: "#3b82f6", // Màu xanh chính cho icon + line
+                        colorPrimaryBorder: "#3b82f6", // Viền xanh
+                        colorText: "#fff", // Màu chữ trắng
+                        colorTextLabel: "#fff",
+                        colorTextDescription: "#fff",
+                        colorSplit: "#3b82f6", // Màu line giữa các step
+                        colorTextDisabled: "#000" // step chưa active cũng trắng
+                      }
+                    }
+                  }}
+                >
+                  <Steps
+                    size="small"
+                    current={3}
+                    items={[
+                      {
+                        title: t("flight.spanFlight1")
+                      },
+                      {
+                        title: t("flight.spanFlight2")
+                      },
+                      {
+                        title: t("flight.spanFlight3")
+                      }
+                    ]}
+                  />
+                </ConfigProvider>
               </div>
             </div>
           </div>

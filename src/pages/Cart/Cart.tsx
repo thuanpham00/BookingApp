@@ -1,4 +1,5 @@
-import { useCallback, useContext, useState } from "react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useContext, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { AppContext } from "src/context/useContext"
 import {
@@ -23,21 +24,43 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "src/components/ui/alert-dialog"
-import { setCartToLS } from "src/utils/auth"
 import backgroundTicker from "src/img/Flight/Icon-vé-máy-bay.png"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import { motion } from "framer-motion"
+import axios from "axios"
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export default function Cart() {
   // xử lý ngôn ngữ
   const { t } = useTranslation("cart")
+  const queryClient = useQueryClient()
 
   const navigate = useNavigate()
-  const { listCart, setListCart } = useContext(AppContext)
+  const { uuid, refetchCartCount } = useContext(AppContext)
   const [checked, setChecked] = useState<string>("")
   const [flightPrice, setFlightPrice] = useState<TypeFlightPriceResponse>()
 
+  const { data } = useQuery({
+    queryKey: ["cart", uuid],
+    queryFn: async () => {
+      if (!uuid) return []
+      const res = await axios.get(`https://api-bookingapp.onrender.com/cart/${uuid}`)
+      if (res.data.success) {
+        return res.data.data
+      } else {
+        toast.error("Không thể lấy danh sách giỏ hàng", { autoClose: 1500 })
+        return []
+      }
+    },
+    enabled: !!uuid,
+    staleTime: 2 * 60 * 1000, // 2 phút
+    placeholderData: keepPreviousData
+  })
+
+  const listCart = data?.map((item: any) => item.flightData) as TypeFlightPriceResponse[]
+
+  console.log(data)
   // xử lý back page
   const handleBackPage = () => {
     navigate(-1)
@@ -60,17 +83,48 @@ export default function Cart() {
     localStorage.setItem("flightPriceData", JSON.stringify(flightPrice))
   }
 
-  const handleDeleteItemCart = useCallback(
-    (index: number) => {
-      const newListCard = listCart.filter((_, indexArr) => indexArr !== index) // [1,2,3,4] -> (2,1) -> [1,2,4]
-      setListCart(newListCard)
-      setCartToLS(newListCard)
-      toast.success("Xóa chuyến bay thành công!", {
+  const deleteCartMutation = useMutation({
+    mutationFn: async (payload: { uuid: string; uuid_ticket: string }) => {
+      const res = await axios.delete("https://api-bookingapp.onrender.com/cart", {
+        data: {
+          uuid: payload.uuid,
+          uuid_ticket: payload.uuid_ticket
+        }
+      })
+      return res.data
+    },
+    onSuccess: (data) => {
+      refetchCartCount()
+      queryClient.invalidateQueries({ queryKey: ["cart", uuid] })
+      toast.success(data.message || "Xóa chuyến bay thành công!", { autoClose: 1500 })
+    },
+    onError: (error: any) => {
+      console.error("❌ Lỗi khi xóa vé:", error)
+      toast.error(error.response?.data?.message || "Lỗi khi xóa vé khỏi giỏ hàng", {
         autoClose: 1500
       })
-    },
-    [listCart, setListCart]
-  )
+    }
+  })
+
+  // 🧩 2. Hàm gọi mutation khi cần
+  const handleDeleteItemCart = (data: TypeFlightPriceResponse) => {
+    const uuid_ticket = data.uuid_ticket
+
+    if (!uuid_ticket) {
+      toast.error("Không tìm thấy mã vé để xóa", { autoClose: 1500 })
+      return
+    }
+
+    if (!uuid) {
+      toast.error("Thiếu thông tin người dùng", { autoClose: 1500 })
+      return
+    }
+
+    deleteCartMutation.mutate({
+      uuid, // mã người dùng
+      uuid_ticket
+    })
+  }
 
   return (
     <div>
@@ -84,7 +138,7 @@ export default function Cart() {
         animate={{ opacity: 1, y: 0 }}
         className="container"
       >
-        {listCart.length === 0 && (
+        {listCart?.length === 0 && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col items-center">
               <img
@@ -107,7 +161,7 @@ export default function Cart() {
           </div>
         )}
 
-        {listCart.length > 0 && (
+        {listCart?.length > 0 && (
           <div className="mt-4   grid grid-cols-12 gap-4">
             <div className="col-span-12 order-1 md:col-span-8 md:order-1">
               <div className="p-4 border border-gray-300 bg-[#fff] shadow-lg rounded-lg flex items-center gap-2">
@@ -210,7 +264,7 @@ export default function Cart() {
                               </AlertDialogCancel>
                               <AlertDialogAction
                                 className="w-[50%] bg-blueColor"
-                                onClick={() => handleDeleteItemCart(index)}
+                                onClick={() => handleDeleteItemCart(cartItem)}
                               >
                                 {t("cart.popupAgree")}
                               </AlertDialogAction>

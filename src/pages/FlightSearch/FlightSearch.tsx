@@ -28,7 +28,6 @@ import { schemaType } from "src/utils/rules"
 import { path } from "src/constant/path"
 import omit from "lodash/omit"
 import AsideFilterFlight from "./components/AsideFilterFlight"
-import Pagination from "src/components/Pagination"
 import banner from "src/img/Flight/ticker-banner-flight.webp"
 import banner2 from "src/img/Flight/air-ticket-booking.webp"
 import banner3 from "src/img/Flight/travel-design-template.webp"
@@ -41,6 +40,7 @@ import AirportCodeList from "src/components/AirportCodeList/AirportCodeList"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import { motion } from "framer-motion"
+import { Pagination } from "antd"
 
 const fetchDataAirport = () => Promise.resolve(airportCodes) // khởi tạo 1 promise
 
@@ -270,13 +270,16 @@ export default function FlightSearch() {
 
   // phân trang
   const [currentPage, setCurrentPage] = useState(1)
-  const totalItem = 10
+  const [totalItem, setTotalItem] = useState(10)
   const startIndex = (currentPage - 1) * totalItem
   const endIndex = startIndex + totalItem
   const currentList = flightList?.data.slice(startIndex, endIndex)
 
-  const handleChangePage = (numberPage: number) => {
-    setCurrentPage(numberPage)
+  const handleChangePage = (page: number, size?: number) => {
+    if (size) {
+      setTotalItem(size) // nếu bạn muốn thay đổi pageSize
+    }
+    setCurrentPage(page)
   }
 
   return (
@@ -753,14 +756,22 @@ export default function FlightSearch() {
                         </motion.div>
                       ))}
 
-                      <div className="my-4">
-                        <Pagination
-                          totalOfPage={totalItem}
-                          totalAllPage={flightList.data.length}
-                          currentPage={currentPage}
-                          onChangePage={handleChangePage}
-                        />
-                      </div>
+                      {flightList?.data?.length > totalItem && (
+                        <div className="my-4 flex justify-center relative z-50">
+                          <Pagination
+                            current={currentPage}
+                            pageSize={totalItem}
+                            total={flightList.data.length}
+                            showSizeChanger
+                            pageSizeOptions={[5, 10, 20]}
+                            onChange={(page, pageSize) => {
+                              window.scrollTo({ top: 0, behavior: "smooth" })
+                              handleChangePage(page, pageSize)
+                            }}
+                            showTotal={(total, range) => `${range[0]}–${range[1]} / ${total}`}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

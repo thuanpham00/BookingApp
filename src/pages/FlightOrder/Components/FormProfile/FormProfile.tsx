@@ -113,7 +113,6 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
       ]
     }
     addOnTraveller && addOnTraveller(infoTraveller)
-    console.log("Traveller:", infoTraveller)
     toast.success("Lưu thông tin hành khách thành công", {
       autoClose: 1500
     })
@@ -238,7 +237,7 @@ export default function FormProfile({ addOnTraveller, typeTraveler, index }: Pro
           <span className="mb-[2px] text-sm block">{t("flight.nationality")}</span>
           <InputSearchV2
             autoComplete="on"
-            placeholder={t("flight.nationality")}
+            placeholder={"VN"}
             classNameList="z-20 absolute top-10 left-0 h-[200px] bg-whiteColor overflow-y-auto overflow-x-hidden rounded-sm shadow-sm transition-all duration-1000 ease-linear"
             classNameBlock="relative flex items-center"
             classNameInput="w-full px-2 py-[5px] outline-none bg-white text-base flex-grow truncate font-normal focus:border-blueColor text-textColor rounded border border-[#dadada]"

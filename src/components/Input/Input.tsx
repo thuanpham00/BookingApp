@@ -14,7 +14,7 @@ export default function Input({
   className,
   nameInput,
   messageError,
-  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border font-medium focus:border-gray-600",
+  classNameInput = "mt-1 w-full py-3 px-2 outline-none bg-transparent border-gray-400 border font-normal text-[15px] focus:border-gray-600",
   register,
   name,
   ...rest

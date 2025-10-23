@@ -1,12 +1,7 @@
-import { createContext, useState } from "react"
-import { TypeFlightManageResponse, TypeFlightPriceResponse } from "src/types/flight.type"
-import {
-  getAccessTokenToLS,
-  getCancelListToLS,
-  getCartToLS,
-  getProfileToLS,
-  getPurchaseListToLS
-} from "src/utils/auth"
+/* eslint-disable react-hooks/exhaustive-deps */
+import axios from "axios"
+import { createContext, useEffect, useState } from "react"
+import { getAccessTokenToLS, getProfileToLS, getUuidUserToLS } from "src/utils/auth"
 
 interface Props {
   children: React.ReactNode
@@ -17,12 +12,11 @@ type initialStateType = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   isProfile: string | null
   setIsProfile: React.Dispatch<React.SetStateAction<string | null>>
-  listCart: TypeFlightPriceResponse[]
-  setListCart: React.Dispatch<React.SetStateAction<TypeFlightPriceResponse[]>>
-  listPurchased: TypeFlightManageResponse[]
-  setListPurchased: React.Dispatch<React.SetStateAction<TypeFlightManageResponse[]>>
-  listCancel: TypeFlightManageResponse[]
-  setListCancel: React.Dispatch<React.SetStateAction<TypeFlightManageResponse[]>>
+  uuid: string | null
+  setUuid: React.Dispatch<React.SetStateAction<string | null>>
+  cartCount: number
+  setCartCount: (n: number) => void
+  refetchCartCount: (uuid?: string) => Promise<void>
 }
 
 const initialState: initialStateType = {
@@ -30,12 +24,12 @@ const initialState: initialStateType = {
   setIsAuthenticated: () => null,
   isProfile: getProfileToLS(),
   setIsProfile: () => null,
-  listCart: getCartToLS(),
-  setListCart: () => null,
-  listPurchased: getPurchaseListToLS(),
-  setListPurchased: () => null,
-  listCancel: getCancelListToLS(),
-  setListCancel: () => null
+  uuid: getUuidUserToLS(),
+  setUuid: () => null,
+
+  cartCount: 0,
+  setCartCount: () => {},
+  refetchCartCount: async () => {}
 }
 
 // Context API
@@ -49,9 +43,32 @@ export default function AppProvider({ children }: Props) {
   // state management
   const [isAuthenticated, setIsAuthenticated] = useState(initialState.isAuthenticated)
   const [isProfile, setIsProfile] = useState(initialState.isProfile)
-  const [listCart, setListCart] = useState(initialState.listCart)
-  const [listPurchased, setListPurchased] = useState(initialState.listPurchased)
-  const [listCancel, setListCancel] = useState(initialState.listCancel)
+  const [uuid, setUuid] = useState(initialState.uuid)
+  const [cartCount, setCartCount] = useState(0)
+
+  const refetchCartCount = async (userUuid?: string) => {
+    const id = userUuid || uuid
+    if (!id) {
+      setCartCount(0)
+      return
+    }
+
+    try {
+      const res = await axios.get(`https://api-bookingapp.onrender.com/cart/${id}`)
+      if (res.data.success) {
+        setCartCount(res.data.data.length)
+      } else {
+        setCartCount(0)
+      }
+    } catch (err) {
+      console.error("❌ Lỗi khi lấy giỏ hàng:", err)
+      setCartCount(0)
+    }
+  }
+
+  useEffect(() => {
+    if (uuid) refetchCartCount(uuid)
+  }, [uuid])
 
   return (
     <AppContext.Provider
@@ -60,12 +77,12 @@ export default function AppProvider({ children }: Props) {
         setIsAuthenticated,
         isProfile,
         setIsProfile,
-        listCart,
-        setListCart,
-        listPurchased,
-        setListPurchased,
-        listCancel,
-        setListCancel
+        uuid,
+        setUuid,
+        cartCount,
+        setCartCount,
+
+        refetchCartCount
       }}
     >
       {children}

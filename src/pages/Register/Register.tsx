@@ -44,11 +44,11 @@ export default function Register() {
           confirmPassword: data.confirmPassword
         })
         navigate(path.login)
-        toast.success("Đăng ký thành công !!!")
+        toast.success("Đăng ký thành công", { autoClose: 1500 })
         setLoading(false)
       }
     } catch (error) {
-      toast.error("Lỗi xác thực/email đã được sử dụng")
+      toast.error("Lỗi xác thực/email đã được sử dụng", { autoClose: 1500 })
       setLoading(false)
     }
   })
@@ -60,80 +60,73 @@ export default function Register() {
         <meta name="description" content={`${"auth.register"} - Amadeus Booking`} />
       </Helmet>
 
-      <div className="w-full custom-calc-height-2 relative">
-        <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="flex items-center">
-            <ChangeAutoBg
-              className="shadow-lg hidden lg:block lg:w-[60%] custom-calc-height transition-all duration-1000 ease-linear"
-              listImg={backgroundList}
-              indexEnd={9}
-            />
-            <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] custom-calc-height bg-white relative">
-              <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="text-textColor text-2xl font-semibold text-center">
-                  {t("auth.register")}
-                </div>
+      <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center h-[600px]">
+        <ChangeAutoBg
+          className="shadow-lg hidden lg:block lg:w-[60%] h-full transition-all duration-1000 ease-linear"
+          listImg={backgroundList}
+          indexEnd={9}
+        />
+        <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] h-full bg-white relative">
+          <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="text-textColor text-2xl font-semibold text-center">
+              {t("auth.register")}
+            </div>
 
-                <form onSubmit={onSubmit} className="mt-5" noValidate>
-                  <Input
-                    className="mt-2"
-                    nameInput={t("auth.userName")}
-                    type="text"
-                    name="userName" // name phải khớp trong schema
-                    autoComplete="on"
-                    placeholder={t("auth.inputUsername")}
-                    messageError={errors.userName?.message}
-                    register={register}
-                  />
-                  <Input
-                    className="mt-1"
-                    nameInput="Email"
-                    type="email"
-                    name="email"
-                    autoComplete="on"
-                    placeholder={t("auth.inputEmail")}
-                    messageError={errors.email?.message}
-                    register={register}
-                  />
-                  <Input
-                    className="mt-1 relative"
-                    nameInput={t("auth.password")}
-                    type="password"
-                    name="password"
-                    autoComplete="on"
-                    placeholder={t("auth.inputPassword")}
-                    messageError={errors.password?.message}
-                    register={register}
-                  />
-                  <Input
-                    className="mt-1 relative"
-                    nameInput={t("auth.confirmPassword")}
-                    type="password"
-                    name="confirmPassword"
-                    autoComplete="on"
-                    placeholder={t("auth.inputPassword")}
-                    messageError={errors.confirmPassword?.message}
-                    register={register}
-                  />
-                  <Button
-                    type="submit"
-                    nameButton={t("auth.register")}
-                    disable={loading}
-                    loading={loading}
-                  />
-                </form>
-                <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
+            <form onSubmit={onSubmit} className="mt-5" noValidate>
+              <Input
+                className="mt-2"
+                nameInput={t("auth.userName")}
+                type="text"
+                name="userName" // name phải khớp trong schema
+                autoComplete="on"
+                placeholder={t("auth.inputUsername")}
+                messageError={errors.userName?.message}
+                register={register}
+              />
+              <Input
+                className="mt-1"
+                nameInput="Email"
+                type="email"
+                name="email"
+                autoComplete="on"
+                placeholder={t("auth.inputEmail")}
+                messageError={errors.email?.message}
+                register={register}
+              />
+              <Input
+                className="mt-1 relative"
+                nameInput={t("auth.password")}
+                type="password"
+                name="password"
+                autoComplete="on"
+                placeholder={t("auth.inputPassword")}
+                messageError={errors.password?.message}
+                register={register}
+              />
+              <Input
+                className="mt-1 relative"
+                nameInput={t("auth.confirmPassword")}
+                type="password"
+                name="confirmPassword"
+                autoComplete="on"
+                placeholder={t("auth.inputPassword")}
+                messageError={errors.confirmPassword?.message}
+                register={register}
+              />
+              <Button
+                type="submit"
+                nameButton={t("auth.register")}
+                disable={loading}
+                loading={loading}
+              />
+            </form>
+            <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
-                <div className="flex justify-center items-center gap-1">
-                  <span className="text-base">{t("auth.haveAccount")}</span>
-                  <Link
-                    to={path.login}
-                    className=" text-textColor font-semibold text-base underline"
-                  >
-                    {t("auth.login")}
-                  </Link>
-                </div>
-              </div>
+            <div className="flex justify-center items-center gap-1">
+              <span className="text-base">{t("auth.haveAccount")}</span>
+              <Link to={path.login} className=" text-textColor font-semibold text-base underline">
+                {t("auth.login")}
+              </Link>
             </div>
           </div>
         </div>

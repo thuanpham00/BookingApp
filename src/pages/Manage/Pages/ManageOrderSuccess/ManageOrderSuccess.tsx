@@ -1,36 +1,51 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Helmet } from "react-helmet-async"
-import { TypeFlightManageResponse } from "src/types/flight.type"
 import ManageItem from "../../Components/ManageItem/ManageItem"
 import { useContext, useState } from "react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from "src/components/ui/alert-dialog"
-import { useMutation } from "@tanstack/react-query"
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
 import { toast } from "react-toastify"
-import { setCancelListToLS, setPurchaseListToLS } from "src/utils/auth"
 import { AppContext } from "src/context/useContext"
 import { Link } from "react-router-dom"
 import { path } from "src/constant/path"
 import useFilterManage from "src/hooks/useFilterManage"
 import { useTranslation } from "react-i18next"
 import { motion } from "framer-motion"
+import { Pagination } from "antd"
+import axios from "axios"
+import CancelFlightAlert from "src/components/CancelFlightAlert"
 
 export default function ManageOrderSuccess() {
   const { t } = useTranslation("manage")
 
-  const { listPurchased, setListPurchased, listCancel, setListCancel } = useContext(AppContext)
-  const dataLS = localStorage.getItem("listPurchased") as string
-  const data = JSON.parse(dataLS) as TypeFlightManageResponse[]
+  const { uuid } = useContext(AppContext)
+  const queryClient = useQueryClient()
+
+  const { data: purchasedResponse } = useQuery({
+    queryKey: ["purchasedTickets", uuid],
+    queryFn: async () => {
+      const res = await axios.get(`https://api-bookingapp.onrender.com/purchase/${uuid}`)
+      if (res.data.success) {
+        return res.data.data
+      } else {
+        toast.error("Không thể lấy danh sách vé đã mua", { autoClose: 1500 })
+        return []
+      }
+    },
+    enabled: !!uuid,
+    staleTime: 2 * 60 * 1000, // 2 phút
+    placeholderData: keepPreviousData
+  })
+
+  const data = purchasedResponse?.map((item: any) => item.data) || []
   const [searchText, setSearchText] = useState("")
   const filterList = useFilterManage(data, searchText)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const paginatedList = filterList?.slice(startIndex, endIndex)
 
   const deleteFlightTicketMutation = useMutation({
     mutationFn: (id: string) => {
@@ -38,21 +53,31 @@ export default function ManageOrderSuccess() {
     }
   })
 
-  const handleDeleteItemCart = (id: string) => {
+  const handleDeleteItemCart = (id: string, item: any) => {
+    console.log(id, item)
     deleteFlightTicketMutation.mutate(id, {
-      onSuccess: () => {
-        toast.success("Hủy vé thành công", {
-          autoClose: 1500
-        })
-        const itemDeleted = data.find((item) => item.data.id === id)
-        if (itemDeleted) {
-          const newListCancel = [...listCancel, itemDeleted]
-          setListCancel(newListCancel)
-          setCancelListToLS(newListCancel)
+      onSuccess: async () => {
+        try {
+          // 🟢 Gọi API lưu vé vào danh sách cancel
+          const res = await axios.post("https://api-bookingapp.onrender.com/purchase-cancel", {
+            uuid,
+            data: item
+          })
 
-          const newListPurchase = listPurchased.filter((item) => item.data.id !== id)
-          setListPurchased(newListPurchase)
-          setPurchaseListToLS(newListPurchase)
+          if (res.data.success) {
+            toast.success("Hủy vé thành công", {
+              autoClose: 1500
+            })
+            queryClient.invalidateQueries({ queryKey: ["purchasedTickets", uuid] })
+            queryClient.invalidateQueries({ queryKey: ["purchasedCancelTickets", uuid] })
+          } else {
+            toast.warning(res.data.message || "Không thể lưu vé hủy", { autoClose: 1500 })
+          }
+        } catch (error: any) {
+          console.error("❌ Lỗi khi thêm vé hủy:", error)
+          toast.error(error.response?.data?.message || "Lỗi khi lưu vé hủy vào danh sách", {
+            autoClose: 1500
+          })
         }
       }
     })
@@ -70,7 +95,7 @@ export default function ManageOrderSuccess() {
           <h1 className="text-xl text-textColor font-medium">
             {t("manage.titleTicketSuccess")} ({data?.length || 0})
           </h1>
-          <div className="hidden py-2 px-4 md:flex items-center gap-2 bg-gray-200 w-[300px] rounded-full">
+          <div className="hidden py-2 px-4 md:flex items-center gap-2 bg-gray-200 w-[350px] rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -89,7 +114,7 @@ export default function ManageOrderSuccess() {
             <input
               type="text"
               placeholder={t("manage.inputSearchFilter")}
-              className="bg-transparent flex-grow outline-none"
+              className="bg-transparent flex-grow outline-none text-sm"
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
             />
@@ -98,43 +123,41 @@ export default function ManageOrderSuccess() {
 
         <div className="mt-4">
           {data?.length > 0 ? (
-            filterList.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <ManageItem item={item}>
-                  <AlertDialog>
-                    <AlertDialogTrigger
-                      aria-label="buttonDelete"
-                      className="bg-red-600 text-white py-2 px-4 rounded text-sm hover:underline hover:bg-red-500 duration-200"
-                    >
-                      {t("manage.delete")}
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="p-4 w-[400px] max-h-[150px]">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle className="text-base text-center font-medium">
-                          {t("manage.titleCancel")}
-                        </AlertDialogTitle>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter className="w-full">
-                        <AlertDialogCancel className="w-[50%] border-blueColor border">
-                          {t("manage.noCancel")}
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          className="w-[50%] bg-blueColor"
-                          onClick={() => handleDeleteItemCart(item.data.id)}
-                        >
-                          {t("manage.yesCancel")}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </ManageItem>
-              </motion.div>
-            ))
+            <>
+              {paginatedList.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <ManageItem item={item}>
+                    <CancelFlightAlert item={item} onConfirmCancel={handleDeleteItemCart} />
+                  </ManageItem>
+                </motion.div>
+              ))}
+
+              {filterList.length > pageSize && (
+                <div className="flex justify-center my-4">
+                  <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={filterList.length}
+                    showSizeChanger
+                    pageSizeOptions={[5, 10, 20]}
+                    onChange={(page, size) => {
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth" // 🔥 mượt mà hơn nhiều
+                      })
+                      setCurrentPage(page)
+                      setPageSize(size)
+                    }}
+                    showTotal={(total, range) => `${range[0]}–${range[1]} / ${total}`}
+                  />
+                </div>
+              )}
+            </>
           ) : (
             <div className="">
               <div className="flex flex-col items-center">

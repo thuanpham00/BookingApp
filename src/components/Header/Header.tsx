@@ -22,12 +22,11 @@ import { locales } from "src/i18n/i18n"
 import { changeLanguage } from "i18next"
 
 export default function Header() {
-  // xử lý ngôn ngữ
   const { i18n, t } = useTranslation("flight") // sử dụng đổi ngôn ngữ
   const currentLanguage = locales[i18n.language as keyof typeof locales]
-  // xử lý header
+
   const { showHeader } = useScrollHeader(100)
-  const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, listCart } =
+  const { isAuthenticated, isProfile, setIsAuthenticated, setIsProfile, cartCount } =
     useContext(AppContext)
 
   const handleLogOut = () => {
@@ -108,7 +107,7 @@ export default function Header() {
             <Link to={path.cart} className="relative">
               {isAuthenticated ? (
                 <span className="absolute left-4 -top-2 flex items-center justify-center w-4 h-4 rounded-full bg-red-500 text-white text-[10px]">
-                  {listCart.length}
+                  {cartCount}
                 </span>
               ) : (
                 ""

@@ -25,14 +25,15 @@ export default function ChangeAutoBg({ listImg, className, indexEnd }: Props) {
   }, [index, imgCurrent, listImg, indexEnd])
 
   return (
-    <div
+    <img
+      src={imgCurrent}
+      alt={imgCurrent}
       className={className}
       style={{
-        backgroundImage: `url(${imgCurrent})`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover"
+        objectFit: "cover",
+        objectPosition: "center",
+        height: "100%"
       }}
-    ></div>
+    />
   )
 }

@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FlightPricingParams,
   TypeFlightItemResponse,
@@ -11,6 +11,7 @@ import luggage from "../../../../img/svg/luggage-baggage-svgrepo-com.svg"
 import {
   changeTravelerType,
   exchangePrice,
+  generateFlightUuid,
   getCountry,
   getCountryAirport,
   getDateFromAPI,
@@ -20,7 +21,7 @@ import {
 import Button from "src/components/Button"
 import { useMutation } from "@tanstack/react-query"
 import { flightApi } from "src/apis/flight.api"
-import { Fragment, memo, useContext, useEffect, useState } from "react"
+import { Fragment, memo, useContext, useState } from "react"
 import { airportCodes } from "src/constant/flightSearch"
 import {
   AlertDialog,
@@ -38,8 +39,8 @@ import { useNavigate } from "react-router-dom"
 import { path } from "src/constant/path"
 import { AppContext } from "src/context/useContext"
 import { toast } from "react-toastify"
-import { setCartToLS } from "src/utils/auth"
 import { useTranslation } from "react-i18next"
+import axios from "axios"
 
 interface Props {
   item: TypeFlightItemResponse
@@ -50,13 +51,12 @@ function FlightItemInner({ item, list }: Props) {
   const { t } = useTranslation(["flight", "manage"])
 
   const navigate = useNavigate()
-  const { setListCart, listCart, isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, uuid, refetchCartCount } = useContext(AppContext)
   const [showFlightDetail, setShowFlightDetail] = useState(false)
   const [showPriceDetail, setShowPriceDetail] = useState(false)
 
   const handleDetailFlight = () => {
     setShowFlightDetail((prev) => !prev)
-    console.log(showFlightDetail)
   }
 
   const flightOffersPriceMutation = useMutation({
@@ -83,42 +83,52 @@ function FlightItemInner({ item, list }: Props) {
   const flightPrice = flightOffersPriceMutation.data?.data as TypeFlightPriceResponse
 
   const handleNavigatePage = () => {
+    const flightOffer = flightPrice?.data?.flightOffers[0]
+    const uuid_ticket = generateFlightUuid(flightOffer)
+
+    const responseWithUuid = {
+      ...flightPrice,
+      uuid_ticket
+    }
     navigate({
       pathname: path.flightOrder
     })
-    localStorage.setItem("flightPriceData", JSON.stringify(flightPrice))
+
+    localStorage.setItem("flightPriceData", JSON.stringify(responseWithUuid))
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (isAuthenticated) {
-      setListCart((prev) => {
-        const findItem = listCart.find(
-          (item) =>
-            // So sánh thời gian khởi hành và đến
-            item.data.flightOffers[0].itineraries[0].segments[0].departure.at ===
-              flightPrice.data.flightOffers[0].itineraries[0].segments[0].departure.at &&
-            item.data.flightOffers[0].itineraries[0].segments[0].arrival.at ===
-              flightPrice.data.flightOffers[0].itineraries[0].segments[0].arrival.at &&
-            // so sánh hãng bay
-            item.data.flightOffers[0].itineraries[0].segments[0].carrierCode ===
-              flightPrice.data.flightOffers[0].itineraries[0].segments[0].carrierCode &&
-            // So sánh giá mỗi hành khách
-            item.data.flightOffers[0].travelerPricings[0].price.total ===
-              flightPrice.data.flightOffers[0].travelerPricings[0].price.total
-        ) // trả về true false
-        if (findItem) {
-          toast.error("Chuyến bay này đã có trong giỏ hàng", {
-            autoClose: 1500
-          })
-          return [...prev]
+      const flightOffer = flightPrice?.data?.flightOffers[0]
+      const uuid_ticket = generateFlightUuid(flightOffer)
+
+      const responseWithUuid = {
+        ...flightPrice,
+        uuid_ticket
+      }
+      try {
+        const response = await axios.post("https://api-bookingapp.onrender.com/cart", {
+          flightData: responseWithUuid,
+          uuid
+        })
+        toast.success(response.data.message || "Thêm vào giỏ hàng thành công!", {
+          autoClose: 1500
+        })
+        refetchCartCount()
+      } catch (error: any) {
+        if (error.response) {
+          if (error.response.status === 409) {
+            toast.error("Chuyến bay này đã có trong giỏ hàng!", { autoClose: 1500 })
+          } else {
+            toast.error(error.response.data?.message || "Lỗi khi thêm vào giỏ hàng!", {
+              autoClose: 1500
+            })
+          }
         } else {
-          toast.success("Thêm vào giỏ hàng thành công!!!", {
-            autoClose: 1500
-          })
-          return [...prev, flightPrice]
+          toast.error("Không thể kết nối đến server!", { autoClose: 1500 })
         }
-      })
+      }
     } else {
       navigate("/login")
       toast.error("Vui lòng đăng nhập!", {
@@ -126,20 +136,10 @@ function FlightItemInner({ item, list }: Props) {
       })
     }
   }
-  // trường hợp thêm 2 lần 1 chuyến bay vào thì từ chối -> so sánh id
-  // vậy nếu cả 2 cùng id trong list nhưng khác chuyến bay
-  // -> so sánh giờ bay bắt đầu và giờ bay về -> nếu trùng ko add
-
-  // nếu ds list cart có thay đổi thì hàm này chạy re-render lại
-  useEffect(() => {
-    if (listCart) {
-      setCartToLS(listCart)
-    }
-  }, [listCart])
 
   return (
     <Fragment>
-      <div className="flex flex-col items-center w-full bg-[#fff] mb-4 shadow-sm rounded">
+      <div className="flex flex-col items-center w-full bg-[#fff] mb-4 shadow-lg border border-gray-200 rounded-lg">
         {/* /* chi tiết 1 chuyến bay sẽ gồm nhiều hành trình bay - 1 chiều hay 2 chiều */}
         {item.itineraries.map((detail, index) => (
           <div key={index} className="w-full border-b-[2px] border-b-gray-400">
@@ -229,7 +229,6 @@ function FlightItemInner({ item, list }: Props) {
             ))}
           </div>
         ))}
-
         <div className="w-full bg-[#f8f8f8] py-2 px-4 rounded-bl rounded-br">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -349,7 +348,7 @@ function FlightItemInner({ item, list }: Props) {
                           (traveler, index) => (
                             <div
                               key={index}
-                              className="col-span-3 lg:col-span-1 border-2 border-gray-300"
+                              className="col-span-3 lg:col-span-1 border-2 border-gray-200 rounded-lg"
                             >
                               <div className="flex items-center p-4 gap-2 border-b border-b-gray-300">
                                 <div>
@@ -543,7 +542,6 @@ function FlightItemInner({ item, list }: Props) {
             </div>
           </div>
         </div>
-
         <div
           className={`${showFlightDetail ? "h-auto opacity-100" : "h-0 opacity-0"} w-full transition-opacity ease-linear duration-200`}
         >

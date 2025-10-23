@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet-async"
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth } from "src/firebase"
 import { useContext, useState } from "react"
-import { setAccessTokenToLS, setProfileToLS } from "src/utils/auth"
+import { setAccessTokenToLS, setProfileToLS, setUuidUserToLS } from "src/utils/auth"
 import { toast } from "react-toastify"
 import { AppContext } from "src/context/useContext"
 import ChangeAutoBg from "src/components/ChangeAutoBg"
@@ -41,7 +41,7 @@ export default function Login() {
   } = useForm<FormData>({ resolver: yupResolver(schemaForm) })
 
   const [loading, setLoading] = useState(false)
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setIsProfile, setUuid } = useContext(AppContext)
   const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (data) => {
@@ -54,13 +54,19 @@ export default function Login() {
           setAccessTokenToLS(`Bearer ${token}`)
         })
         setIsAuthenticated(true)
-        window.location.reload()
+
+        const uuid = res.user.uid
+        setUuid(uuid)
+        setUuidUserToLS(uuid)
+
+        setIsProfile(res.user.email as string)
         setProfileToLS(res.user.email as string)
-        toast.success("Đăng nhập thành công !!!")
+
+        toast.success("Đăng nhập thành công", { autoClose: 1500 })
         setLoading(false)
       }
     } catch (error) {
-      toast.error("Lỗi xác thực/thông tin không hợp lệ")
+      toast.error("Lỗi xác thực/thông tin không hợp lệ", { autoClose: 1500 })
       setLoading(false)
     }
   })
@@ -76,10 +82,16 @@ export default function Login() {
         })
       }
       setIsAuthenticated(true)
+
+      const uuid = res.user.uid
+      setUuid(uuid)
+      setUuidUserToLS(uuid)
+
+      setIsProfile(res.user.displayName as string)
       setProfileToLS(res.user.displayName as string)
-      window.location.reload()
+
+      toast.success("Đăng nhập thành công", { autoClose: 1500 })
       navigate(path.home)
-      toast.success("Đăng nhập thành công !!!")
     } catch (error) {
       console.log(error)
     }
@@ -92,76 +104,70 @@ export default function Login() {
         <meta name="description" content={`${"auth.login"} - Amadeus Booking`} />
       </Helmet>
 
-      <div className="w-full custom-calc-height-2 relative">
-        <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="flex items-center">
-            <ChangeAutoBg
-              className="shadow-lg hidden lg:block lg:w-[60%] custom-calc-height transition-all duration-1000 ease-linear"
-              listImg={backgroundList}
-              indexEnd={9}
-            />
-            <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] custom-calc-height bg-white relative">
-              <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="text-textColor text-2xl font-semibold text-center">
-                  {t("auth.login")}
-                </div>
-                <button
-                  onClick={loginGoogle}
-                  className="mt-4 w-[90%] mx-auto flex items-center justify-center gap-2 rounded-full border border-[#4e6c8d] py-2"
-                >
-                  <div
-                    className="w-5 h-5"
-                    style={{
-                      backgroundImage: `url(https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg)`,
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat"
-                    }}
-                  ></div>
-                  <span className="text-base text-textColor font-medium">
-                    {t("auth.loginGoogle")}
-                  </span>
-                </button>
+      <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center h-[600px]">
+        <ChangeAutoBg
+          className="shadow-lg hidden lg:block lg:w-[60%] h-full transition-all duration-1000 ease-linear"
+          listImg={backgroundList}
+          indexEnd={9}
+        />
+        <div className="shadow-lg mx-auto w-full md:w-[70%] lg:mx-0 lg:w-[40%] h-full bg-white relative">
+          <div className="w-[80%] md:w-[70%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="text-textColor text-2xl font-semibold text-center">
+              {t("auth.login")}
+            </div>
+            <button
+              onClick={loginGoogle}
+              className="mt-4 w-[90%] mx-auto flex items-center justify-center gap-2 rounded-full border border-[#4e6c8d] py-2"
+            >
+              <div
+                className="w-5 h-5"
+                style={{
+                  backgroundImage: `url(https://accounts.scdn.co/sso/images/new-google-icon.72fd940a229bc94cf9484a3320b3dccb.svg)`,
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat"
+                }}
+              ></div>
+              <span className="text-base text-textColor font-medium">{t("auth.loginGoogle")}</span>
+            </button>
 
-                <form onSubmit={onSubmit} className="mt-5" noValidate>
-                  <Input
-                    className="mt-1"
-                    nameInput="Email"
-                    type="email"
-                    name="email"
-                    autoComplete="on"
-                    placeholder={t("auth.inputEmail")}
-                    messageError={errors.email?.message}
-                    register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
-                  />
-                  <Input
-                    className="mt-1 relative"
-                    nameInput={t("auth.password")}
-                    type="password"
-                    name="password"
-                    autoComplete="on"
-                    placeholder={t("auth.inputPassword")}
-                    messageError={errors.password?.message}
-                    register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
-                  />
-                  <Button
-                    type="submit"
-                    nameButton={t("auth.login")}
-                    disable={loading}
-                    loading={loading}
-                  />
-                </form>
-                <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
+            <form onSubmit={onSubmit} className="mt-5" noValidate>
+              <Input
+                className="mt-1"
+                nameInput="Email"
+                type="email"
+                name="email"
+                autoComplete="on"
+                placeholder={t("auth.inputEmail")}
+                messageError={errors.email?.message}
+                register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
+              />
+              <Input
+                className="mt-1 relative"
+                nameInput={t("auth.password")}
+                type="password"
+                name="password"
+                autoComplete="on"
+                placeholder={t("auth.inputPassword")}
+                messageError={errors.password?.message}
+                register={register} // các thẻ input cần được đăng ký với 'register' để theo dõi dữ liệu và submit form đi // {...register("nameInput")}
+              />
+              <Button
+                type="submit"
+                nameButton={t("auth.login")}
+                disable={loading}
+                loading={loading}
+              />
+            </form>
+            <div className="my-4 w-full h-[1px] bg-[#4e6c8d]/70"></div>
 
-                <div className="flex justify-center items-center gap-1">
-                  <span className="text-base">{t("auth.noAccount")}</span>
-                  <Link
-                    to={path.register}
-                    className=" text-textColor font-semibold text-base underline"
-                  >
-                    {t("auth.register")}
-                  </Link>
-                </div>
-              </div>
+            <div className="flex justify-center items-center gap-1">
+              <span className="text-base">{t("auth.noAccount")}</span>
+              <Link
+                to={path.register}
+                className=" text-textColor font-semibold text-base underline"
+              >
+                {t("auth.register")}
+              </Link>
             </div>
           </div>
         </div>

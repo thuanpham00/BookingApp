@@ -60,20 +60,33 @@ export default function SelectDate({
         <PopoverContent className="w-auto p-0">
           <Controller
             control={control}
-            name={name} // tên trường dữ liệu
-            render={({ field }) => (
-              <div ref={field.ref}>
-                <Calendar
-                  mode="single"
-                  selected={field.value}
-                  onSelect={(date) => {
-                    setDate(date as Date)
-                    field.onChange(convertToYYYYMMDD(date as Date)) // cập nhật trường dữ liệu
-                  }}
-                  initialFocus
-                />
-              </div>
-            )}
+            name={name}
+            render={({ field }) => {
+              const selectedDate =
+                field.value instanceof Date
+                  ? field.value
+                  : typeof field.value === "string"
+                    ? new Date(field.value)
+                    : date instanceof Date
+                      ? date
+                      : new Date()
+
+              return (
+                <div ref={field.ref}>
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    defaultMonth={selectedDate}
+                    onSelect={(newDate) => {
+                      if (!newDate) return
+                      setDate(newDate)
+                      field.onChange(convertToYYYYMMDD(newDate)) // Lưu string vào form
+                    }}
+                    initialFocus
+                  />
+                </div>
+              )
+            }}
           />
         </PopoverContent>
       </Popover>
