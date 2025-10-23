@@ -14,7 +14,7 @@ import { motion } from "framer-motion"
 import { Pagination } from "antd"
 import axios from "axios"
 import CancelFlightAlert from "src/components/CancelFlightAlert"
-import { baseURL } from "src/constant/http"
+import { localhostURL } from "src/constant/http"
 
 export default function ManageOrderSuccess() {
   const { t } = useTranslation("manage")
@@ -25,7 +25,7 @@ export default function ManageOrderSuccess() {
   const { data: purchasedResponse } = useQuery({
     queryKey: ["purchasedTickets", uuid],
     queryFn: async () => {
-      const res = await axios.get(`${baseURL}/purchase/${uuid}`)
+      const res = await axios.get(`${localhostURL}/purchase/${uuid}`)
       if (res.data.success) {
         return res.data.data
       } else {
@@ -60,7 +60,7 @@ export default function ManageOrderSuccess() {
       onSuccess: async () => {
         try {
           // 🟢 Gọi API lưu vé vào danh sách cancel
-          const res = await axios.post(`${baseURL}/purchase-cancel`, {
+          const res = await axios.post(`${localhostURL}/purchase-cancel`, {
             uuid,
             data: item
           })

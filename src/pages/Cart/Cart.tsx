@@ -30,7 +30,7 @@ import { toast } from "react-toastify"
 import { motion } from "framer-motion"
 import axios from "axios"
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { baseURL } from "src/constant/http"
+import { localhostURL } from "src/constant/http"
 
 export default function Cart() {
   // xử lý ngôn ngữ
@@ -46,7 +46,7 @@ export default function Cart() {
     queryKey: ["cart", uuid],
     queryFn: async () => {
       if (!uuid) return []
-      const res = await axios.get(`${baseURL}/cart/${uuid}`)
+      const res = await axios.get(`${localhostURL}/cart/${uuid}`)
       if (res.data.success) {
         return res.data.data
       } else {
@@ -86,7 +86,7 @@ export default function Cart() {
 
   const deleteCartMutation = useMutation({
     mutationFn: async (payload: { uuid: string; uuid_ticket: string }) => {
-      const res = await axios.delete(`${baseURL}/cart`, {
+      const res = await axios.delete(`${localhostURL}/cart`, {
         data: {
           uuid: payload.uuid,
           uuid_ticket: payload.uuid_ticket
