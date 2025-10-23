@@ -14,7 +14,7 @@ import { formatCurrency } from "src/utils/utils"
 import { motion } from "framer-motion"
 import { ConfigProvider, Steps } from "antd"
 import axios from "axios"
-import { localhostURL } from "src/constant/http"
+import { baseURL } from "src/constant/http"
 
 export default function PaymentSuccess() {
   const { t } = useTranslation("flight")
@@ -37,7 +37,7 @@ export default function PaymentSuccess() {
 
       // Thử xóa khỏi giỏ hàng, nếu lỗi (vd: không có trong giỏ) thì bỏ qua
       try {
-        await axios.delete(`${localhostURL}/cart`, {
+        await axios.delete(`${baseURL}/cart`, {
           data: { uuid, uuid_ticket }
         })
       } catch (err: any) {
@@ -48,7 +48,7 @@ export default function PaymentSuccess() {
 
       // Vẫn tiến hành lưu purchase; bỏ qua nếu server báo đã tồn tại
       try {
-        await axios.post(`${localhostURL}/purchase`, {
+        await axios.post(`${baseURL}/purchase`, {
           data: { ...res.data, uuid_ticket },
           uuid
         })
