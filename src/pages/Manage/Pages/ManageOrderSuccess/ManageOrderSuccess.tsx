@@ -55,7 +55,6 @@ export default function ManageOrderSuccess() {
   })
 
   const handleDeleteItemCart = (id: string, item: any) => {
-    console.log(id, item)
     deleteFlightTicketMutation.mutate(id, {
       onSuccess: async () => {
         try {

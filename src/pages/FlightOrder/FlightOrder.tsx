@@ -62,7 +62,6 @@ export default function FlightOrder() {
   const dataLS = localStorage.getItem("flightPriceData") as string
   const data = JSON.parse(dataLS) as TypeFlightPriceResponse
   const uuid_ticket = data.uuid_ticket
-  console.log(data)
 
   useEffect(() => {
     FetchDataListNational().then((res) => {

@@ -61,7 +61,6 @@ export default function Cart() {
 
   const listCart = data?.map((item: any) => item.flightData) as TypeFlightPriceResponse[]
 
-  console.log(data)
   // xử lý back page
   const handleBackPage = () => {
     navigate(-1)
