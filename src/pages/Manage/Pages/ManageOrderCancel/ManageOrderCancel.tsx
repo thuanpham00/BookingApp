@@ -12,6 +12,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { AppContext } from "src/context/useContext"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { localhostURL } from "src/constant/http"
 
 export default function ManageOrderCancel() {
   const { t } = useTranslation("manage")
@@ -21,7 +22,7 @@ export default function ManageOrderCancel() {
   const { data: purchasedResponse } = useQuery({
     queryKey: ["purchasedCancelTickets", uuid],
     queryFn: async () => {
-      const res = await axios.get(`https://api-bookingapp.onrender.com/purchase-cancel/${uuid}`)
+      const res = await axios.get(`${localhostURL}/purchase-cancel/${uuid}`)
       if (res.data.success) {
         return res.data.data
       } else {

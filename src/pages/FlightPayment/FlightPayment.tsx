@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
 import { motion } from "framer-motion"
 import { ConfigProvider, Steps } from "antd"
+import { baseURL } from "src/constant/http"
 
 /**
  * Ngân hàng	NCB
@@ -35,7 +36,7 @@ export default function FlightPayment() {
   const handleSubmitPayment = async () => {
     const toastId = toast.loading("Đang xử lý thanh toán. Vui lòng chờ trong giây lát...")
     try {
-      const response = await axios.post("https://api-bookingapp.onrender.com/create_payment_url", {
+      const response = await axios.post(`${baseURL}/create_payment_url`, {
         amount: data.data.flightOffers[0].price.total, // số tiền
         orderDescription: "Thanh toán đơn hàng", // mô tả đơn hàng
         orderType: "billpayment", // loại đơn hàng

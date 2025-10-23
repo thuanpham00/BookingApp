@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useContext } from "react"
 import { Helmet } from "react-helmet-async"
@@ -13,6 +14,7 @@ import { formatCurrency } from "src/utils/utils"
 import { motion } from "framer-motion"
 import { ConfigProvider, Steps } from "antd"
 import axios from "axios"
+import { localhostURL } from "src/constant/http"
 
 export default function PaymentSuccess() {
   const { t } = useTranslation("flight")
@@ -29,25 +31,40 @@ export default function PaymentSuccess() {
 
   useQuery({
     queryKey: ["flightOrderManage", idFlight],
+    enabled: Boolean(idFlight && uuid && uuid_ticket),
     queryFn: async () => {
       const res = await flightApi.flightManagement(idFlight)
 
-      await axios.delete("https://api-bookingapp.onrender.com/cart", {
-        data: {
-          uuid,
-          uuid_ticket
+      // Thử xóa khỏi giỏ hàng, nếu lỗi (vd: không có trong giỏ) thì bỏ qua
+      try {
+        await axios.delete(`${localhostURL}/cart`, {
+          data: { uuid, uuid_ticket }
+        })
+      } catch (err: any) {
+        console.warn("Delete cart failed:", err)
+      } finally {
+        refetchCartCount()
+      }
+
+      // Vẫn tiến hành lưu purchase; bỏ qua nếu server báo đã tồn tại
+      try {
+        await axios.post(`${localhostURL}/purchase`, {
+          data: { ...res.data, uuid_ticket },
+          uuid
+        })
+      } catch (err: any) {
+        if (axios.isAxiosError(err) && err.response?.status === 409) {
+          console.info("Purchase already exists, skipping.")
+        } else {
+          console.warn("Create purchase failed:", err)
+          // Không throw để không làm hỏng UI thành công thanh toán
         }
-      })
-
-      refetchCartCount()
-
-      await axios.post("https://api-bookingapp.onrender.com/purchase", {
-        data: { ...res.data, uuid_ticket },
-        uuid: uuid
-      })
+      }
 
       return res
     },
+    retry: false,
+    refetchOnWindowFocus: false,
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000
   })

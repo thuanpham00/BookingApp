@@ -41,6 +41,7 @@ import { AppContext } from "src/context/useContext"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import axios from "axios"
+import { localhostURL } from "src/constant/http"
 
 interface Props {
   item: TypeFlightItemResponse
@@ -108,7 +109,7 @@ function FlightItemInner({ item, list }: Props) {
         uuid_ticket
       }
       try {
-        const response = await axios.post("https://api-bookingapp.onrender.com/cart", {
+        const response = await axios.post(`${localhostURL}/cart`, {
           flightData: responseWithUuid,
           uuid
         })

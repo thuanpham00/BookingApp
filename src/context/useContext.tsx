@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios"
 import { createContext, useEffect, useState } from "react"
+import { localhostURL } from "src/constant/http"
 import { getAccessTokenToLS, getProfileToLS, getUuidUserToLS } from "src/utils/auth"
 
 interface Props {
@@ -54,7 +55,7 @@ export default function AppProvider({ children }: Props) {
     }
 
     try {
-      const res = await axios.get(`https://api-bookingapp.onrender.com/cart/${id}`)
+      const res = await axios.get(`${localhostURL}/cart/${id}`)
       if (res.data.success) {
         setCartCount(res.data.data.length)
       } else {
